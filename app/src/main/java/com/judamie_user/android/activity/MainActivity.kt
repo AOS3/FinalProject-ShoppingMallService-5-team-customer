@@ -23,10 +23,10 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
+        // UserActivity를 실행한다.
         val userIntent = Intent(this@MainActivity, LoginActivity::class.java)
         startActivity(userIntent)
-        Log.d("test","메인")
-        overridePendingTransition(0,0)
+        // MainActivity를 종료한다.
         finish()
 
 

@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="registerVerificationViewModel"
+            type="com.judamie_user.android.viewmodel.fragmentviewmodel.RegisterVerificationViewModel" />
+    </data>
+
+    <LinearLayout
+        android:background="#FFFFFF"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:transitionGroup="true">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbarRegisterVerification"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="?attr/actionBarTheme" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="#FFFFFF">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/textFieldRegisterVerificationFragmentPhoneNo"
+                    android:layout_width="350dp"
+                    android:layout_height="60dp"
+                    android:layout_marginTop="20dp"
+                    android:hint="휴대폰 번호"
+                    app:errorEnabled="true"
+                    tools:endIconMode="clear_text">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:digits="@string/digit_value_onlyNo"
+                        android:singleLine="true"
+                        android:text=""
+                        android:textSize="16sp" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <android.widget.Button
+                    android:id="@+id/buttonRegisterVerificationFragmentRequestVerification"
+                    android:layout_width="360dp"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/button_round_activated"
+                    android:backgroundTint="#2E3D3D"
+                    android:text="인증 요청"
+                    android:textColor="#FFFFFF"
+                    android:textSize="14sp"
+                    tools:cornerRadius="10dp" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/textFieldRegisterVerificationFragmentVerificationNo"
+                    android:layout_width="350dp"
+                    android:layout_height="60dp"
+                    android:layout_marginTop="20dp"
+                    android:hint="인증 번호"
+                    app:errorEnabled="true"
+                    tools:endIconMode="clear_text">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:digits="@string/digit_value_onlyNo"
+                        android:singleLine="true"
+                        android:text=""
+                        android:textSize="16sp" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <android.widget.Button
+                    android:id="@+id/buttonRegisterVerificationFragmentCheckInfo"
+                    android:layout_width="360dp"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/button_round_activated"
+                    android:backgroundTint="#2E3D3D"
+                    android:text="인증 확인"
+                    android:textColor="#FFFFFF"
+                    android:textSize="14sp"
+                    tools:cornerRadius="10dp" />
+            </LinearLayout>
+
+
+        </ScrollView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <android.widget.Button
+                android:id="@+id/buttonLoginFragmentSignUp"
+                android:layout_width="360dp"
+                android:layout_height="50dp"
+                android:background="@drawable/button_round_activated"
+
+                android:backgroundTint="#2E3D3D"
+                android:text="가입 완료"
+                android:textColor="#FFFFFF"
+                android:textSize="14sp"
+                tools:cornerRadius="10dp"
+                android:onClick="@{(view) -> registerVerificationViewModel.buttonRegisterVerificationSubmitOnClick()}"/>
+        </LinearLayout>
+
+    </LinearLayout>
+</layout>

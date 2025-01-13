@@ -2,8 +2,13 @@
     <string name="app_name">게시판</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
     <!-- 영어, 숫자, 특수문자만 입력을 위한 문자열 -->
     <string name="digit_value">abcdefghijklmnopqrstuvwxyz0123456789_!@#</string>
+    <!-- 숫자만 입력을 위한 문자열 -->
+    <string name="digit_value_onlyNo">0123456789_!@#</string>
+
+    <!-- 주문 상태 입력을 위한 문자열 -->
     <string name="orderDone">주문 완료</string>
     <string name="deliveryDone">배송 완료</string>
     <string name="pickupDone">픽업 완료</string>
