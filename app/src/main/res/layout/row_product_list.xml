@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="RowProductListViewModel"
+            type="com.judamie_user.android.viewmodel.rowviewmodel.RowProductListViewModel" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FFFFFF"
+        android:orientation="vertical"
+        android:padding="15dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/imageViewProductImage"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/liquor_24px" />
+            <!-- 드라이브에 아이콘-->
+
+            <ProgressBar
+                android:id="@+id/progressBarProductImage"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textViewSoldOut"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:background="#80000000"
+                android:gravity="center"
+                android:text="품절"
+                android:textAppearance="@style/TextAppearance.AppCompat.Display3"
+                android:textColor="@android:color/white"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/textViewProductName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="25dp"
+            android:layout_marginTop="10dp"
+            android:text="@{RowProductListViewModel.textViewProductNameText}"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            tools:text="상품명" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textViewDiscountRating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="1"
+                android:text="@{RowProductListViewModel.textViewDiscountRatingText}"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                tools:text="20%" />
+
+            <TextView
+                android:id="@+id/textViewProductPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="1"
+                android:text="@{RowProductListViewModel.textViewProductPriceText}"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                tools:text="256,000원" />
+        </LinearLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp">
+
+            <ImageView
+                android:id="@+id/imageButtonSetWishList"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="24dp"
+                android:onClick="@{()->RowProductListViewModel.imageViewSetWishListOnCLick()}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:srcCompat="@drawable/bookmark_filled_24px"
+                app:tint="@color/mainColor"
+                tools:layout_editor_absoluteY="0dp" />
+            <!--찜상태:app:srcCompat="@drawable/bookmark_filled_24px" -->
+            <!--찜상아닌상태app:srcCompat="@drawable/bookmark_outline_24px" -->
+            <!--아이콘 드라이브에있음 -->
+            <!--res/values/color/mainColor
+            <?xml version="1.0" encoding="utf-8"?>
+            <resources>
+            <color name="black">#FF000000</color>
+            <color name="white">#FFFFFFFF</color>
+            <color name="mainColor">#004F50</color>
+            </resources> -->
+
+            <TextView
+                android:id="@+id/textViewProductReview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:text="@{RowProductListViewModel.textViewProductReviewText}"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="리뷰" />
+
+            <TextView
+                android:id="@+id/textViewProductReviewCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:text="@{RowProductListViewModel.textViewProductReviewCountText}"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/textViewProductReview"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="(8)" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/textViewProductSeller"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:text="@{RowProductListViewModel.textViewProductSellerText}"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            tools:text="판매자" />
+
+    </LinearLayout>
+
+</layout>

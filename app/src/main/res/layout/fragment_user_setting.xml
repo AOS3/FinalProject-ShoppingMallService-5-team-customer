@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="UserSettingViewModel"
+            type="com.judamie_user.android.viewmodel.fragmentviewmodel.UserSettingViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        tools:context=".ui.subfragment.UserSettingFragment">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/materialToolbarUserSetting"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:drawable/screen_background_light_transparent"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="?attr/actionBarTheme"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:navigationIcon="@drawable/arrow_back_ios_24px"
+            app:onNavigationClickUserSetting="@{UserSettingViewModel.userSettingFragment}"
+            app:title="설정"
+            app:titleCentered="true" />
+
+        <TextView
+            android:id="@+id/textViewModifyUserInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="50dp"
+            android:layout_marginTop="40dp"
+            android:onClick="@{()->UserSettingViewModel.textViewModifyUserInfoOnClick()}"
+            android:text="개인정보 변경"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/materialToolbarUserSetting" />
+
+        <TextView
+            android:id="@+id/textViewSettingNotification"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="50dp"
+            android:layout_marginTop="40dp"
+            android:onClick="@{()->UserSettingViewModel.textViewSettingNotificationOnClick()}"
+            android:text="알림설정"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewModifyUserInfo" />
+
+        <TextView
+            android:id="@+id/textViewMembershipWithdrawal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="50dp"
+            android:layout_marginTop="40dp"
+            android:onClick="@{()->UserSettingViewModel.textViewMembershipWithdrawalOnClick()}"
+            android:text="회원 탈퇴"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewSettingNotification" />
+
+        <TextView
+            android:id="@+id/textViewLogout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="50dp"
+            android:layout_marginTop="40dp"
+            android:onClick="@{()->UserSettingViewModel.textViewLogoutOcClick()}"
+            android:text="로그아웃"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewMembershipWithdrawal" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
