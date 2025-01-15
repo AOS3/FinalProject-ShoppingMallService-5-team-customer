@@ -23,7 +23,10 @@
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
             android:minHeight="?attr/actionBarSize"
-            android:theme="?attr/actionBarTheme" />
+            android:theme="?attr/actionBarTheme"
+            app:title="@{registerStep1ViewModel.toolbarRegisterStep1Title}"
+            app:navigationIcon="@{registerStep1ViewModel.toolbarRegisterStep1NavigationIcon}"
+            onNavigationClickRegisterStep1="@{registerStep1ViewModel.registerStep1Fragment}"/>
 
         <ScrollView
             android:layout_width="match_parent"
@@ -47,7 +50,9 @@
                     app:counterMaxLength="15"
                     app:endIconMode="clear_text"
                     app:errorEnabled="true"
-                    tools:endIconMode="clear_text">
+                    tools:endIconMode="clear_text"
+                    app:boxStrokeColor="@color/material_on_surface_stroke"
+                    app:hintTextColor="@color/material_dynamic_primary10">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
@@ -66,7 +71,9 @@
                     android:layout_marginTop="20dp"
                     android:hint="비밀번호"
                     android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                    app:endIconMode="password_toggle">
+                    app:endIconMode="password_toggle"
+                    app:boxStrokeColor="@color/material_on_surface_stroke"
+                    app:hintTextColor="@color/material_dynamic_primary10">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
@@ -85,7 +92,9 @@
                     android:layout_marginTop="20dp"
                     android:hint="비밀번호 확인"
                     android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                    app:endIconMode="password_toggle">>
+                    app:endIconMode="password_toggle"
+                    app:boxStrokeColor="@color/material_on_surface_stroke"
+                    app:hintTextColor="@color/material_dynamic_primary10">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
@@ -123,7 +132,9 @@
                         android:digits="@string/digit_value"
                         android:singleLine="true"
                         android:text=""
-                        android:textSize="16sp" />
+                        android:textSize="16sp"
+                        app:boxStrokeColor="@color/material_on_surface_stroke"
+                        app:hintTextColor="@color/material_dynamic_primary10"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>

@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:padding="10dp">
+
+    <data>
+
+        <variable
+            name="paymentProductViewModel"
+            type="com.judamie_user.android.viewmodel.fragmentviewmodel.PaymentProductViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:transitionGroup="true"
+        android:background="@color/white">
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/nestedScrollView"
+            android:layout_width="410dp"
+            android:layout_height="0dp"
+            android:fillViewport="true"
+            android:paddingBottom="20dp"
+            app:layout_constraintBottom_toTopOf="@id/buttonPaymentPay"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbarPaymentProduct">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <ScrollView
+                    android:id="@+id/scrollView2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    tools:layout_constraintBottom_toBottomOf="parent">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:text="구매자 정보"
+                            android:textSize="20sp"
+                            android:textStyle="bold" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:padding="10dp">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.5"
+                                android:text="이름"
+                                android:textColor="#6F7979"
+                                android:textSize="14sp" />
+
+                            <TextView
+                                android:id="@+id/textViewPaymentUserName"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.5"
+                                android:text="젠슨 황" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.5"
+                            android:orientation="horizontal"
+                            android:padding="10dp">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.5"
+                                android:text="연락처"
+                                android:textColor="#6F7979"
+                                android:textSize="14sp" />
+
+                            <TextView
+                                android:id="@+id/textViewPaymentUserNo"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.5"
+                                android:text="01012340000" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="231dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="10dp"
+                                android:text="픽업 상품"
+                                android:textSize="20sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/textViewPaymentProductCount"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="20dp"
+                                android:layout_weight="1"
+                                android:text="3건"
+                                android:textAlignment="viewEnd"
+                                android:textColor="#D46F7979"
+                                android:textSize="20sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/recyclerViewPaymentProduct"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:nestedScrollingEnabled="false"
+                            android:overScrollMode="never"
+                            android:padding="10dp">
+
+                        </androidx.recyclerview.widget.RecyclerView>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_weight="0.5"
+                            android:text="픽업 매장"
+                            android:textSize="20sp"
+                            android:textStyle="bold" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.5"
+                            android:orientation="horizontal"
+                            android:padding="10dp">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.5"
+                                android:text="매장 이름
+        "
+                                android:textColor="#6F7979"
+                                android:textSize="14sp" />
+
+                            <TextView
+                                android:id="@+id/textViewPaymentPickupLocName"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.5"
+                                android:text="멋쟁이 호랑이 강남점" />
+
+                        </LinearLayout>
+
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_weight="0.5"
+                            android:text="쿠폰 선택"
+                            android:textSize="20sp"
+                            android:textStyle="bold" />
+
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:id="@+id/buttonPaymentSelectCoupon"
+                            android:layout_width="360dp"
+                            android:layout_height="40dp"
+                            android:layout_marginTop="10dp"
+                            android:background="@drawable/background_shape_round_button"
+                            android:backgroundTint="@color/white"
+                            android:drawableStart="@drawable/coupon"
+                            android:drawableEnd="@drawable/arrow_forward_ios_24px"
+                            android:drawableTint="#5F6368"
+                            android:paddingStart="20dp"
+                            android:paddingEnd="10dp"
+                            android:text="적용할 쿠폰을 선택해주세요"
+                            app:cornerRadius="@dimen/material_emphasis_medium" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="10dp"
+                            android:text="결제정보"
+                            android:textSize="20sp"
+                            android:textStyle="bold" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="180dp"
+                            android:layout_marginTop="10dp"
+                            android:background="#946F7979"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="300dp"
+                                android:layout_height="120dp"
+                                android:background="@drawable/background_shape_round_button"
+                                android:backgroundTint="@color/white"
+                                android:gravity="center"
+                                android:orientation="vertical"
+                                android:padding="10dp">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="10dp"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="0.5"
+                                        android:text="총 상품 가격"
+                                        android:textColor="#6F7979"
+                                        android:textSize="14sp" />
+
+                                    <TextView
+                                        android:id="@+id/textViewPaymentAllProductPrice"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="0.5"
+                                        android:text="246,000원" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="10dp"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="0.5"
+                                        android:text="쿠폰 사용"
+                                        android:textColor="#6F7979"
+                                        android:textSize="14sp" />
+
+                                    <TextView
+                                        android:id="@+id/textViewPaymentCouponDiscountPrice"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="0.5"
+                                        android:text="-3,600원" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="10dp"
+                                    android:layout_marginTop="10dp"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="0.5"
+                                        android:text="총 결제 가격"
+                                        android:textColor="#6F7979"
+                                        android:textSize="14sp"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:id="@+id/textViewPaymentTotalPrice"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="0.5"
+                                        android:text="243,000원"
+                                        android:textStyle="bold" />
+                                </LinearLayout>
+
+                            </LinearLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+                </ScrollView>
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbarPaymentProduct"
+            android:layout_width="417dp"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="?attr/actionBarTheme"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:navigationIcon="@{paymentProductViewModel.toolbarPaymentProductNavigationIcon}"
+            app:onNavigationClickPaymentProduct="@{paymentProductViewModel.paymentProductFragment}"
+            app:title="@{paymentProductViewModel.toolbarPaymentProductTitle}"
+            app:titleCentered="true" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/buttonPaymentPay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/button_round_activated"
+            android:text="243,000원 결제하기"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/nestedScrollView" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

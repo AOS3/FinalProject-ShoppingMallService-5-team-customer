@@ -15,12 +15,14 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.divider.MaterialDividerItemDecoration
 import com.judamie_user.android.R
+import com.judamie_user.android.activity.ShopActivity
 import com.judamie_user.android.databinding.FragmentWishListBinding
 import com.judamie_user.android.databinding.RowProductListBinding
 import com.judamie_user.android.viewmodel.fragmentviewmodel.WishListViewModel
 import com.judamie_user.android.viewmodel.rowviewmodel.RowProductListViewModel
 
 class WishListFragment(val mainFragment: MainFragment) : Fragment() {
+
     lateinit var fragmentWishListBinding: FragmentWishListBinding
 
     //  찜목록RecyclerView를 구성하기 위해 사용할 리스트

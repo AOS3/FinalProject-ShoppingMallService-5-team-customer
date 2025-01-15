@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="rowCartProductListViewModel"
+            type="com.judamie_user.android.viewmodel.rowviewmodel.RowCartProductListViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:transitionGroup="true">
+
+        <LinearLayout
+            android:id="@+id/linearLayout3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="@+id/imageViewCartProduct"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/imageViewCartProduct"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/textViewCartProductName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:text="더 발베니 14년 캐리비안 캐스크 피"
+                android:textSize="14sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textViewCartProductPercent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="20%"
+                    android:textColor="#009688"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/textViewCartProductPrice"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:text="256, 000원"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/imageViewCartProduct"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/liquor_24px" />
+
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/checkBoxCartProduct"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            app:buttonTint="#009688"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <LinearLayout
+            android:layout_width="100dp"
+            android:layout_height="35dp"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/background_product_count"
+            android:gravity="center_horizontal|center_vertical"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/linearLayout3"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout3"
+            app:layout_constraintVertical_bias="0.0">
+
+            <ImageButton
+                android:id="@+id/buttonCartProductCntMinus"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:backgroundTint="@android:color/transparent"
+                android:text="-"
+                android:textColor="@color/black"
+                android:src="@drawable/remove_24px"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/textViewCartProductCnt"
+                android:layout_width="30dp"
+                android:layout_height="wrap_content"
+                android:text="1"
+                android:textAlignment="center" />
+
+            <ImageButton
+                android:id="@+id/buttonCartProductCntPlus"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:backgroundTint="@android:color/transparent"
+                android:text="-"
+                android:textColor="@color/black"
+                android:src="@drawable/add_24px"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/linearLayout3"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

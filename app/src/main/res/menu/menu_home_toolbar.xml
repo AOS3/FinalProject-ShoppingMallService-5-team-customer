@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item android:title="알림"
+        android:id="@+id/menuItemHomeNotification"
+        android:icon="@drawable/notifications_24px"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/menuItemHomeShoppingCart"
+        android:icon="@drawable/shopcart"
+        android:title="장바구니"
+        app:showAsAction="always" />
+</menu>

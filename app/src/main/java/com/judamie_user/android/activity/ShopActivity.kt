@@ -22,13 +22,13 @@ class ShopActivity : AppCompatActivity() {
 
     lateinit var activityShopBinding: ActivityShopBinding
 
-    // 현재 Fragment와 다음 Fragment를 담을 변수(애니메이션 이동 때문에...)
+    // 현재 Fragment와 다음 Fragment를 담을 변수
     var newFragment: Fragment? = null
     var oldFragment: Fragment? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+        // enableEdgeToEdge()
         activityShopBinding =
             DataBindingUtil.setContentView(this@ShopActivity, R.layout.activity_shop)
         activityShopBinding.lifecycleOwner = this@ShopActivity
@@ -44,7 +44,7 @@ class ShopActivity : AppCompatActivity() {
             )
             insets
         }
-        replaceFragment(ShopFragmentName.MAIN_FRAGMENT, isAddToBackStack = false, animate = false, dataBundle = null)
+        replaceFragment(ShopFragmentName.MAIN_FRAGMENT, false, false, null)
     }
 
     // 프래그먼트를 교체하는 함수
@@ -61,6 +61,7 @@ class ShopActivity : AppCompatActivity() {
 
         // 프래그먼트 객체
         newFragment = when (fragmentName) {
+            // 메인 화면 (상품 목록 화면)
             ShopFragmentName.MAIN_FRAGMENT -> MainFragment()
         }
 
@@ -91,7 +92,7 @@ class ShopActivity : AppCompatActivity() {
                     MaterialSharedAxis(MaterialSharedAxis.X, /* forward= */ false)
             }
 
-            replace(R.id.main_container, newFragment!!)
+            replace(R.id.fragmentContainerShop, newFragment!!)
             if (isAddToBackStack) {
                 addToBackStack(fragmentName.str)
             }
@@ -111,5 +112,4 @@ class ShopActivity : AppCompatActivity() {
 // 프래그먼트들을 나타내는 값들
 enum class ShopFragmentName(var number: Int, var str: String) {
     MAIN_FRAGMENT(1,"MainFragment")
-
 }

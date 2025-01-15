@@ -4,6 +4,7 @@ import androidx.databinding.BindingAdapter
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.android.material.appbar.MaterialToolbar
+import com.judamie_user.android.activity.FragmentName
 import com.judamie_user.android.ui.fragment.LoginFragment
 import com.judamie_user.android.ui.fragment.RegisterVerificationFragment
 
@@ -38,8 +39,11 @@ data class RegisterVerificationViewModel(val registerVerificationFragment: Regis
         // toolbarRegisterVerification - onNavigationClickRegisterVerification
         @JvmStatic
         @BindingAdapter("onNavigationClickRegisterVerification")
-        fun onNavigationClickRegisterVerification(materialToolbar: MaterialToolbar, loginFragment: LoginFragment){
-
+        fun onNavigationClickRegisterVerification(materialToolbar: MaterialToolbar, registerVerificationFragment: RegisterVerificationFragment){
+            materialToolbar.setNavigationOnClickListener {
+                // 이전으로 돌아간다.
+                registerVerificationFragment.loginActivity.removeFragment(FragmentName.REGISTER_VERIFICATION_FRAGMENT)
+            }
         }
     }
 }

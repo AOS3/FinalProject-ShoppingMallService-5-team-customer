@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:padding="5dp"
+        android:transitionGroup="true">
+
+        <RadioButton
+            android:id="@+id/rowRadioButtonDialogCouponItem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/rowTextViewDialogCouponItem"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="5% 할인 쿠폰"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="@+id/rowRadioButtonDialogCouponItem"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/rowRadioButtonDialogCouponItem"
+            app:layout_constraintTop_toTopOf="@+id/rowRadioButtonDialogCouponItem" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -22,7 +22,10 @@
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
             android:minHeight="?attr/actionBarSize"
-            android:theme="?attr/actionBarTheme" />
+            android:theme="?attr/actionBarTheme"
+            app:title="@{registerVerificationViewModel.toolbarRegisterVerificationTitle}"
+            app:navigationIcon="@{registerVerificationViewModel.toolbarRegisterVerificationNavigationIcon}"
+            onNavigationClickRegisterVerification="@{registerVerificationViewModel.registerVerificationFragment}"/>
 
         <ScrollView
             android:layout_width="match_parent"
@@ -43,7 +46,9 @@
                     android:layout_marginTop="20dp"
                     android:hint="휴대폰 번호"
                     app:errorEnabled="true"
-                    tools:endIconMode="clear_text">
+                    tools:endIconMode="clear_text"
+                    app:boxStrokeColor="@color/material_on_surface_stroke"
+                    app:hintTextColor="@color/material_dynamic_primary10">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
@@ -73,7 +78,9 @@
                     android:layout_marginTop="20dp"
                     android:hint="인증 번호"
                     app:errorEnabled="true"
-                    tools:endIconMode="clear_text">
+                    tools:endIconMode="clear_text"
+                    app:boxStrokeColor="@color/material_on_surface_stroke"
+                    app:hintTextColor="@color/material_dynamic_primary10">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
@@ -81,7 +88,9 @@
                         android:digits="@string/digit_value_onlyNo"
                         android:singleLine="true"
                         android:text=""
-                        android:textSize="16sp" />
+                        android:textSize="16sp"
+                        app:boxStrokeColor="@color/material_on_surface_stroke"
+                        app:hintTextColor="@color/material_dynamic_primary10"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <android.widget.Button
@@ -112,7 +121,6 @@
                 android:layout_width="360dp"
                 android:layout_height="50dp"
                 android:background="@drawable/button_round_activated"
-
                 android:backgroundTint="#2E3D3D"
                 android:text="가입 완료"
                 android:textColor="#FFFFFF"

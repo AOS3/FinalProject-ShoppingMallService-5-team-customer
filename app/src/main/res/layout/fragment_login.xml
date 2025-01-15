@@ -49,17 +49,20 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/textFieldLoginFragmentId"
                         android:layout_width="300dp"
-                        android:layout_height="50dp"
+                        android:layout_height="match_parent"
                         android:hint="아이디"
+                        app:boxStrokeColor="@color/material_on_surface_stroke"
                         app:endIconMode="clear_text"
+                        app:errorEnabled="true"
+                        app:hintTextColor="@color/material_dynamic_primary10"
                         tools:endIconMode="clear_text">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:digits="@string/digit_value"
                             android:singleLine="true"
-                            android:text=""
+                            android:text="@{loginViewModel.textFieldLoginFragmentIdEditTextText}"
                             android:textAppearance="@style/TextAppearance.AppCompat.Large"
                             android:textSize="16sp" />
                     </com.google.android.material.textfield.TextInputLayout>
@@ -67,11 +70,13 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/textFieldLoginFragmentPw"
                         android:layout_width="300dp"
-                        android:layout_height="50dp"
-                        android:layout_marginTop="10dp"
+                        android:layout_height="match_parent"
                         android:hint="비밀번호"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                        app:endIconMode="password_toggle">
+                        app:boxStrokeColor="@color/material_on_surface_stroke"
+                        app:endIconMode="password_toggle"
+                        app:errorEnabled="true"
+                        app:hintTextColor="@color/material_dynamic_primary10">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:layout_width="match_parent"
@@ -79,15 +84,16 @@
                             android:digits="@string/digit_value"
                             android:inputType="text|textPassword"
                             android:singleLine="true"
-                            android:text=""
+                            android:text="@{loginViewModel.textFieldLoginFragmentPwEditTextText}"
                             android:textSize="16sp" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <CheckBox
                         android:id="@+id/checkBoxLoginFragmentLoginAuto"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
+                        android:layout_marginEnd="100dp"
                         android:text="자동 로그인"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
                         android:textSize="14sp" />
@@ -97,9 +103,9 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
                     android:gravity="center_horizontal"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    tools:layout_marginTop="20dp">
 
                     <android.widget.Button
                         android:id="@+id/buttonLoginFragmentSignIn"
@@ -108,11 +114,11 @@
                         android:layout_marginTop="5dp"
                         android:background="@drawable/button_round_activated"
                         android:backgroundTint="#00696B"
+                        android:onClick="@{(view) -> loginViewModel.buttonLoginFragmentSignInOnClick()}"
                         android:text="로그인 하기"
                         android:textColor="#FFFFFF"
                         android:textSize="14sp"
-                        tools:cornerRadius="10dp"
-                        android:onClick="@{(view) -> loginViewModel.buttonLoginFragmentSignInOnClick()}"/>
+                        tools:cornerRadius="10dp" />
 
                     <android.widget.Button
                         android:id="@+id/buttonLoginFragmentSignUp"
@@ -121,11 +127,11 @@
                         android:layout_marginTop="10dp"
                         android:background="@drawable/button_round_activated"
                         android:backgroundTint="#00696B"
+                        android:onClick="@{(view) -> loginViewModel.buttonLoginFragmentSignUpOnClick()}"
                         android:text="회원가입"
                         android:textColor="#FFFFFF"
                         android:textSize="14sp"
-                        tools:cornerRadius="10dp"
-                        android:onClick="@{(view) -> loginViewModel.buttonLoginFragmentSignUpOnClick()}"/>
+                        tools:cornerRadius="10dp" />
 
 
                 </LinearLayout>

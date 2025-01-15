@@ -62,7 +62,7 @@ class RegisterVerificationFragment : Fragment() {
     // 가입 완료 처리 메서드
     fun proUserJoin(){
         fragmentRegisterVerificationBinding.apply {
-            loginActivity.removeFragment(FragmentName.LOGIN_FRAGMENT)
+            loginActivity.removeFragment(FragmentName.REGISTER_STEP1_FRAGMENT)
         }
     }
 

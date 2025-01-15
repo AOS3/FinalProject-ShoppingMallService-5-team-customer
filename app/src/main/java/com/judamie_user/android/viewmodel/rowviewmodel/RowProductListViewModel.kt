@@ -1,10 +1,12 @@
 package com.judamie_user.android.viewmodel.rowviewmodel
 
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.judamie_user.android.ui.fragment.MainFragment
 import com.judamie_user.android.ui.fragment.WishListFragment
 
-class RowProductListViewModel(val wishListFragment: WishListFragment):ViewModel(){
+class RowProductListViewModel(val wishListFragment: WishListFragment): ViewModel(){
 
     //imageViewProductImage 이미지뷰
 
@@ -34,6 +36,5 @@ class RowProductListViewModel(val wishListFragment: WishListFragment):ViewModel(
 
     //textViewProductSeller 상품판매자
     val textViewProductSellerText = MutableLiveData("상품판매자")
-
 
 }

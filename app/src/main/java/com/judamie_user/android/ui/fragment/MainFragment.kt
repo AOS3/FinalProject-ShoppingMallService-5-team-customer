@@ -12,6 +12,7 @@ import com.google.android.material.transition.MaterialSharedAxis
 import com.judamie_user.android.R
 import com.judamie_user.android.databinding.FragmentMainBinding
 import com.judamie_user.android.ui.subfragment.ModifyUserInfoFragment
+import com.judamie_user.android.ui.subfragment.PaymentProductFragment
 import com.judamie_user.android.ui.subfragment.SettingUserNotificationFragment
 import com.judamie_user.android.ui.subfragment.ShowUserOrderListFragment
 import com.judamie_user.android.ui.subfragment.UserSettingFragment
@@ -135,10 +136,16 @@ class MainFragment() : Fragment() {
 
         // 프래그먼트 객체
         newFragment = when (fragmentName) {
-            ShopSubFragmentName.USER_SETTING_FRAGMENT -> UserSettingFragment(this)
+            ShopSubFragmentName.HOME_FRAGMENT -> HomeFragment(this)
+            ShopSubFragmentName.SEARCH_FRAGMENT -> SearchFragment(this)
+            ShopSubFragmentName.WISH_LIST_FRAGMENT -> WishListFragment(this)
+            ShopSubFragmentName.USER_INFO_FRAGMENT -> UserInfoFragment(this)
             ShopSubFragmentName.MODIFY_USER_INFO_FRAGMENT -> ModifyUserInfoFragment(this)
-            ShopSubFragmentName.SETTING_USER_NOTIFICATION_FRAGMENT -> SettingUserNotificationFragment(this)
             ShopSubFragmentName.SHOW_USER_ORDER_LIST_FRAGMENT -> ShowUserOrderListFragment(this)
+            ShopSubFragmentName.SETTING_USER_NOTIFICATION_FRAGMENT -> SettingUserNotificationFragment(this)
+            ShopSubFragmentName.USER_SETTING_FRAGMENT -> UserSettingFragment(this)
+            ShopSubFragmentName.SHOP_CART_FRAGMENT -> ShopCartFragment(this)
+            ShopSubFragmentName.PAYMENT_PRODUCT_FRAGMENT -> PaymentProductFragment(this)
         }
 
         // bundle 객체가 null이 아니라면
@@ -187,21 +194,26 @@ class MainFragment() : Fragment() {
     }
 }
 
-
-
 // 프래그먼트들을 나타내는 값들
 enum class ShopSubFragmentName(var number: Int, var str: String) {
-
-    //UserSettingFragment
-    USER_SETTING_FRAGMENT(1,"UserSettingFragment"),
-
-    //ModifyUserInfoFragment
-    MODIFY_USER_INFO_FRAGMENT(2,"ModifyUserInfoFragment"),
-
-    //SettingUserNotificationFragment
-    SETTING_USER_NOTIFICATION_FRAGMENT(3,"SettingUserNotificationFragment"),
-
-    //ShowUserOrderListFragment
-    SHOW_USER_ORDER_LIST_FRAGMENT(4,"ShowUserOrderListFragment")
-
+    // 메인 화면 (홈)
+    HOME_FRAGMENT(1, "HomeFragment"),
+    // 검색 화면
+    SEARCH_FRAGMENT(2, "SearchFragment"),
+    // 찜 목록 화면
+    WISH_LIST_FRAGMENT(3, "WishListFragment"),
+    // 내 정보 화면
+    USER_INFO_FRAGMENT(4, "UserInfoFragment"),
+    // 내 정보 수정 화면
+    MODIFY_USER_INFO_FRAGMENT(5, "ModifyUserInfoFragment"),
+    // 주문 내역 확인 화면
+    SHOW_USER_ORDER_LIST_FRAGMENT(6, "ShowUserOrderListFragment"),
+    // 알림 설정 화면
+    SETTING_USER_NOTIFICATION_FRAGMENT(7, "SettingUserNotificationFragment"),
+    // 사용자 설정 화면
+    USER_SETTING_FRAGMENT(8, "UserSettingFragment"),
+    // 장바구니 화면
+    SHOP_CART_FRAGMENT(9, "ShopCartFragment"),
+    // 결제하기 화면
+    PAYMENT_PRODUCT_FRAGMENT(10, "PaymentProductFragment")
 }

@@ -4,6 +4,7 @@ import androidx.databinding.BindingAdapter
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.android.material.appbar.MaterialToolbar
+import com.judamie_user.android.activity.FragmentName
 import com.judamie_user.android.ui.fragment.LoginFragment
 import com.judamie_user.android.ui.fragment.RegisterStep1Fragment
 
@@ -30,8 +31,11 @@ data class RegisterStep1ViewModel(val registerStep1Fragment: RegisterStep1Fragme
         // toolbarRegisterStep1 - onNavigationClickRegisterStep1
         @JvmStatic
         @BindingAdapter("onNavigationClickRegisterStep1")
-        fun onNavigationClickRegisterStep1(materialToolbar: MaterialToolbar, loginFragment: LoginFragment){
-
+        fun onNavigationClickRegisterStep1(materialToolbar: MaterialToolbar, registerStep1Fragment: RegisterStep1Fragment){
+            materialToolbar.setNavigationOnClickListener {
+                // 이전으로 돌아간다.
+                registerStep1Fragment.loginActivity.removeFragment(FragmentName.REGISTER_STEP1_FRAGMENT)
+            }
         }
     }
 

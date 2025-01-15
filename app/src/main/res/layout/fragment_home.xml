@@ -1,9 +1,180 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@android:color/background_light"
-    tools:context=".ui.fragment.HomeFragment">
-</androidx.constraintlayout.widget.ConstraintLayout>
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="homeViewModel"
+            type="com.judamie_user.android.viewmodel.fragmentviewmodel.HomeViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:transitionGroup="true">
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabLayoutHome"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/searchBarHome2"
+            app:tabGravity="fill"
+            app:tabIndicatorColor="@color/black"
+            app:tabIndicatorFullWidth="true"
+            app:tabMode="scrollable"
+            app:tabRippleColor="@android:color/transparent"
+            app:tabSelectedTextColor="@color/black"
+            app:tabTextAppearance="@style/tab_text"
+            app:tabTextColor="@color/black"
+            tools:tabGravity="fill">
+
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/tabItem"
+                android:layout_width="300dp"
+                android:layout_height="match_parent"
+                android:icon="@drawable/bookmark_filled_24px"
+                android:text="전체" />
+
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/tabItem2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:icon="@drawable/bookmark_filled_24px"
+                android:text="와인" />
+
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/tabItem3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:icon="@drawable/bookmark_filled_24px"
+                android:text="위스키" />
+
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/tabItem4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:icon="@drawable/bookmark_filled_24px"
+                android:text="보드카" />
+
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/tabItem5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:icon="@drawable/bookmark_filled_24px"
+                android:text="데낄라" />
+
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/tabItem6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:icon="@drawable/bookmark_filled_24px"
+                android:text="우리술" />
+
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/tabItem7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:icon="@drawable/bookmark_filled_24px"
+                android:text="사케" />
+
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/tabItem8"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:icon="@drawable/bookmark_filled_24px"
+                android:text="럼" />
+
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/tabItem9"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:icon="@drawable/bookmark_filled_24px"
+                android:text="리큐르" />
+
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/tabItem10"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:icon="@drawable/bookmark_filled_24px"
+                android:text="중국술" />
+
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/tabItem11"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:icon="@drawable/bookmark_filled_24px"
+                android:text="브랜디" />
+
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/tabItem12"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:icon="@drawable/bookmark_filled_24px"
+                android:text="맥주" />
+
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/tabItem13"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:icon="@drawable/bookmark_filled_24px"
+                android:text="논알콜" />
+        </com.google.android.material.tabs.TabLayout>
+
+        <com.google.android.material.search.SearchBar
+            android:id="@+id/searchBarHome2"
+            style="style/shapeappe"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="상품을 검색해보세요"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
+
+        <LinearLayout
+            android:id="@+id/linearLayout2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <Button
+                android:id="@+id/buttonHomeFragmentPickupLoc2"
+                android:layout_width="262dp"
+                android:layout_height="45dp"
+                android:layout_gravity="center_horizontal|center_vertical"
+                android:backgroundTint="@android:color/transparent"
+                android:drawableEnd="@drawable/arrow_forward_ios_24px"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:text=" "
+                android:textAlignment="textStart"
+                android:textColor="#0D0C0C"
+                android:textSize="20sp" />
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbarHome"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:drawable/screen_background_light_transparent"
+                android:minHeight="?attr/actionBarSize"
+                android:theme="?attr/actionBarTheme"
+                app:menu="@menu/menu_home_toolbar"
+                app:titleCentered="true" />
+        </LinearLayout>
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/pagerHome"
+            android:layout_width="409dp"
+            android:layout_height="511dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tabLayoutHome" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

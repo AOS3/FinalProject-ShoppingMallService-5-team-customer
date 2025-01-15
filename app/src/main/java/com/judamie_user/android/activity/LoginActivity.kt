@@ -62,6 +62,7 @@ class LoginActivity : AppCompatActivity() {
 
     }
 
+
     // 프래그먼트 교체 함수
     fun replaceFragment(fragmentName: FragmentName, isAddToBackStack:Boolean, animate:Boolean, dataBundle: Bundle?){
         // newFragment가 null이 아니라면 oldFragment 변수에 담아준다.

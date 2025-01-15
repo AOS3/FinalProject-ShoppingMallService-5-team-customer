@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable
+            name="shopCartViewModel"
+            type="com.judamie_user.android.viewmodel.fragmentviewmodel.ShopCartViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:transitionGroup="true" >
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbarShopCart"
+            onNavigationClickShopCart="@{shopCartViewModel.shopCartFragment}"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="?attr/actionBarTheme"
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:navigationIcon="@{shopCartViewModel.toolbarShopCartNavigationIcon}"
+            app:title="@{shopCartViewModel.toolbarShopCartTitle}"
+            app:titleCentered="true" />
+
+        <CheckBox
+            android:id="@+id/checkBoxCartProductAll"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="전체 선택"
+            android:textSize="12sp"
+            android:visibility="visible"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbarShopCart" />
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@android:color/transparent"
+            android:text="선택 삭제"
+            android:textColor="@color/deactivatedcolor"
+            android:textSize="12sp"
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbarShopCart" />
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/recyclerViewShopCart">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/buttonCartProductSelected"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:background="@drawable/button_round_activated"
+                android:drawableStart="@drawable/shopping_cart_24px"
+                android:paddingStart="90dp"
+                android:paddingEnd="90dp"
+                android:text="256,000원 방문 픽업 구매하기"
+                android:textColor="@color/white"
+                android:visibility="visible"
+                android:onClick="@{(view) -> shopCartViewModel.buttonCartProductSelectedOnClick()}"/>
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewShopCart"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:padding="10dp"
+            app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/checkBoxCartProductAll"
+            app:layout_constraintVertical_bias="0.0"
+            tools:layout_constraintBottom_toTopOf="@id/linearLayout" />
+
+        <TextView
+            android:id="@+id/textViewShopCartEmpty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="299dp"
+            android:text="TextView"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/recyclerViewShopCart" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/buttonShopCartEmpty"
+            android:layout_width="250dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/button_round_activated"
+            android:backgroundTint="#56B4B6"
+            android:shadowColor="#56B4B6"
+            android:text="상품 보러가기"
+            android:textColor="#00696B"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewShopCartEmpty" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
