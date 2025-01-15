@@ -28,6 +28,12 @@
         <item name="itemIconTint">@color/bottom_nav_color</item>
     </style>
 
+    <!-- 레이팅바 금색으로 채우기-->
+    <style name="RatingBar" parent="Theme.AppCompat">
+        <item name="colorControlNormal">@color/gray</item>
+        <item name="colorControlActivated">@color/pickupDone</item>
+    </style>
+
 
 
 </resources>

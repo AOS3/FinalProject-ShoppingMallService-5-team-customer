@@ -15,6 +15,7 @@ import com.google.android.material.transition.MaterialSharedAxis
 import com.judamie_user.android.R
 import com.judamie_user.android.databinding.ActivityShopBinding
 import com.judamie_user.android.ui.fragment.MainFragment
+import com.judamie_user.android.ui.temp.WriteProductReviewFragment
 
 import com.judamie_user.android.viewmodel.activityviewmodel.ShopViewModel
 
@@ -40,7 +41,7 @@ class ShopActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        replaceFragment(ShopFragmentName.MAIN_FRAGMENT, false, false, null)
+        replaceFragment(ShopFragmentName.write, false, false, null)
     }
 
     // 프래그먼트를 교체하는 함수
@@ -59,6 +60,7 @@ class ShopActivity : AppCompatActivity() {
         newFragment = when (fragmentName) {
             // 메인 화면 (상품 목록 화면)
             ShopFragmentName.MAIN_FRAGMENT -> MainFragment()
+            ShopFragmentName.write -> WriteProductReviewFragment(MainFragment())
         }
 
         // bundle 객체가 null이 아니라면
@@ -107,5 +109,6 @@ class ShopActivity : AppCompatActivity() {
 
 // 프래그먼트들을 나타내는 값들
 enum class ShopFragmentName(var number: Int, var str: String) {
-    MAIN_FRAGMENT(1,"MainFragment")
+    MAIN_FRAGMENT(1,"MainFragment"),
+    write(2,"write")
 }
