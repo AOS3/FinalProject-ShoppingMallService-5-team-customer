@@ -37,11 +37,7 @@ class ShopActivity : AppCompatActivity() {
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.updatePadding(
-                top = systemBars.top,
-                left = 0, // 왼쪽은 적용하지 않음
-                right = 0 // 오른쪽은 적용하지 않음
-            )
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
         replaceFragment(ShopFragmentName.MAIN_FRAGMENT, false, false, null)

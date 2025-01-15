@@ -23,7 +23,7 @@ class ModifyUserInfoFragment(val mainFragment: MainFragment) : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         fragmentModifyUserInfoBinding = DataBindingUtil.inflate(inflater,R.layout.fragment_modify_user_info,container,false)
-        fragmentModifyUserInfoBinding.modifyUserInfoViewModel = ModifyUserInfoViewModel(this@ModifyUserInfoFragment)
+        fragmentModifyUserInfoBinding.modifyUserInfoViewModel = ModifyUserInfoViewModel(this)
         fragmentModifyUserInfoBinding.lifecycleOwner = this
 
         return fragmentModifyUserInfoBinding.root
