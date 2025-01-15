@@ -5,8 +5,7 @@
         <item name="android:statusBarColor">@color/white</item>
         <item name="android:windowLightStatusBar">true</item>
 
-
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="colorPrimary">@color/mainColor</item>
     </style>
 
     <style name="Theme.FinalProjectShoppingMallService5teamcustomer" parent="Base.Theme.FinalProjectShoppingMallService5teamcustomer" />

@@ -37,10 +37,13 @@
             android:layout_marginStart="30dp"
             android:layout_marginTop="40dp"
             android:layout_marginEnd="30dp"
+            android:hint="새 비밀번호"
+            app:boxStrokeColor="@color/focused_input_color"
             app:counterEnabled="true"
             app:counterMaxLength="15"
-            android:hint="새 비밀번호"
             app:endIconMode="password_toggle"
+            app:cursorColor="@color/mainColor"
+            app:hintTextColor="@color/mainColor"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/materialToolbarModifyUserInfo">
@@ -50,8 +53,8 @@
                 android:layout_height="wrap_content"
                 android:digits="@string/digit_value"
                 android:inputType="textPassword"
-                android:singleLine="true"
                 android:maxLength="15"
+                android:singleLine="true"
                 android:text="@={modifyUserInfoViewModel.textInputLayoutNewPassword1Text}" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -63,21 +66,24 @@
             android:layout_marginTop="20dp"
             android:layout_marginEnd="30dp"
             android:hint="비밀번호 재입력"
+            app:cursorColor="@color/mainColor"
+            app:boxStrokeColor="@color/focused_input_color"
             app:counterEnabled="true"
             app:counterMaxLength="15"
             app:endIconMode="password_toggle"
+            app:hintTextColor="@color/mainColor"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textInputLayoutNewPassword1">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:digits="@string/digit_value"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:singleLine="true"
+                android:digits="@string/digit_value"
+                android:inputType="textPassword"
                 android:maxLength="15"
-                android:text="@={modifyUserInfoViewModel.textInputLayoutNewPassword2Text}"
-                android:inputType="textPassword"/>
+                android:singleLine="true"
+                android:text="@={modifyUserInfoViewModel.textInputLayoutNewPassword2Text}" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <android.widget.Button

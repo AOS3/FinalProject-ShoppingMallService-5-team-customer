@@ -15,4 +15,19 @@
         <item name="android:textSize">14sp</item>
     </style>
 
+    <style name="CustomMaterialSwitch" parent="Widget.Material3.CompoundButton.MaterialSwitch">
+        <item name="trackTint">@color/switch_track_color</item>
+    </style>
+
+    <!-- BottomNavigationView 아이콘 색상 -->
+
+    <style name="BottomNavStyle" parent="Widget.MaterialComponents.BottomNavigationView">
+        <!-- 텍스트 색상 상태별로 지정 -->
+        <item name="itemTextColor">@color/bottom_nav_color</item>
+        <!-- 아이콘 색상 상태별로 지정 -->
+        <item name="itemIconTint">@color/bottom_nav_color</item>
+    </style>
+
+
+
 </resources>
