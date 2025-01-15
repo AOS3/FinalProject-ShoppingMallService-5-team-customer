@@ -14,8 +14,16 @@ import com.judamie_user.android.databinding.FragmentMainBinding
 import com.judamie_user.android.ui.subfragment.ModifyUserInfoFragment
 import com.judamie_user.android.ui.subfragment.PaymentProductFragment
 import com.judamie_user.android.ui.subfragment.SettingUserNotificationFragment
+import com.judamie_user.android.ui.temp.ShowUserCouponListFragment
 import com.judamie_user.android.ui.subfragment.ShowUserOrderListFragment
 import com.judamie_user.android.ui.subfragment.UserSettingFragment
+import com.judamie_user.android.ui.temp.SetPickUpLocationFragment
+import com.judamie_user.android.ui.temp.ShowAppInfoFragment
+import com.judamie_user.android.ui.temp.ShowAppPrivacyPolicyFragment
+import com.judamie_user.android.ui.temp.ShowAppTOSFragment
+import com.judamie_user.android.ui.temp.ShowUserOrderInfoFragment
+import com.judamie_user.android.ui.temp.UserNotificationListFragment
+import com.judamie_user.android.ui.temp.WriteProductReviewFragment
 import com.judamie_user.android.viewmodel.fragmentviewmodel.MainFragmentViewModel
 
 
@@ -115,6 +123,14 @@ class MainFragment() : Fragment() {
             ShopSubFragmentName.USER_SETTING_FRAGMENT -> UserSettingFragment(this)
             ShopSubFragmentName.SHOP_CART_FRAGMENT -> ShopCartFragment(this)
             ShopSubFragmentName.PAYMENT_PRODUCT_FRAGMENT -> PaymentProductFragment(this)
+            ShopSubFragmentName.SHOW_USER_COUPON_LIST_FRAGMENT -> ShowUserCouponListFragment(this)
+            ShopSubFragmentName.SHOW_USER_ORDER_INFO_FRAGMENT -> ShowUserOrderInfoFragment(this)
+            ShopSubFragmentName.WRITE_PRODUCT_REVIEW_FRAGMENT -> WriteProductReviewFragment(this)
+            ShopSubFragmentName.SHOW_APP_INFO_FRAGMENT -> ShowAppInfoFragment(this)
+            ShopSubFragmentName.SHOW_APP_PRIVACY_POLICY_FRAGMENT -> ShowAppPrivacyPolicyFragment(this)
+            ShopSubFragmentName.SHOW_APP_TOS_FRAGMENT -> ShowAppTOSFragment(this)
+            ShopSubFragmentName.USER_NOTIFICATION_LIST_FRAGMENT -> UserNotificationListFragment(this)
+            ShopSubFragmentName.SET_PICKUP_LOCATION_FRAGMENT -> SetPickUpLocationFragment(this)
         }
 
         // bundle 객체가 null이 아니라면
@@ -184,5 +200,30 @@ enum class ShopSubFragmentName(var number: Int, var str: String) {
     // 장바구니 화면
     SHOP_CART_FRAGMENT(9, "ShopCartFragment"),
     // 결제하기 화면
-    PAYMENT_PRODUCT_FRAGMENT(10, "PaymentProductFragment")
+    PAYMENT_PRODUCT_FRAGMENT(10, "PaymentProductFragment"),
+
+    // 주문상세 ShowUserOrderInfoFragment
+    SHOW_USER_ORDER_INFO_FRAGMENT(11,"ShowUserOrderInfoFragment"),
+
+    // 리뷰작성 WriteProductReviewFragment
+    WRITE_PRODUCT_REVIEW_FRAGMENT(12,"WriteProductReviewFragment"),
+
+    // 쿠폰보기 화면
+    SHOW_USER_COUPON_LIST_FRAGMENT(13,"ShowUserCouponListFragment"),
+
+    // 앱정보 보기 ShowAppInfoFragment
+    SHOW_APP_INFO_FRAGMENT(14,"ShowAppInfoFragment"),
+
+    // 개인정보 처리방침 ShowAppPrivacyPolicyFragment
+    SHOW_APP_PRIVACY_POLICY_FRAGMENT(15,"ShowAppPrivacyPolicyFragment"),
+
+    // 서비스이용약관 ShowAppTOSFragment
+    SHOW_APP_TOS_FRAGMENT(16,"ShowAppTOSFragment"),
+
+    // 알림창 UserNotificationListFragment
+    USER_NOTIFICATION_LIST_FRAGMENT(17,"UserNotificationListFragment"),
+
+    // 지도에서 픽업지 선택 SetPickUpLocationFragment
+    SET_PICKUP_LOCATION_FRAGMENT(18,"SetPickUpLocationFragment")
+
 }
