@@ -11,6 +11,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/white"
         android:transitionGroup="true">
 
         <com.google.android.material.tabs.TabLayout
@@ -18,9 +19,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            android:background="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/searchBarHome2"
+            app:layout_constraintTop_toBottomOf="@id/buttonHomeSearch"
             app:tabGravity="fill"
             app:tabIndicatorColor="@color/black"
             app:tabIndicatorFullWidth="true"
@@ -123,15 +126,26 @@
                 android:text="논알콜" />
         </com.google.android.material.tabs.TabLayout>
 
-        <com.google.android.material.search.SearchBar
-            android:id="@+id/searchBarHome2"
-            style="style/shapeappe"
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/buttonHomeSearch"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:hint="상품을 검색해보세요"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/button_round_activated"
+            android:backgroundTint="#DEE4E3"
+            android:drawableStart="@drawable/search_24px"
+            android:drawablePadding="10dp"
+            android:paddingStart="10dp"
+            android:text="상품을 검색해보세요."
+            android:textAlignment="viewStart"
+            android:textColor="#888C8C"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toTopOf="@+id/tabLayoutHome"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
+            android:onClick="@{(view)->homeViewModel.buttonHomeSearchOnClick()}"/>
 
         <LinearLayout
             android:id="@+id/linearLayout2"
@@ -142,10 +156,9 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <Button
-                android:id="@+id/buttonHomeFragmentPickupLoc2"
+                android:id="@+id/buttonHomePickupLoc"
                 android:layout_width="262dp"
-                android:layout_height="45dp"
-                android:layout_gravity="center_horizontal|center_vertical"
+                android:layout_height="match_parent"
                 android:backgroundTint="@android:color/transparent"
                 android:drawableEnd="@drawable/arrow_forward_ios_24px"
                 android:ellipsize="end"
@@ -170,6 +183,7 @@
             android:id="@+id/pagerHome"
             android:layout_width="409dp"
             android:layout_height="511dp"
+            android:layout_marginTop="5dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

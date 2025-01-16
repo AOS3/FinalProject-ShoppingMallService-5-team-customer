@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.divider.MaterialDividerItemDecoration
@@ -26,6 +27,9 @@ class ShopCartFragment(val mainFragment: MainFragment) : Fragment() {
     val tempList1 = Array(20) {
         "발베니 14년산"
     }
+
+    // RecyclerView CheckBox 상태 관리
+    val checkBoxStates = MutableLiveData<MutableList<Boolean>>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -77,11 +81,17 @@ class ShopCartFragment(val mainFragment: MainFragment) : Fragment() {
         }
     }
 
+    // 전체 선택 시 모든 체크박스를 업데이트하는 메서드
+    fun updateAllCheckBoxes(isChecked: Boolean) {
+        // checkBoxStates 업데이트
+        checkBoxStates.value = MutableList(tempList1.size) { isChecked }
 
+        // 어댑터에 데이터 변경 알림
+        (fragmentShopCartBinding.recyclerViewShopCart.adapter as CartRecyclerViewAdapter).notifyDataSetChanged()
+    }
 
-
-    // 장바구니 품목 삭제 처리 메서드
-    fun deleteCartList() {
+    // 선택 삭제 버튼 메서드
+    fun selectionDelete() {
 
     }
 

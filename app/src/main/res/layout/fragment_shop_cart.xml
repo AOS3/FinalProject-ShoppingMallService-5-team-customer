@@ -38,7 +38,9 @@
             android:textSize="12sp"
             android:visibility="visible"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/toolbarShopCart" />
+            app:layout_constraintTop_toBottomOf="@id/toolbarShopCart"
+            android:checked="@{shopCartViewModel.checkBoxCartProductAllCheckedState}"
+            android:onClick="@{(view)->shopCartViewModel.checkBoxCartProductAllOnClick()}"/>
 
         <Button
             android:id="@+id/button"
@@ -50,7 +52,8 @@
             android:textSize="12sp"
             android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/toolbarShopCart" />
+            app:layout_constraintTop_toBottomOf="@id/toolbarShopCart"
+            android:onClick="@{(view)->shopCartViewModel.buttonShopCartDeleteOnClick()}"/>
 
         <LinearLayout
             android:id="@+id/linearLayout"

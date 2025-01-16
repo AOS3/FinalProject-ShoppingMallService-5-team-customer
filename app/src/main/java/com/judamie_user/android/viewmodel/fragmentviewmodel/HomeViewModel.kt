@@ -5,4 +5,8 @@ import com.judamie_user.android.ui.fragment.HomeFragment
 
 data class HomeViewModel(val homeFragment: HomeFragment) : ViewModel() {
 
+    // buttonHomeSearch - onClick
+    fun buttonHomeSearchOnClick() {
+        homeFragment.moveToSearch()
+    }
 }

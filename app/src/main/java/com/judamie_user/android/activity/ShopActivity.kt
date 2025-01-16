@@ -1,8 +1,12 @@
 package com.judamie_user.android.activity
 
 import android.os.Bundle
+import android.os.SystemClock
+import android.view.View
+import android.view.inputmethod.InputMethodManager
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
@@ -17,6 +21,7 @@ import com.judamie_user.android.databinding.ActivityShopBinding
 import com.judamie_user.android.ui.fragment.MainFragment
 
 import com.judamie_user.android.viewmodel.activityviewmodel.ShopViewModel
+import kotlin.concurrent.thread
 
 class ShopActivity : AppCompatActivity() {
 
@@ -105,6 +110,32 @@ class ShopActivity : AppCompatActivity() {
             fragmentName.str,
             FragmentManager.POP_BACK_STACK_INCLUSIVE
         )
+    }
+
+    // 키보드 올리는 메서드
+    fun showSoftInput(view: View){
+        // 입력을 관리하는 매니저
+        val inputManager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+        // 포커스를 준다.
+        view.requestFocus()
+
+        thread {
+            SystemClock.sleep(500)
+            // 키보드를 올린다.
+            inputManager.showSoftInput(view, 0)
+        }
+    }
+    // 키보드를 내리는 메서드
+    fun hideSoftInput(){
+        // 포커스가 있는 뷰가 있다면
+        if(currentFocus != null){
+            // 입력을 관리하는 매니저
+            val inputManager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+            // 키보드를 내린다.
+            inputManager.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
+            // 포커스를 해제한다.
+            currentFocus?.clearFocus()
+        }
     }
 
 }

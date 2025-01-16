@@ -1,10 +1,14 @@
 package com.judamie_user.android.ui.fragment
 
 import android.os.Bundle
+import android.os.SystemClock
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
+import androidx.appcompat.app.AppCompatActivity.INPUT_METHOD_SERVICE
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.commit
@@ -17,6 +21,7 @@ import com.judamie_user.android.ui.subfragment.SettingUserNotificationFragment
 import com.judamie_user.android.ui.subfragment.ShowUserOrderListFragment
 import com.judamie_user.android.ui.subfragment.UserSettingFragment
 import com.judamie_user.android.viewmodel.fragmentviewmodel.MainFragmentViewModel
+import kotlin.concurrent.thread
 
 
 class MainFragment() : Fragment() {
@@ -192,6 +197,7 @@ class MainFragment() : Fragment() {
             FragmentManager.POP_BACK_STACK_INCLUSIVE
         )
     }
+
 }
 
 // 프래그먼트들을 나타내는 값들
@@ -216,4 +222,28 @@ enum class ShopSubFragmentName(var number: Int, var str: String) {
     SHOP_CART_FRAGMENT(9, "ShopCartFragment"),
     // 결제하기 화면
     PAYMENT_PRODUCT_FRAGMENT(10, "PaymentProductFragment")
+
+//    //주문내역
+//    ShowUserOrderListFragment
+//
+////주문상세
+//    ShowUserOrderInfoFragment
+//
+////리뷰작성
+//    WriteProductReviewFragment
+//
+////쿠폰보기
+//    ShowUserCouponListFragment
+//
+////앱정보보기
+//    ShowAppInfoFragment
+//
+////개인정보 처리방침
+//    ShowAppPrivacyPolicyFragment
+//
+////서비스 이용약관
+//    ShowAppTOSFragment
+//
+////알림창
+//    UserNotificationListFragment
 }
