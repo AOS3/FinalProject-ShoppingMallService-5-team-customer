@@ -49,9 +49,14 @@ data class PaymentProductViewModel(val paymentProductFragment: PaymentProductFra
     val textViewPaymentTotalPriceText = MutableLiveData("")
 
     // 쿠폰 선택 버튼
+    // buttonPaymentSelectCoupon - text
+    val buttonPaymentSelectCouponText = MutableLiveData("")
+
+    // 쿠폰 선택 버튼
     // buttonPaymentSelectCoupon - onClick
     fun buttonPaymentSelectCouponOnClick() {
         // 쿠폰 선택 다이얼로그 띄우는 메서드 호출
+        paymentProductFragment.selectCoupon()
     }
 
     // 결제하기 버튼

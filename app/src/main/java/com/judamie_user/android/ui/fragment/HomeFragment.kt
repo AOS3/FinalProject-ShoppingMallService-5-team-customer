@@ -47,6 +47,7 @@ class HomeFragment(val mainFragment:MainFragment) : Fragment() {
         // 툴바 구성 메서드 호출
         settingToolbar()
 
+
         return fragmentHomeBinding.root
     }
 
@@ -67,6 +68,13 @@ class HomeFragment(val mainFragment:MainFragment) : Fragment() {
         }
     }
 
+    // 검색 화면으로 이동 메서드
+    fun moveToSearch(){
+        fragmentHomeBinding.apply {
+            mainFragment.replaceFragment(ShopSubFragmentName.SEARCH_FRAGMENT, true, true, null)
+        }
+    }
+
     // 탭 레이아웃 동작 메서드
     fun showCategory() {
         fragmentHomeBinding.apply {
@@ -83,7 +91,6 @@ class HomeFragment(val mainFragment:MainFragment) : Fragment() {
                 override fun onTabReselected(tab: TabLayout.Tab?) {
                     TODO("Not yet implemented")
                 }
-
             })
 
             // ViewPager2 Adapter 설정
@@ -107,21 +114,20 @@ class HomeFragment(val mainFragment:MainFragment) : Fragment() {
 
         // position 번째 사용할 Fragment 객체를 생성하여 반환
         override fun createFragment(position: Int): Fragment {
-            val newFragment = when(position) {
-                0 -> return ViewPagerFragment()
-                1 -> return ViewPagerFragment()
-                2 -> return ViewPagerFragment()
-                3 -> return ViewPagerFragment()
-                4 -> return ViewPagerFragment()
-                5 -> return ViewPagerFragment()
-                6 -> return ViewPagerFragment()
-                7 -> return ViewPagerFragment()
-                8 -> return ViewPagerFragment()
-                9 -> return ViewPagerFragment()
-                10 -> return ViewPagerFragment()
-                11 -> return ViewPagerFragment()
-                12 -> return ViewPagerFragment()
-                else -> return ViewPagerFragment()
+            val newFragment = when (position) {
+                0 -> ViewPagerFragment()
+                1 -> ViewPagerFragment()
+                2 -> ViewPagerFragment()
+                3 -> ViewPagerFragment()
+                4 -> ViewPagerFragment()
+                5 -> ViewPagerFragment()
+                6 -> ViewPagerFragment()
+                7 -> ViewPagerFragment()
+                8 -> ViewPagerFragment()
+                9 -> ViewPagerFragment()
+                10 -> ViewPagerFragment()
+                11 -> ViewPagerFragment()
+                else -> ViewPagerFragment()
             }
             return newFragment
         }

@@ -13,15 +13,10 @@ import com.google.android.material.divider.MaterialDividerItemDecoration
 import com.judamie_user.android.R
 import com.judamie_user.android.activity.ShopActivity
 import com.judamie_user.android.databinding.FragmentPaymentProductBinding
-import com.judamie_user.android.databinding.FragmentShopCartBinding
-import com.judamie_user.android.databinding.RowCartProductListBinding
 import com.judamie_user.android.databinding.RowPaymentProductListBinding
-import com.judamie_user.android.ui.fragment.HomeFragment
 import com.judamie_user.android.ui.fragment.MainFragment
 import com.judamie_user.android.ui.fragment.ShopSubFragmentName
 import com.judamie_user.android.viewmodel.fragmentviewmodel.PaymentProductViewModel
-import com.judamie_user.android.viewmodel.fragmentviewmodel.ShopCartViewModel
-import com.judamie_user.android.viewmodel.rowviewmodel.RowCartProductListViewModel
 import com.judamie_user.android.viewmodel.rowviewmodel.RowPaymentProductListViewModel
 
 class PaymentProductFragment(val mainFragment: MainFragment) : Fragment() {
@@ -45,6 +40,7 @@ class PaymentProductFragment(val mainFragment: MainFragment) : Fragment() {
 
         shopActivity = activity as ShopActivity
 
+        fragmentPaymentProductBinding.paymentProductViewModel?.buttonPaymentSelectCouponText?.value = "적용할 쿠폰을 선택해주세요."
         // 툴바 구성 메서드 호출
         settingToolbar()
         // 장바구니 RecyclerView 구성 메서드 호출
@@ -122,5 +118,37 @@ class PaymentProductFragment(val mainFragment: MainFragment) : Fragment() {
         }
     }
 
+    // 쿠폰 선택 메서드
+    fun selectCoupon() {
+        // 쿠폰 데이터
+        val couponList = arrayListOf("쿠폰 적용 안함","10% 할인쿠폰", "3% 할인쿠폰", "50% 할인쿠폰")
+        // setSingleChoiceItems는 Array<String> ListAdapter만 허용
+        // ArrayList<String>는 바로 사용 불가
+        val couponListArray = couponList.toTypedArray()
+        var selectedCouponIndex = 0
+
+        // AlertDialog
+        val alertDialogBuilder = AlertDialog.Builder(requireContext())
+        alertDialogBuilder.setTitle("쿠폰 선택")
+        alertDialogBuilder.setSingleChoiceItems(couponListArray, selectedCouponIndex) { _, which ->
+            // 선택된 쿠폰 Index 저장
+            selectedCouponIndex = which
+        }
+        alertDialogBuilder.setPositiveButton("쿠폰 선택") { dialog, _ ->
+            if (selectedCouponIndex != 0) {
+                val selectedCoupon = couponList[selectedCouponIndex]
+                // 쿠폰 처리하기
+                fragmentPaymentProductBinding.paymentProductViewModel?.buttonPaymentSelectCouponText?.value = selectedCoupon
+            } else {
+                // 선택하지 않았을 경우
+            }
+            dialog.dismiss()
+        }
+        alertDialogBuilder.setNegativeButton("취소") { dialog, _ ->
+            dialog.dismiss()
+        }
+        alertDialogBuilder.show()
+
+    }
 
 }

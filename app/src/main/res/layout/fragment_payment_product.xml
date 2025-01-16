@@ -189,9 +189,12 @@
                             android:drawableStart="@drawable/coupon"
                             android:drawableEnd="@drawable/arrow_forward_ios_24px"
                             android:drawableTint="#5F6368"
+                            android:onClick="@{(view)->paymentProductViewModel.buttonPaymentSelectCouponOnClick()}"
                             android:paddingStart="20dp"
                             android:paddingEnd="10dp"
-                            android:text="적용할 쿠폰을 선택해주세요"
+                            android:text="@={paymentProductViewModel.buttonPaymentSelectCouponText}"
+                            android:textColor="#5F6368"
+                            android:textSize="16sp"
                             app:cornerRadius="@dimen/material_emphasis_medium" />
 
                         <TextView

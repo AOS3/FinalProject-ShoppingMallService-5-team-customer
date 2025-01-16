@@ -20,13 +20,20 @@ data class ShopCartViewModel(val shopCartFragment: ShopCartFragment) : ViewModel
             "장바구니가 비어있어요.\n" +
             "원하는 상품을 담아보세요."
 
-    // 상품 선택
-    // checkBoxCartProductAll - checkedState
-    val checkBoxCartProductAllCheckedState = MutableLiveData(MaterialCheckBox.STATE_UNCHECKED)
+    // 상품 선택 체크박스
+    // checkBoxCartProductAll - checkedBox
+    val checkBoxCartProductAllCheckedState = MutableLiveData(true)
 
     // checkBoxCartProductAll - onClick
-    fun checkBoxUserJoinStep2HobbyAllOnClick(){
-
+    fun checkBoxCartProductAllOnClick(){
+        if (checkBoxCartProductAllCheckedState.value == true){
+            val isChecked = true
+            shopCartFragment.updateAllCheckBoxes(isChecked)
+        }
+        else {
+            val isChecked = false
+            shopCartFragment.updateAllCheckBoxes(isChecked)
+        }
     }
 
     // 장바구니 비었을 때 버튼
