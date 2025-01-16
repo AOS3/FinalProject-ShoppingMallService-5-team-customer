@@ -17,6 +17,7 @@ import com.judamie_user.android.R
 import com.judamie_user.android.databinding.FragmentMainBinding
 import com.judamie_user.android.ui.subfragment.ModifyUserInfoFragment
 import com.judamie_user.android.ui.subfragment.PaymentProductFragment
+import com.judamie_user.android.ui.subfragment.ProductInfoFragment
 import com.judamie_user.android.ui.subfragment.SettingUserNotificationFragment
 import com.judamie_user.android.ui.subfragment.ShowUserOrderListFragment
 import com.judamie_user.android.ui.subfragment.UserSettingFragment
@@ -151,6 +152,7 @@ class MainFragment() : Fragment() {
             ShopSubFragmentName.USER_SETTING_FRAGMENT -> UserSettingFragment(this)
             ShopSubFragmentName.SHOP_CART_FRAGMENT -> ShopCartFragment(this)
             ShopSubFragmentName.PAYMENT_PRODUCT_FRAGMENT -> PaymentProductFragment(this)
+            ShopSubFragmentName.PRODUCT_INFO_FRAGMENT -> ProductInfoFragment(this)
         }
 
         // bundle 객체가 null이 아니라면
@@ -221,7 +223,9 @@ enum class ShopSubFragmentName(var number: Int, var str: String) {
     // 장바구니 화면
     SHOP_CART_FRAGMENT(9, "ShopCartFragment"),
     // 결제하기 화면
-    PAYMENT_PRODUCT_FRAGMENT(10, "PaymentProductFragment")
+    PAYMENT_PRODUCT_FRAGMENT(10, "PaymentProductFragment"),
+    // 제품 상세 페이지 화면
+    PRODUCT_INFO_FRAGMENT(11, "ProductInfoFragment")
 
 //    //주문내역
 //    ShowUserOrderListFragment

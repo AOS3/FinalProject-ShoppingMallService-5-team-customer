@@ -7,5 +7,9 @@
     <color name="orderDone">#000000</color>
     <color name="deliveryDone">#FF373A</color>
     <color name="pickupDone">#FCA607</color>
+
+    <color name="colorPrimary">#00696B</color>
+    <color name="colorPrimaryDark">#00696B</color>
+    <color name="colorAccent">#00696B</color>
 </resources>
 

@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable
+            name="productInfoViewModel"
+            type="com.judamie_user.android.viewmodel.fragmentviewmodel.ProductInfoViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:transitionGroup="true" >
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbarProductInfo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="?attr/actionBarTheme"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:titleCentered="true"
+            app:title="@{productInfoViewModel.toolbarProductInfoTitle}"
+            app:navigationIcon="@{productInfoViewModel.toolbarProductInfoNavigationIcon}"
+            onNavigationClickProductInfo="@{productInfoViewModel.productInfoFragment}"/>
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginBottom="10dp"
+            android:fillViewport="true"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toolbarProductInfo"
+            tools:layout_constraintBottom_toTopOf="@id/linearlayoutbutton">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:orientation="vertical">
+
+                <ScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="20dp"
+                        android:orientation="vertical">
+
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <ImageView
+                                android:id="@+id/imageViewProductInfoThumbnail"
+                                android:layout_width="match_parent"
+                                android:layout_height="300dp"
+                                android:layout_gravity="center_horizontal"
+                                android:src="@drawable/sampleproductimage_gp18" />
+
+                            <ImageView
+                                android:id="@+id/imageButtonProductInfoSetWishList"
+                                android:layout_width="40dp"
+                                android:layout_height="30dp"
+                                android:layout_gravity="bottom|right"
+                                android:layout_marginEnd="10dp"
+                                android:layout_marginBottom="10dp"
+                                android:onClick="@{()->productInfoViewModel.imageButtonProductInfoSetWishListOnClick()}"
+                                app:srcCompat="@drawable/bookmark_filled_24px"
+                                app:tint="@color/mainColor"
+                                tools:foregroundGravity="bottom" />
+
+                        </FrameLayout>
+
+                        <TextView
+                            android:id="@+id/textViewProductInfoProductCategory"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:text="TextView"
+                            android:textColor="#8A8787"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:id="@+id/textViewProductInfoProductName"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="TextView" />
+
+                        <LinearLayout
+                            android:layout_width="194dp"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/textViewProductInfoDiscountPercent"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="20%"
+                                android:textColor="#009688"
+                                android:textSize="20sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/textViewProductInfoPrice"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="10dp"
+                                android:text="256, 000원"
+                                android:textSize="14sp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="100dp"
+                            android:layout_height="35dp"
+                            android:layout_marginTop="5dp"
+                            android:background="@drawable/background_product_count"
+                            android:gravity="center_horizontal|center_vertical"
+                            android:orientation="horizontal"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.0"
+                            app:layout_constraintStart_toStartOf="@+id/linearLayout3"
+                            app:layout_constraintTop_toBottomOf="@+id/linearLayout3"
+                            app:layout_constraintVertical_bias="0.0">
+
+                            <ImageButton
+                                android:id="@+id/buttonProductInfoCntMinus"
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:backgroundTint="@android:color/transparent"
+                                android:onClick="@{()->productInfoViewModel.buttonProductInfoCntMinusOnClick()}"
+                                android:src="@drawable/remove_24px"
+                                android:text="-"
+                                android:textColor="@color/black"
+                                android:textSize="14sp" />
+
+                            <TextView
+                                android:id="@+id/textViewProductInfoCnt"
+                                android:layout_width="30dp"
+                                android:layout_height="wrap_content"
+                                android:text="@{productInfoViewModel.textViewProductInfoCntText}"
+                                android:textAlignment="center" />
+
+                            <ImageButton
+                                android:id="@+id/buttonProductInfoCntPlus"
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:backgroundTint="@android:color/transparent"
+                                android:onClick="@{()->productInfoViewModel.buttonProductInfoCntPlusOnClick()}"
+                                android:src="@drawable/add_24px"
+                                android:text="-"
+                                android:textColor="@color/black"
+                                android:textSize="14sp" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:orientation="horizontal">
+
+                        </LinearLayout>
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <RatingBar
+                                android:id="@+id/ratingBarProductInfo"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:isIndicator="true"
+                                android:numStars="5"
+                                android:rating="2"
+                                android:stepSize="1"
+                                android:theme="@style/SmallRatingBar"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <TextView
+                                android:id="@+id/textViewProductInfoReviewCnt"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="20dp"
+                                android:text="리뷰 (3)"
+                                android:textSize="14sp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintStart_toEndOf="@+id/ratingBarProductInfo"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <ImageView
+                                android:id="@+id/imageView"
+                                android:layout_width="15dp"
+                                android:layout_height="15dp"
+                                app:layout_constraintBottom_toBottomOf="@id/textViewProductInfoReviewCnt"
+                                app:layout_constraintStart_toEndOf="@+id/textViewProductInfoReviewCnt"
+                                app:layout_constraintTop_toTopOf="@id/textViewProductInfoReviewCnt"
+                                app:srcCompat="@drawable/arrow_forward_ios_24px" />
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal"></LinearLayout>
+
+                        <View
+                            android:id="@+id/divider2"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="?android:attr/listDivider" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="20dp"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/textViewProductInfoDescription"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="TextView" />
+
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/recyclerViewProductInfoImg"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="20dp" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+                </ScrollView>
+
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+
+        <LinearLayout
+            android:id="@+id/linearlayoutbutton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:background="@color/white">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/buttonProductInfoAddCart"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="0.5"
+                android:background="@drawable/button_round_activated"
+                android:backgroundTint="#CCE8E8"
+                android:drawableLeft="@drawable/shopping_cart_24px"
+                android:drawablePadding="5dp"
+                android:drawableTint="@color/mainColor"
+                android:paddingStart="20dp"
+                android:text="장바구니에 넣기"
+                android:textAlignment="viewStart"
+                android:textSize="16sp"
+                android:onClick="@{(view)->productInfoViewModel.buttonProductInfoAddCartOnClick()}"/>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/buttonProductInfoBuy"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_weight="0.5"
+                android:background="@drawable/button_round_activated"
+                android:text="바로 구매"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:onClick="@{(view)->productInfoViewModel.buttonProductInfoBuyOnClick()}"/>
+        </LinearLayout>
+
+        <!--찜상태:app:srcCompat="@drawable/bookmark_filled_24px" -->
+        <!--찜상아닌상태app:srcCompat="@drawable/bookmark_outline_24px" -->
+        <!--아이콘 드라이브에있음 -->
+        <!--res/values/color/mainColor
+        <?xml version="1.0" encoding="utf-8"?>
+        <resources>
+        <color name="black">#FF000000</color>
+        <color name="white">#FFFFFFFF</color>
+        <color name="mainColor">#004F50</color>
+        </resources> -->
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
