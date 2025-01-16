@@ -123,9 +123,9 @@ class ShopCartFragment(val mainFragment: MainFragment) : Fragment() {
 
             rowCartProductListBinding.root.setOnClickListener {
                 // 사용자가 누른 항목의 게시글 문서 번호를 담아서 전달
-//                val dataBundle = Bundle()
+                val dataBundle = Bundle()
 //                dataBundle.putString("boardDocumentId", recyclerViewList[mainViewHolder.adapterPosition].boardDocumentId)
-//                boardMainFragment.replaceFragment(BoardSubFragmentName.BOARD_READ_FRAGMENT, true, true, dataBundle)
+                mainFragment.replaceFragment(ShopSubFragmentName.PRODUCT_INFO_FRAGMENT, true, true, dataBundle)
             }
 
             return cartViewHolder
