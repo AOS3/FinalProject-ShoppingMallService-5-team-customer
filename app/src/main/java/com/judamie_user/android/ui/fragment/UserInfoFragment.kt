@@ -57,5 +57,10 @@ class UserInfoFragment(val mainFragment: MainFragment) : Fragment() {
         mainFragment.replaceFragment(ShopSubFragmentName.SHOW_USER_ORDER_LIST_FRAGMENT,true,true,null)
     }
 
+    // 쿠폰리스트이동
+    fun goShowUserCouponListFragment(){
+        mainFragment.replaceFragment(ShopSubFragmentName.SHOW_USER_COUPON_LIST_FRAGMENT,true,true,null)
+    }
+
 
 }

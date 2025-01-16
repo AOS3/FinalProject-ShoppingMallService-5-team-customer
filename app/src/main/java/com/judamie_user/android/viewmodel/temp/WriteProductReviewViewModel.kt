@@ -1,20 +1,20 @@
 package com.judamie_user.android.viewmodel.temp
 
+import android.util.Log
 import androidx.databinding.BindingAdapter
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.android.material.appbar.MaterialToolbar
-import com.judamie_user.android.ui.subfragment.ModifyUserInfoFragment
 import com.judamie_user.android.ui.temp.WriteProductReviewFragment
 
 class WriteProductReviewViewModel(val writeProductReviewFragment: WriteProductReviewFragment):ViewModel() {
 
     // materialToolbarWriteProductReview
     companion object {
-        // materialToolbarWriteProductReview - onNavigationClickBarWriteProductReview
+        // materialToolbarWriteProductReview - onNavigationClickWriteProductReview
         @JvmStatic
-        @BindingAdapter("onNavigationClickBarWriteProductReview")
-        fun onNavigationClickBarWriteProductReview(
+        @BindingAdapter("onNavigationClickWriteProductReview")
+        fun onNavigationClickWriteProductReview(
             materialToolbar: MaterialToolbar,
             writeProductReviewFragment: WriteProductReviewFragment
         ) {
@@ -48,6 +48,6 @@ class WriteProductReviewViewModel(val writeProductReviewFragment: WriteProductRe
 
     //buttonWriteProductReviewSaveReview
     fun buttonWriteProductReviewSaveReviewOnclick(){
-
+        writeProductReviewFragment.saveReview()
     }
 }

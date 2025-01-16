@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <variable
             name="writeProductReviewViewModel"
             type="com.judamie_user.android.viewmodel.temp.WriteProductReviewViewModel" />
@@ -13,7 +13,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white">
+        android:background="@color/white"
+        android:transitionGroup="true">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/materialToolbarWriteProductReview"
@@ -26,6 +27,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:navigationIcon="@drawable/arrow_back_ios_24px"
+            app:onNavigationClickWriteProductReview="@{writeProductReviewViewModel.writeProductReviewFragment}"
             app:title="리뷰 작성"
             app:titleCentered="true" />
 
@@ -47,7 +49,7 @@
                 <ImageView
                     android:id="@+id/imageViewWriteProductReviewProductImage"
                     android:layout_width="wrap_content"
-                    android:layout_height="100dp"
+                    android:layout_height="150dp"
                     android:layout_marginTop="30dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -101,8 +103,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
-                    android:theme="@style/RatingBar"
                     android:stepSize="1"
+                    android:theme="@style/RatingBar"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textViewWriteProductReviewProductSeller" />
@@ -130,8 +132,8 @@
                         android:inputType="textMultiLine"
                         android:maxLength="200"
                         android:padding="8dp"
-                        android:text="@={writeProductReviewViewModel.textInputLayoutWriteProductReviewContentText}"
-                        android:scrollbars="vertical" />
+                        android:scrollbars="vertical"
+                        android:text="@={writeProductReviewViewModel.textInputLayoutWriteProductReviewContentText}" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <LinearLayout
@@ -169,8 +171,8 @@
                             android:layout_width="110dp"
                             android:layout_height="110dp"
                             android:background="@drawable/background_product_count"
-                            android:text="@{writeProductReviewViewModel.buttonWriteProductReviewAddPhotoText}"
                             android:onClick="@{(view)->writeProductReviewViewModel.buttonWriteProductReviewAddPhotoOnclick()}"
+                            android:text="@{writeProductReviewViewModel.buttonWriteProductReviewAddPhotoText}"
                             android:textAppearance="@style/TextAppearance.AppCompat.Small"
                             android:textColor="@color/orderDone"
                             app:strokeColor="@color/gray" />
@@ -184,9 +186,6 @@
                     </LinearLayout>
 
                 </LinearLayout>
-
-
-
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
