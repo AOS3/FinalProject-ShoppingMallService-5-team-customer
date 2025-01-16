@@ -59,6 +59,12 @@ class ShowUserOrderInfoFragment(val mainFragment: MainFragment) : Fragment() {
 
     inner class RecyclerViewAdapter():RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>(){
         inner class ViewHolder(val rowOrderInfoBinding: RowOrderInfoBinding):RecyclerView.ViewHolder(rowOrderInfoBinding.root){
+            init {
+                rowOrderInfoBinding.buttonRowOrderInfoWriteReview.setOnClickListener {
+                    mainFragment.replaceFragment(ShopSubFragmentName.WRITE_PRODUCT_REVIEW_FRAGMENT,true,true,null)
+                }
+
+            }
 
         }
 

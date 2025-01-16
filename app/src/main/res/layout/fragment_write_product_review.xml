@@ -81,7 +81,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
-                    android:text="TextView"
+                    android:text="@{writeProductReviewViewModel.textViewWriteProductReviewProductNameText}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/imageViewWriteProductReviewProductImage" />
@@ -91,13 +91,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:text="TextView"
+                    android:text="@{writeProductReviewViewModel.textViewWriteProductReviewProductSellerText}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textViewWriteProductReviewProductName" />
 
                 <RatingBar
-                    android:id="@+id/ratingBar"
+                    android:id="@+id/ratingBarWriteProductReviewRate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
@@ -108,7 +108,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/textViewWriteProductReviewProductSeller" />
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/textInputLayout"
+                    android:id="@+id/textInputLayoutWriteProductReviewContent"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
@@ -121,7 +121,7 @@
                     app:hintEnabled="true"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/ratingBar">
+                    app:layout_constraintTop_toBottomOf="@+id/ratingBarWriteProductReviewRate">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
@@ -130,21 +130,26 @@
                         android:inputType="textMultiLine"
                         android:maxLength="200"
                         android:padding="8dp"
+                        android:text="@={writeProductReviewViewModel.textInputLayoutWriteProductReviewContentText}"
                         android:scrollbars="vertical" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="20dp"
                     android:orientation="vertical"
-                    android:padding="16dp"
-                    app:layout_constraintTop_toBottomOf="@id/textInputLayout">
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/textInputLayoutWriteProductReviewContent">
 
                     <TextView
                         android:id="@+id/textViewTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="사진 첨부 (선택)  (0/5)"
+                        android:layout_marginStart="10dp"
+                        android:text="사진 첨부 (선택)"
                         android:textSize="16sp"
                         android:textStyle="bold" />
 
@@ -152,24 +157,28 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginTop="8dp">
+                        android:layout_marginTop="10dp"
+                        android:gravity="bottom|center"
+                        android:orientation="horizontal">
 
                         <!-- 사진 추가 버튼 -->
-                        <Button
-                            android:id="@+id/buttonAddPhoto"
+
+                        <!-- RecyclerView -->
+                        <android.widget.Button
+                            android:id="@+id/buttonWriteProductReviewAddPhoto"
                             android:layout_width="110dp"
                             android:layout_height="110dp"
                             android:background="@drawable/background_product_count"
-                            android:text="사진 추가"
+                            android:text="@{writeProductReviewViewModel.buttonWriteProductReviewAddPhotoText}"
+                            android:onClick="@{(view)->writeProductReviewViewModel.buttonWriteProductReviewAddPhotoOnclick()}"
                             android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                            android:textColor="@color/orderDone" />
+                            android:textColor="@color/orderDone"
+                            app:strokeColor="@color/gray" />
 
-                        <!-- RecyclerView -->
                         <androidx.recyclerview.widget.RecyclerView
-                            android:id="@+id/recyclerViewPhotos"
+                            android:id="@+id/recyclerViewWriteProductReviewPhotos"
                             android:layout_width="0dp"
-                            android:layout_height="wrap_content"
+                            android:layout_height="110dp"
                             android:layout_marginStart="8dp"
                             android:layout_weight="1" />
                     </LinearLayout>
@@ -191,6 +200,7 @@
             android:layout_marginEnd="5dp"
             android:layout_marginBottom="5dp"
             android:background="@drawable/button_round_activated"
+            android:onClick="@{(view)->writeProductReviewViewModel.buttonWriteProductReviewSaveReviewOnclick()}"
             android:text="등록하기"
             android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"

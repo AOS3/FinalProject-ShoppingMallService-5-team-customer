@@ -5,15 +5,15 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="110dp"
-        android:layout_height="110dp">
+        android:layout_width="150dp"
+        android:layout_height="wrap_content">
 
         <!-- 사진 이미지뷰 -->
+        <!-- 히든개발자 세훈 -->
         <ImageView
             android:id="@+id/imageViewPhoto"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="20dp"
+            android:layout_width="110dp"
+            android:layout_height="110dp"
             android:layout_marginEnd="20dp"
             android:background="@drawable/img"
             android:contentDescription="사진"
