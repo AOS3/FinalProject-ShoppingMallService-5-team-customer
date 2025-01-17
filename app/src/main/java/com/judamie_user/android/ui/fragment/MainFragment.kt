@@ -204,6 +204,7 @@ enum class ShopSubFragmentName(var number: Int, var str: String) {
     // 결제하기 화면
     PAYMENT_PRODUCT_FRAGMENT(10, "PaymentProductFragment"),
 
+
     // 주문상세 ShowUserOrderInfoFragment
     SHOW_USER_ORDER_INFO_FRAGMENT(11,"ShowUserOrderInfoFragment"),
 
