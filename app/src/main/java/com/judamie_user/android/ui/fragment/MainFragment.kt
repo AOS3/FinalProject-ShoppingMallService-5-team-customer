@@ -217,6 +217,7 @@ enum class ShopSubFragmentName(var number: Int, var str: String) {
     // 리뷰 사진 크게보기 화면
     SHOW_REVIEW_PHOTO_FRAGMENT(13,"ShowReviewPhotoFragment"),
 
+
     // 주문상세 ShowUserOrderInfoFragment
     SHOW_USER_ORDER_INFO_FRAGMENT(14,"ShowUserOrderInfoFragment"),
 
