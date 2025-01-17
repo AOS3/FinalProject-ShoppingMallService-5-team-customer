@@ -14,11 +14,12 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:transitionGroup="true"
         android:background="@drawable/view_round_white_dialog">
 
 
         <TextView
-            android:id="@+id/textViewpickupLocationName"
+            android:id="@+id/textViewPickupLocationName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
@@ -31,14 +32,14 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/textViewpickupLocationDetailText"
+            android:id="@+id/textViewPickupLocationDetailText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
             android:text="@{showPickupLocationDialogViewModel.pickupLocationDetailText}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textViewpickupLocationName" />
+            app:layout_constraintTop_toBottomOf="@+id/textViewPickupLocationName" />
 
         <android.widget.Button
             android:id="@+id/buttonPickupLocationCall"
@@ -47,24 +48,25 @@
             android:layout_marginTop="30dp"
             android:background="@drawable/dialog_call_button"
             android:onClick="@{(view) -> showPickupLocationDialogViewModel.buttonPickupLocationCallOnClick()}"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
             android:textColor="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textViewpickupLocationDetailText" />
+            app:layout_constraintTop_toBottomOf="@+id/textViewPickupLocationDetailText" />
 
         <android.widget.Button
             android:id="@+id/buttonPickupLocationCancle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="20dp"
             android:layout_marginBottom="30dp"
             android:background="@drawable/button_round_deactivated"
             android:onClick="@{(view) -> showPickupLocationDialogViewModel.buttonPickupLocationCancleOnClick()}"
+            android:padding="10dp"
             android:text="다른 픽업지 고르기"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.2"
+            app:layout_constraintHorizontal_bias="0.1"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/buttonPickupLocationCall" />
 
@@ -72,15 +74,16 @@
             android:id="@+id/buttonPickupLocationSelect"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="20dp"
             android:layout_marginBottom="30dp"
             android:background="@drawable/button_round_activated"
             android:onClick="@{(view) -> showPickupLocationDialogViewModel.buttonPickupLocationSelectOnClick()}"
+            android:padding="10dp"
             android:text="해당 지점 고르기"
             android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.8"
+            app:layout_constraintHorizontal_bias="0.9"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/buttonPickupLocationCall" />
 

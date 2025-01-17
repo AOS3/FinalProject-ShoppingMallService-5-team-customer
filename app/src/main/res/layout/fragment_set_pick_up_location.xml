@@ -13,6 +13,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:transitionGroup="true"
         android:background="@color/white">
 
         <com.google.android.material.appbar.MaterialToolbar
@@ -33,7 +34,7 @@
 
         <!-- 구글 맵 Fragment -->
         <fragment
-            android:id="@+id/mapFragmentSetPicupLocation"
+            android:id="@+id/mapFragmentSetPickupLocation"
             android:name="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="0dp"
             android:layout_height="0dp"

@@ -18,7 +18,6 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.transition.MaterialSharedAxis
 import com.judamie_user.android.R
 import com.judamie_user.android.databinding.ActivityShopBinding
-import com.judamie_user.android.ui.component.ShowPickupLocationDialogFragment
 import com.judamie_user.android.ui.fragment.MainFragment
 import com.judamie_user.android.ui.temp.SetPickUpLocationFragment
 import com.judamie_user.android.ui.temp.UserNotificationListFragment
@@ -71,7 +70,6 @@ class ShopActivity : AppCompatActivity() {
             ShopFragmentName.write -> WriteProductReviewFragment(MainFragment())
             ShopFragmentName.notifi -> UserNotificationListFragment(MainFragment())
             ShopFragmentName.map -> SetPickUpLocationFragment(MainFragment())
-            ShopFragmentName.SHOW_PICKUP_LOCATION_DIALOG_FRAGMENT -> ShowPickupLocationDialogFragment(MainFragment())
         }
 
         // bundle 객체가 null이 아니라면
@@ -150,6 +148,4 @@ enum class ShopFragmentName(var number: Int, var str: String) {
     write(2,"write"),
     notifi(3,"notifi"),
     map(4,"map"),
-    // 픽업지 다이얼로그 ShowPickupLocationDialogFragment
-    SHOW_PICKUP_LOCATION_DIALOG_FRAGMENT(19,"ShowPickupLocationDialogFragment")
 }

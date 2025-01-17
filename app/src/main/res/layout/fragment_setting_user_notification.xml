@@ -14,6 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white"
+        android:transitionGroup="true"
         tools:context=".ui.subfragment.SettingUserNotificationFragment">
 
 
@@ -38,6 +39,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="40dp"
             android:layout_marginTop="40dp"
+            android:textSize="19sp"
             android:text="앱 알림"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
@@ -49,6 +51,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="40dp"
             android:layout_marginTop="5dp"
+            android:textSize="18sp"
             android:text="앱 알림을 ON/OFF 할 수 있어요"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView1" />

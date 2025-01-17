@@ -57,7 +57,7 @@ class HomeFragment(val mainFragment:MainFragment) : Fragment() {
             toolbarHome.setOnMenuItemClickListener {
                 when(it.itemId){
                     R.id.menuItemHomeNotification -> {
-
+                        mainFragment.replaceFragment(ShopSubFragmentName.USER_NOTIFICATION_LIST_FRAGMENT,true,true,null)
                     }
                     R.id.menuItemHomeShoppingCart -> {
                         mainFragment.replaceFragment(ShopSubFragmentName.SHOP_CART_FRAGMENT, true, true, null)
@@ -103,6 +103,10 @@ class HomeFragment(val mainFragment:MainFragment) : Fragment() {
             }
             tabLayoutMediator.attach()
         }
+    }
+
+    fun moveToPickLoc() {
+        mainFragment.replaceFragment(ShopSubFragmentName.SET_PICKUP_LOCATION_FRAGMENT,true,true,null)
     }
 
     // ViewPager2의 Adapter
