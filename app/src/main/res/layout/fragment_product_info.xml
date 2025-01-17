@@ -177,14 +177,17 @@
 
                             <RatingBar
                                 android:id="@+id/ratingBarProductInfo"
+                                style="@style/SmallRatingBar"
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
+                                android:layout_marginStart="-50dp"
                                 android:layout_weight="1"
                                 android:isIndicator="true"
                                 android:numStars="5"
                                 android:rating="2"
+                                android:scaleX="0.5"
+                                android:scaleY="0.5"
                                 android:stepSize="1"
-                                android:theme="@style/SmallRatingBar"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
@@ -193,13 +196,13 @@
                                 android:id="@+id/textViewProductInfoReviewCnt"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="20dp"
+                                android:layout_marginStart="-45dp"
+                                android:onClick="@{(view)->productInfoViewModel.textViewProductInfoReviewCntOnClick()}"
                                 android:text="리뷰 (3)"
                                 android:textSize="14sp"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintStart_toEndOf="@+id/ratingBarProductInfo"
-                                app:layout_constraintTop_toTopOf="parent"
-                                android:onClick="@{(view)->productInfoViewModel.textViewProductInfoReviewCntOnClick()}"/>
+                                app:layout_constraintTop_toTopOf="parent" />
 
                             <ImageView
                                 android:id="@+id/imageView"

@@ -14,7 +14,10 @@ import com.judamie_user.android.databinding.FragmentMainBinding
 import com.judamie_user.android.ui.component.ShowPickupLocationDialogFragment
 import com.judamie_user.android.ui.subfragment.ModifyUserInfoFragment
 import com.judamie_user.android.ui.subfragment.PaymentProductFragment
+import com.judamie_user.android.ui.subfragment.ProductInfoFragment
+import com.judamie_user.android.ui.subfragment.ProductReviewListFragment
 import com.judamie_user.android.ui.subfragment.SettingUserNotificationFragment
+import com.judamie_user.android.ui.subfragment.ShowReviewPhotoFragment
 import com.judamie_user.android.ui.temp.ShowUserCouponListFragment
 import com.judamie_user.android.ui.subfragment.ShowUserOrderListFragment
 import com.judamie_user.android.ui.subfragment.UserSettingFragment
@@ -133,6 +136,9 @@ class MainFragment() : Fragment() {
             ShopSubFragmentName.USER_NOTIFICATION_LIST_FRAGMENT -> UserNotificationListFragment(this)
             ShopSubFragmentName.SET_PICKUP_LOCATION_FRAGMENT -> SetPickUpLocationFragment(this)
             ShopSubFragmentName.SHOW_PICKUP_LOCATION_DIALOG_FRAGMENT -> ShowPickupLocationDialogFragment(this)
+            ShopSubFragmentName.PRODUCT_INFO_FRAGMENT -> ProductInfoFragment(this)
+            ShopSubFragmentName.PRODUCT_REVIEW_LIST_FRAGMENT -> ProductReviewListFragment(this)
+            ShopSubFragmentName.SHOW_REVIEW_PHOTO_FRAGMENT -> ShowReviewPhotoFragment(this)
         }
 
         // bundle 객체가 null이 아니라면
@@ -203,34 +209,39 @@ enum class ShopSubFragmentName(var number: Int, var str: String) {
     SHOP_CART_FRAGMENT(9, "ShopCartFragment"),
     // 결제하기 화면
     PAYMENT_PRODUCT_FRAGMENT(10, "PaymentProductFragment"),
-
+    // 제품 상세 페이지 화면
+    PRODUCT_INFO_FRAGMENT(11, "ProductInfoFragment"),
+    // 제품 리뷰 목록 화면
+    PRODUCT_REVIEW_LIST_FRAGMENT(12, "ProductReviewListFragment"),
+    // 리뷰 사진 크게보기 화면
+    SHOW_REVIEW_PHOTO_FRAGMENT(13,"ShowReviewPhotoFragment"),
 
     // 주문상세 ShowUserOrderInfoFragment
-    SHOW_USER_ORDER_INFO_FRAGMENT(11,"ShowUserOrderInfoFragment"),
+    SHOW_USER_ORDER_INFO_FRAGMENT(14,"ShowUserOrderInfoFragment"),
 
     // 리뷰작성 WriteProductReviewFragment
-    WRITE_PRODUCT_REVIEW_FRAGMENT(12,"WriteProductReviewFragment"),
+    WRITE_PRODUCT_REVIEW_FRAGMENT(15,"WriteProductReviewFragment"),
 
     // 쿠폰보기 화면
-    SHOW_USER_COUPON_LIST_FRAGMENT(13,"ShowUserCouponListFragment"),
+    SHOW_USER_COUPON_LIST_FRAGMENT(16,"ShowUserCouponListFragment"),
 
     // 앱정보 보기 ShowAppInfoFragment
-    SHOW_APP_INFO_FRAGMENT(14,"ShowAppInfoFragment"),
+    SHOW_APP_INFO_FRAGMENT(17,"ShowAppInfoFragment"),
 
     // 개인정보 처리방침 ShowAppPrivacyPolicyFragment
-    SHOW_APP_PRIVACY_POLICY_FRAGMENT(15,"ShowAppPrivacyPolicyFragment"),
+    SHOW_APP_PRIVACY_POLICY_FRAGMENT(18,"ShowAppPrivacyPolicyFragment"),
 
     // 서비스이용약관 ShowAppTOSFragment
-    SHOW_APP_TOS_FRAGMENT(16,"ShowAppTOSFragment"),
+    SHOW_APP_TOS_FRAGMENT(19,"ShowAppTOSFragment"),
 
     // 알림창 UserNotificationListFragment
-    USER_NOTIFICATION_LIST_FRAGMENT(17,"UserNotificationListFragment"),
+    USER_NOTIFICATION_LIST_FRAGMENT(20,"UserNotificationListFragment"),
 
     // 지도에서 픽업지 선택 SetPickUpLocationFragment
-    SET_PICKUP_LOCATION_FRAGMENT(18,"SetPickUpLocationFragment"),
+    SET_PICKUP_LOCATION_FRAGMENT(21,"SetPickUpLocationFragment"),
 
     // 픽업지 다이얼로그 ShowPickupLocationDialogFragment
-    SHOW_PICKUP_LOCATION_DIALOG_FRAGMENT(19,"ShowPickupLocationDialogFragment")
+    SHOW_PICKUP_LOCATION_DIALOG_FRAGMENT(22,"ShowPickupLocationDialogFragment")
 
 
 }

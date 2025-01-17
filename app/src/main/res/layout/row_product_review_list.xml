@@ -36,15 +36,15 @@
 
         <RatingBar
             android:id="@+id/rowRatingBarProductReview"
-            android:layout_width="240dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="-50dp"
+            android:layout_marginEnd="-45dp"
             android:numStars="5"
             android:rating="3"
             android:scaleX="0.5"
             android:scaleY="0.5"
             android:stepSize="1"
-            android:theme="@style/RatingBar"
+            style="@style/SmallRatingBar"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toEndOf="@+id/rowImageViewProductReviewNameArrow"
