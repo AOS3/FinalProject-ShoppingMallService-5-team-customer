@@ -3,9 +3,8 @@ package com.judamie_user.android.viewmodel.componentviewmodel
 import android.view.View
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.judamie_user.android.ui.component.ShowPickupLocationDialogFragment
 
-class ShowPickupLocationDialogViewModel(val showPickupLocationDialogFragment: ShowPickupLocationDialogFragment):ViewModel() {
+class ShowPickupLocationDialogViewModel : ViewModel() {
 
     // pickupLocationName - text
     val pickupLocationNameText = MutableLiveData("")
@@ -16,19 +15,22 @@ class ShowPickupLocationDialogViewModel(val showPickupLocationDialogFragment: Sh
     // pickupLocationDetail - visibility
     val pickupLocationDetailTextVisibility = MutableLiveData(View.VISIBLE)
 
-    // buttonPickupLocationCall - onClick
-    fun buttonPickupLocationCallOnClick(){
-        showPickupLocationDialogFragment.buttonCalling()
+
+    // Call button onClick
+    var onCallClick: (() -> Unit)? = null
+    fun buttonPickupLocationCallOnClick() {
+        onCallClick?.invoke()
     }
 
-    // buttonPickupLocationCancle - onClick
-    fun buttonPickupLocationCancleOnClick(){
-        showPickupLocationDialogFragment.buttonClose()
+    // Cancel button onClick
+    var onCancelClick: (() -> Unit)? = null
+    fun buttonPickupLocationCancleOnClick() {
+        onCancelClick?.invoke()
     }
 
-    // buttonPickupLocationSelect
-    fun buttonPickupLocationSelectOnClick(){
-
+    // Select button onClick
+    var onSelectClick: (() -> Unit)? = null
+    fun buttonPickupLocationSelectOnClick() {
+        onSelectClick?.invoke()
     }
-
 }

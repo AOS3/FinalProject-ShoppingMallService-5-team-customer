@@ -32,6 +32,7 @@
             </intent-filter>
         </activity>
 
+        <!-- 구글맵 API-key 등록(나중에 공용계정  API-key로 바꿀 예정-->
         <meta-data android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCQJdv7LZA3Gep-3AGGsaOP0lcJrfKG0vA"/>
 

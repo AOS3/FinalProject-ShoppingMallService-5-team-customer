@@ -9,4 +9,9 @@ data class HomeViewModel(val homeFragment: HomeFragment) : ViewModel() {
     fun buttonHomeSearchOnClick() {
         homeFragment.moveToSearch()
     }
+
+    //buttonHomePickupLoc - onClick
+    fun buttonHomePickupLocOnClick(){
+        homeFragment.moveToPickLoc()
+    }
 }
