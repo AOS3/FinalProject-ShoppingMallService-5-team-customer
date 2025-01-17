@@ -11,6 +11,7 @@ import androidx.fragment.app.commit
 import com.google.android.material.transition.MaterialSharedAxis
 import com.judamie_user.android.R
 import com.judamie_user.android.databinding.FragmentMainBinding
+import com.judamie_user.android.ui.component.ShowPickupLocationDialogFragment
 import com.judamie_user.android.ui.subfragment.ModifyUserInfoFragment
 import com.judamie_user.android.ui.subfragment.PaymentProductFragment
 import com.judamie_user.android.ui.subfragment.SettingUserNotificationFragment
@@ -131,6 +132,7 @@ class MainFragment() : Fragment() {
             ShopSubFragmentName.SHOW_APP_TOS_FRAGMENT -> ShowAppTOSFragment(this)
             ShopSubFragmentName.USER_NOTIFICATION_LIST_FRAGMENT -> UserNotificationListFragment(this)
             ShopSubFragmentName.SET_PICKUP_LOCATION_FRAGMENT -> SetPickUpLocationFragment(this)
+            ShopSubFragmentName.SHOW_PICKUP_LOCATION_DIALOG_FRAGMENT -> ShowPickupLocationDialogFragment(this)
         }
 
         // bundle 객체가 null이 아니라면
@@ -224,6 +226,10 @@ enum class ShopSubFragmentName(var number: Int, var str: String) {
     USER_NOTIFICATION_LIST_FRAGMENT(17,"UserNotificationListFragment"),
 
     // 지도에서 픽업지 선택 SetPickUpLocationFragment
-    SET_PICKUP_LOCATION_FRAGMENT(18,"SetPickUpLocationFragment")
+    SET_PICKUP_LOCATION_FRAGMENT(18,"SetPickUpLocationFragment"),
+
+    // 픽업지 다이얼로그 ShowPickupLocationDialogFragment
+    SHOW_PICKUP_LOCATION_DIALOG_FRAGMENT(19,"ShowPickupLocationDialogFragment")
+
 
 }

@@ -9,6 +9,7 @@ import androidx.databinding.DataBindingUtil
 import com.judamie_user.android.R
 import com.judamie_user.android.databinding.FragmentSetPickUpLocationBinding
 import com.judamie_user.android.ui.fragment.MainFragment
+import com.judamie_user.android.ui.fragment.ShopSubFragmentName
 import com.judamie_user.android.viewmodel.temp.SetPickUpLocationViewModel
 
 
@@ -22,10 +23,26 @@ class SetPickUpLocationFragment(val mainFragment: MainFragment) : Fragment() {
     ): View? {
         fragmentSetPickUpLocationBinding = DataBindingUtil.inflate(inflater,R.layout.fragment_set_pick_up_location,container,false)
         fragmentSetPickUpLocationBinding.setPickUpLocationViewModel = SetPickUpLocationViewModel(this)
-        fragmentSetPickUpLocationBinding.lifecycleOwner = viewLifecycleOwner
+        fragmentSetPickUpLocationBinding.lifecycleOwner = this
+
+        fragmentSetPickUpLocationBinding.apply {
+            materialToolbarSetPickupLocation.setOnMenuItemClickListener {
+                when(it.itemId){
+
+                    R.id.menuItemGettingMyLocation -> {
+                        mainFragment.replaceFragment(ShopSubFragmentName.SHOW_PICKUP_LOCATION_DIALOG_FRAGMENT,true,true,null)
+                    }
+                }
+                true
+            }
+        }
 
 
         return fragmentSetPickUpLocationBinding.root
+    }
+
+    fun movePrevFragment() {
+
     }
 
 
