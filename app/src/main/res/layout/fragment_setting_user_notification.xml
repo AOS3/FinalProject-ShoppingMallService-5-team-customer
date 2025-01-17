@@ -19,7 +19,7 @@
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/materialToolbarSettingUserNotification"
-            android:layout_width="409dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="@android:drawable/screen_background_light_transparent"
             android:minHeight="?attr/actionBarSize"

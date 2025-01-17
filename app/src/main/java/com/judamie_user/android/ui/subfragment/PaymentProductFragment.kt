@@ -49,6 +49,7 @@ class PaymentProductFragment(val mainFragment: MainFragment) : Fragment() {
         return fragmentPaymentProductBinding.root
     }
 
+
     // 툴바 구성 메서드
     fun settingToolbar(){
         fragmentPaymentProductBinding.paymentProductViewModel?.apply {
