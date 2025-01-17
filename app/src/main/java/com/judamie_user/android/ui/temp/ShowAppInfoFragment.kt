@@ -23,6 +23,8 @@ class ShowAppInfoFragment(val mainFragment: MainFragment) : Fragment() {
         fragmentShowAppInfoBinding.showAppInfoViewModel = ShowAppInfoViewModel(this)
         fragmentShowAppInfoBinding.lifecycleOwner = viewLifecycleOwner
 
+
+
         return fragmentShowAppInfoBinding.root
     }
 
