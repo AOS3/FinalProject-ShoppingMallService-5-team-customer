@@ -28,4 +28,11 @@
         <item name="ratingBarStyle">@style/Widget.AppCompat.RatingBar.Small</item>
     </style>
 
+    <!-- 레이팅바 금색으로 채우기 / 미듐 레이팅바 안댐안댐-->
+    <style name="MediumRatingBar" parent="Theme.AppCompat">
+        <item name="colorControlNormal">#D7D1D1</item>
+        <item name="colorControlActivated">@color/pickupDone</item>
+        <item name="ratingBarStyle">@style/Widget.AppCompat.RatingBar.Indicator</item>
+    </style>
+
 </resources>

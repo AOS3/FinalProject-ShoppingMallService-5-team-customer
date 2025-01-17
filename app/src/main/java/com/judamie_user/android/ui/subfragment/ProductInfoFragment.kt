@@ -65,8 +65,17 @@ class ProductInfoFragment(val mainFragment: MainFragment) : Fragment() {
     }
 
     // 리뷰 화면으로 이동하는 메서드
-    fun checkReview() {
-        // 리뷰 개수를 가져온다. (textView에 표시)
+    fun moveToReviewList() {
+        fragmentProductInfoBinding.apply {
+            val dataBundle = Bundle()
+            mainFragment.replaceFragment(ShopSubFragmentName.PRODUCT_REVIEW_LIST_FRAGMENT, true, true, dataBundle)
+        }
+
+    }
+
+    // 화면 구성 메서드
+    fun settingData(){
+
     }
 
     // 툴바 구성 메서드
