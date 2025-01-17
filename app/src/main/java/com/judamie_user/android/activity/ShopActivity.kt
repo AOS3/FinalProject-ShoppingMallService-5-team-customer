@@ -42,7 +42,7 @@ class ShopActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        replaceFragment(ShopFragmentName.notifi, false, false, null)
+        replaceFragment(ShopFragmentName.MAIN_FRAGMENT, false, false, null)
     }
 
     // 프래그먼트를 교체하는 함수

@@ -38,7 +38,7 @@ class WriteProductReviewViewModel(val writeProductReviewFragment: WriteProductRe
     val textInputLayoutWriteProductReviewContentText = MutableLiveData("textInputLayoutWriteProductReviewContent")
 
     //buttonWriteProductReviewAddPhoto(Text)
-    val buttonWriteProductReviewAddPhotoText = MutableLiveData("사진 추가 \n (0/5)")
+    val buttonWriteProductReviewAddPhotoText = MutableLiveData("")
 
     //buttonWriteProductReviewAddPhoto
     fun buttonWriteProductReviewAddPhotoOnclick(){

@@ -18,6 +18,8 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.judamie_user.android.R
@@ -33,7 +35,7 @@ class WriteProductReviewFragment(val mainFragment: MainFragment) : Fragment() {
     private lateinit var fragmentWriteProductReviewBinding: FragmentWriteProductReviewBinding
     //private val photoList = mutableListOf<String>() // 사진 경로 리스트
 
-    private val photoList = mutableListOf<Bitmap>() // 사진 파일 리스트
+    private val photoList = mutableListOf<Uri>() // 사진 파일 리스트
 
     private lateinit var photoAdapter: PhotoAdapter
 
@@ -145,31 +147,22 @@ class WriteProductReviewFragment(val mainFragment: MainFragment) : Fragment() {
     }
 
     private fun processCapturedPhoto(uri: Uri) {
-        val bitmap = pictureHandler.getBitmapFromUri(uri)
-        val degree = pictureHandler.getRotationDegree(uri)
-        val rotatedBitmap = pictureHandler.rotateBitmap(bitmap, degree)
-        val resizedBitmap = pictureHandler.resizeBitmap(1024, rotatedBitmap)
-
-        photoList.add(resizedBitmap)
-        Log.d("test",photoList.toString())// Bitmap을 리스트에 추가
+        photoList.add(uri) // Uri를 리스트에 추가
         photoAdapter.notifyItemInserted(photoList.size - 1)
         updatePhotoCountText()
     }
 
     private fun processSelectedPhoto(uri: Uri) {
-        val bitmap = pictureHandler.getBitmapFromUri(uri)
-        val resizedBitmap = pictureHandler.resizeBitmap(1024, bitmap)
-
-        photoList.add(resizedBitmap)
-        Log.d("test",photoList.toString())// Bitmap을 리스트에 추가
+        photoList.add(uri) // Uri를 리스트에 추가
         photoAdapter.notifyItemInserted(photoList.size - 1)
         updatePhotoCountText()
     }
 
 
+
     private fun updatePhotoCountText() {
-        fragmentWriteProductReviewBinding.writeProductReviewViewModel?.buttonWriteProductReviewAddPhotoText?.value =
-            "사진 추가 \n (${photoList.size}/5)"
+        fragmentWriteProductReviewBinding.textViewTitle.text =
+            "사진 첨부 (선택) (${photoList.size}/5)"
     }
 
     private fun showToast(message: String) {
@@ -184,12 +177,11 @@ class WriteProductReviewFragment(val mainFragment: MainFragment) : Fragment() {
         fragmentWriteProductReviewBinding.apply {
             if (writeProductReviewViewModel?.textInputLayoutWriteProductReviewContentText?.value?.length!! < 10) {
                 showToast("리뷰를 최소 10자 이상 작성해주세요")
-            }
-            else {
+            } else {
                 // 다이얼로그 빌더 생성
                 val builder = MaterialAlertDialogBuilder(requireContext())
 
-                builder.setTitle("리뷰 저장")
+                val dialog = builder.setTitle("리뷰 저장")
                     .setMessage("작성한 리뷰를 저장하시겠습니까?")
                     .setPositiveButton("확인") { dialog, _ ->
                         // 리뷰 저장 로직 실행
@@ -205,14 +197,20 @@ class WriteProductReviewFragment(val mainFragment: MainFragment) : Fragment() {
                         dialog.dismiss()
                     }
                     .setCancelable(true) // 다이얼로그 외부 터치로 닫을 수 있음
-                    .show() // 다이얼로그 표시
+                    .create() // 다이얼로그 생성
+
+                // 배경색을 흰색으로 설정
+                dialog.window?.setBackgroundDrawableResource(android.R.color.white)
+
+                dialog.show() // 다이얼로그 표시
             }
         }
     }
 
 
+
     inner class PhotoAdapter(
-        private val photos: MutableList<Bitmap>,
+        private val photos: MutableList<Uri>, // Uri 리스트로 변경
         private val onDeleteClick: (Int) -> Unit
     ) : RecyclerView.Adapter<PhotoAdapter.PhotoViewHolder>() {
 
@@ -227,8 +225,13 @@ class WriteProductReviewFragment(val mainFragment: MainFragment) : Fragment() {
         }
 
         override fun onBindViewHolder(holder: PhotoViewHolder, position: Int) {
-            val bitmap = photos[position]
-            holder.binding.imageViewPhoto.setImageBitmap(bitmap) // Bitmap을 이미지 뷰에 설정
+            val uri = photos[position]
+
+            // Glide로 Uri를 로드
+            Glide.with(holder.binding.imageViewPhoto.context)
+                .load(uri)
+                .apply(RequestOptions().transform(RoundedCorners(24))) // 둥근 모서리 처리
+                .into(holder.binding.imageViewPhoto)
 
             holder.binding.buttonDeletePhoto.setOnClickListener {
                 onDeleteClick(position)
@@ -239,6 +242,7 @@ class WriteProductReviewFragment(val mainFragment: MainFragment) : Fragment() {
 
         inner class PhotoViewHolder(val binding: ItemPhotoBinding) : RecyclerView.ViewHolder(binding.root)
     }
+
 
 
 }
