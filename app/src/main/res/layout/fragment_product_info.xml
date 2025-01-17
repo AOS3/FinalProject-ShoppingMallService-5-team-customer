@@ -198,7 +198,8 @@
                                 android:textSize="14sp"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintStart_toEndOf="@+id/ratingBarProductInfo"
-                                app:layout_constraintTop_toTopOf="parent" />
+                                app:layout_constraintTop_toTopOf="parent"
+                                android:onClick="@{(view)->productInfoViewModel.textViewProductInfoReviewCntOnClick()}"/>
 
                             <ImageView
                                 android:id="@+id/imageView"
@@ -232,7 +233,7 @@
                                 android:id="@+id/textViewProductInfoDescription"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="TextView" />
+                                android:text="제품에 대한 상세 내용 설명입니다 주르륵 주르륵 어떤 술 좋아하세요?" />
 
                             <androidx.recyclerview.widget.RecyclerView
                                 android:id="@+id/recyclerViewProductInfoImg"

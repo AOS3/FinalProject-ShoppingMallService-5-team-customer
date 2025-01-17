@@ -15,30 +15,39 @@
         android:background="@color/white"
         android:transitionGroup="true">
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbarProductReview"
-            android:layout_width="290dp"
+        <FrameLayout
+            android:id="@+id/frameLayoutProdutReview"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            android:minHeight="?attr/actionBarSize"
-            android:theme="?attr/actionBarTheme"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <Button
-            android:id="@+id/buttonProductReviewWrite"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="1dp"
-            android:background="@android:color/transparent"
-            android:text="리뷰쓰기"
-            android:textColor="@color/mainColor"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/toolbarProductReview"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/toolbarProductReview"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbarProductReview"
+                onNavigationClickProductReviewList="@{productReviewListViewModel.productReviewListFragment}"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:minHeight="?attr/actionBarSize"
+                android:theme="?attr/actionBarTheme"
+                app:contentInsetRight="50dp"
+                app:navigationIcon="@{productReviewListViewModel.toolbarProductReviewNavigationIcon}"
+                app:title="@{productReviewListViewModel.toolbarProductReviewTitle}"
+                app:titleCentered="true" />
+
+            <Button
+                android:id="@+id/buttonProductReviewWrite"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|center_vertical"
+                android:layout_marginStart="1dp"
+                android:background="@android:color/transparent"
+                android:text="리뷰쓰기"
+                android:textColor="@color/mainColor"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+        </FrameLayout>
 
         <TextView
             android:id="@+id/textViewProductReviewCnt"
@@ -52,13 +61,14 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/toolbarProductReview" />
+            app:layout_constraintTop_toBottomOf="@id/frameLayoutProdutReview"
+            tools:layout_constraintTop_toBottomOf="@id/frameLayoutProdutReview" />
 
         <View
             android:id="@+id/divider3"
             android:layout_width="0dp"
             android:layout_height="1dp"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="10dp"
             android:background="?android:attr/listDivider"
             app:layout_constraintBottom_toTopOf="@id/scrollViewProductReview"
             app:layout_constraintEnd_toEndOf="parent"
@@ -81,7 +91,8 @@
                 android:orientation="vertical">
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:layout_width="0dp"
+                    android:id="@+id/recyclerViewProductReview"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
             </LinearLayout>
         </ScrollView>

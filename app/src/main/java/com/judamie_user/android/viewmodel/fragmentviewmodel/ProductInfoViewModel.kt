@@ -28,6 +28,12 @@ data class ProductInfoViewModel(val productInfoFragment: ProductInfoFragment) : 
     // textViewProductInfoReviewCnt
     val textViewProductInfoReviewCnt = MutableLiveData("")
 
+
+    // textViewProductInfoReviewCnt - onClick
+    fun textViewProductInfoReviewCntOnClick() {
+        productInfoFragment.moveToReviewList()
+    }
+
     // 찜 목록 추가 버튼
     // imageButtonProductInfoSetWishList - OnClick
     fun imageButtonProductInfoSetWishListOnClick() {
