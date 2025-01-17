@@ -6,23 +6,23 @@ import com.judamie_user.android.ui.subfragment.ShowUserOrderListFragment
 
 class RowOrderListViewModel(val showUserOrderListFragment: ShowUserOrderListFragment):ViewModel() {
     // textViewOrderDate
-    val textViewOrderDateText = MutableLiveData("")
+    val textViewOrderDateText = MutableLiveData("textViewOrderDate")
 
     //imageViewOrderImage
 
 
     //textViewOrderName
-    val textViewOrderNameText = MutableLiveData("")
+    val textViewOrderNameText = MutableLiveData("textViewOrderName")
 
     //textViewCountMore
-    val textViewCountMoreText = MutableLiveData("")
+    val textViewCountMoreText = MutableLiveData("textViewCountMore")
 
     //textViewTotalPrice
-    val textViewTotalPrice = MutableLiveData("")
+    val textViewTotalPrice = MutableLiveData("textViewTotalPrice")
 
     //textViewOrderCount
-    val textViewOrderCount = MutableLiveData("")
+    val textViewOrderCount = MutableLiveData("textViewOrderCount")
 
     //textViewPickupState
-    val textViewPickupState = MutableLiveData("")
+    val textViewPickupState = MutableLiveData("textViewPickupState")
 }

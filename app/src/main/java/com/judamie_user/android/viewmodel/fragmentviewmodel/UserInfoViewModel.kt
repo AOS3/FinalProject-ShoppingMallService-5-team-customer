@@ -21,7 +21,7 @@ class UserInfoViewModel(val userInfoFragment: UserInfoFragment) : ViewModel() {
 
     //textViewCouponList
     fun textViewCouponListOnClick(){
-        Log.d("test","textViewCouponListOnClick")
+        userInfoFragment.goShowUserCouponListFragment()
     }
 
     //textViewIntroduceAndHowToUse

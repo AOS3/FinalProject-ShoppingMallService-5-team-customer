@@ -15,4 +15,30 @@
         <item name="android:textSize">14sp</item>
     </style>
 
+    <style name="CustomMaterialSwitch" parent="Widget.Material3.CompoundButton.MaterialSwitch">
+        <item name="trackTint">@color/switch_track_color</item>
+    </style>
+
+    <!-- BottomNavigationView 아이콘 색상 -->
+
+    <style name="BottomNavStyle" parent="Widget.MaterialComponents.BottomNavigationView">
+        <!-- 텍스트 색상 상태별로 지정 -->
+        <item name="itemTextColor">@color/bottom_nav_color</item>
+        <!-- 아이콘 색상 상태별로 지정 -->
+        <item name="itemIconTint">@color/bottom_nav_color</item>
+    </style>
+
+    <!-- 레이팅바 금색으로 채우기-->
+    <style name="RatingBar" parent="Theme.AppCompat">
+        <item name="colorControlNormal">@color/gray</item>
+        <item name="colorControlActivated">@color/pickupDone</item>
+    </style>
+
+    <style name="ImageRatingBar" parent="Widget.AppCompat.RatingBar">
+        <item name="android:progressDrawable">@drawable/custom_judamie_ratingbar</item>
+    </style>
+
+
+
+
 </resources>

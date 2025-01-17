@@ -9,7 +9,7 @@
         android:background="@drawable/view_round_white">
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/textViewNoNotification"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="40dp"
@@ -60,7 +60,7 @@
             android:text="탈퇴 버튼 선택 시, 계정은 삭제되며 \n복구되지 않습니다."
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView" />
+            app:layout_constraintTop_toBottomOf="@+id/textViewNoNotification" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

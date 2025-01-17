@@ -10,7 +10,7 @@
         android:background="@drawable/view_round_white">
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/textViewNoNotification"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="40dp"
@@ -36,7 +36,7 @@
             app:layout_constraintEnd_toEndOf="@id/buttonLogout"
             app:layout_constraintHorizontal_bias="0.303"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView" />
+            app:layout_constraintTop_toBottomOf="@+id/textViewNoNotification" />
 
         <android.widget.Button
             android:id="@+id/buttonLogout"
@@ -54,7 +54,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.73"
             app:layout_constraintStart_toStartOf="@id/buttonCancle"
-            app:layout_constraintTop_toBottomOf="@+id/textView"
+            app:layout_constraintTop_toBottomOf="@+id/textViewNoNotification"
             app:layout_constraintVertical_bias="0.0" />
 
 
