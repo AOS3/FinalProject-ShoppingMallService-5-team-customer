@@ -202,8 +202,7 @@
                                 android:textSize="14sp"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintStart_toEndOf="@+id/ratingBarProductInfo"
-                                app:layout_constraintTop_toTopOf="parent"
-                                android:onClick="@{(view)->productInfoViewModel.textViewProductInfoReviewCntOnClick()}"/>
+                                app:layout_constraintTop_toTopOf="parent" />
 
                             <ImageView
                                 android:id="@+id/imageView"
