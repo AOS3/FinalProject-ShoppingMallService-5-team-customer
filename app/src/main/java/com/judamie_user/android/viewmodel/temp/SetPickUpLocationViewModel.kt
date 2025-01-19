@@ -1,6 +1,7 @@
 package com.judamie_user.android.viewmodel.temp
 
 import androidx.databinding.BindingAdapter
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.android.material.appbar.MaterialToolbar
 import com.judamie_user.android.ui.temp.SetPickUpLocationFragment
@@ -21,6 +22,20 @@ class SetPickUpLocationViewModel(val setPickUpLocationFragment: SetPickUpLocatio
     }
 
 
-//
+    //textViewSetPickUpLocationName
+    val textViewSetPickUpLocationNameText = MutableLiveData("CU")
+
+    //textViewSetPickUpLocationCenterAddress
+    val textViewSetPickUpLocationCenterAddressText = MutableLiveData("")
+
+    //floatingActionButtonSetPickupLocation
+    fun floatingActionButtonSetPickupLocationOnClick(){
+        setPickUpLocationFragment.getMyLocation()
+    }
+
+    //buttonSetPickUpLocationShowInfo
+    fun buttonSetPickUpLocationShowInfoOnClick(){
+        setPickUpLocationFragment.pickUpLocationShowInfo()
+    }
 
 }

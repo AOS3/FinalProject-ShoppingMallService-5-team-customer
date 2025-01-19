@@ -72,13 +72,25 @@ class SetPickUpLocationFragment(val mainFragment: MainFragment) : Fragment() {
     // 현재 사용자의 위치를 표시할 마커 객체
     var myMarker: Marker? = null
 
+    // 현재 사용자가 보고있는 지도의 중심마커
+    var centerMarker: Marker? = null
+
     // 임시 픽업지 주소 리스트
     val addressList = listOf(
         "서울특별시 종로구 세종대로 175",
         "서울특별시 강남구 테헤란로 123",
         "충청북도 청주시 흥덕구 오송읍 오송생명5로 184-4",
         "03900, 서울 마포구 하늘공원로 84 (상암동)",
-        "155 W Center Street Promenade, Anaheim, CA 92805"
+        "155 W Center Street Promenade, Anaheim, CA 92805",
+        "1159 N Rengstorff Ave, Mountain View, CA 94043",
+        "1600 Amphitheatre Pkwy, Mountain View, CA 94043",
+        "2000 N Shoreline Blvd Ground Floor, Mountain View, CA 94043"
+    )
+
+    val addressMap = mapOf(
+        "A픽업지" to "1600 Amphitheatre Pkwy, Mountain View, CA 94043",
+        "B픽업지" to "2000 N Shoreline Blvd Ground Floor, Mountain View, CA 94043"
+
     )
 
     // 마커와 주소를 매핑하는 맵
@@ -116,29 +128,11 @@ class SetPickUpLocationFragment(val mainFragment: MainFragment) : Fragment() {
         // 구글 맵 설정
         settingGoogleMap()
 
-        // 상단 툴바 세팅
-        settingMaterialToolbarSetPickupLocation()
-
         return fragmentSetPickUpLocationBinding.root
     }
 
-    // 상단 툴바 세팅
-    fun settingMaterialToolbarSetPickupLocation() {
-        fragmentSetPickUpLocationBinding.apply {
-            materialToolbarSetPickupLocation.setOnMenuItemClickListener {
-                when (it.itemId) {
-
-                    R.id.menuItemGettingMyLocation -> {
-                        getMyLocation()
-                    }
-                }
-                true
-            }
-        }
-    }
-
     fun movePrevFragment() {
-
+        mainFragment.removeFragment(ShopSubFragmentName.SET_PICKUP_LOCATION_FRAGMENT)
     }
 
     // 위치 측정에 성공하면 동작하는 리스너
@@ -170,7 +164,7 @@ class SetPickUpLocationFragment(val mainFragment: MainFragment) : Fragment() {
         myMarker = null
 
         // VectorDrawable을 Bitmap으로 변환하여 마커에 적용
-        val markerBitmap = vectorToBitmap(requireContext(), R.drawable.choi_ho_joon) // 벡터 리소스 ID
+        val markerBitmap = vectorToBitmap(requireContext(), R.drawable.my_location_24px) // 벡터 리소스 ID
         markerOptions.icon(BitmapDescriptorFactory.fromBitmap(markerBitmap))
 
         // 새 마커 추가
@@ -183,7 +177,7 @@ class SetPickUpLocationFragment(val mainFragment: MainFragment) : Fragment() {
             childFragmentManager.findFragmentById(R.id.mapFragmentSetPickupLocation) as SupportMapFragment
         mapFragment.getMapAsync {
             mainGoogleMap = it
-            mainGoogleMap.uiSettings.isZoomControlsEnabled = true
+            mainGoogleMap.uiSettings.isZoomControlsEnabled = false
             mainGoogleMap.mapType = GoogleMap.MAP_TYPE_NORMAL
 
             locationManager = requireContext().getSystemService(LOCATION_SERVICE) as LocationManager
@@ -219,13 +213,60 @@ class SetPickUpLocationFragment(val mainFragment: MainFragment) : Fragment() {
                 setMyLocation(passiveSavedLocation)
             }
 
-            // 현재 위치 측정을 시작한다.
-            // getMyLocation()
-
             // 주소 리스트의 모든 주소를 처리
-            addressList.forEach { address ->
-                addMarker(address)
+
+            addressMap.forEach{
+                addMarker(it.value)
             }
+
+//            addressList.forEach { address ->
+//                addMarker(address)
+//            }
+
+
+            // 카메라가 이동을 멈춘 후 호출되는 리스너
+            mainGoogleMap.setOnCameraIdleListener {
+                val centerLatLng = mainGoogleMap.cameraPosition.target
+                addCenterMarker(centerLatLng) // 지도 중심에 마커 추가
+            }
+        }
+    }
+
+    fun addCenterMarker(centerLatLng: LatLng): String? {
+        // 기존 중심 마커 제거
+        centerMarker?.remove()
+
+        // 새로운 중심 마커 옵션 설정
+        val markerOptions = MarkerOptions()
+            .position(centerLatLng)
+            .title("선택한 위치")
+            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)) // 마커 색상
+
+        // VectorDrawable을 Bitmap으로 변환하여 마커에 적용
+        val markerBitmap = vectorToBitmap(requireContext(), R.drawable.red_marker)
+        markerOptions.icon(BitmapDescriptorFactory.fromBitmap(markerBitmap))
+
+        // 마커 추가
+        centerMarker = mainGoogleMap.addMarker(markerOptions)
+
+        // 위치에 대한 주소 표시
+        val geocoder = Geocoder(requireContext(), Locale.KOREAN) // 한국어 설정
+        return try {
+            val addresses = geocoder.getFromLocation(centerLatLng.latitude, centerLatLng.longitude, 1)
+            if (!addresses.isNullOrEmpty()) {
+                val address = addresses[0].getAddressLine(0) // 한글 주소
+
+
+                fragmentSetPickUpLocationBinding.setPickUpLocationViewModel?.textViewSetPickUpLocationCenterAddressText?.value = address
+                Log.d("CenterMarker", "한글 주소: $address")
+                address // 반환
+            } else {
+                Log.e("CenterMarker", "주소를 찾을 수 없습니다.")
+                null
+            }
+        } catch (e: IOException) {
+            Log.e("Geocoder", "Geocoding 에러: $e")
+            null
         }
     }
 
@@ -377,6 +418,7 @@ class SetPickUpLocationFragment(val mainFragment: MainFragment) : Fragment() {
 
             viewModel.onSelectClick = {
                 // Handle "Select" action here
+                fragmentSetPickUpLocationBinding.setPickUpLocationViewModel?.textViewSetPickUpLocationNameText?.value = address
                 dialog.dismiss()
             }
 
@@ -410,5 +452,17 @@ class SetPickUpLocationFragment(val mainFragment: MainFragment) : Fragment() {
         vectorDrawable.draw(canvas)
         return bitmap
     }
+
+    fun callToPickupLocation() {
+        val intent = Intent(Intent.ACTION_DIAL).apply {
+            data = Uri.parse("tel:$01012345678")
+        }
+        startActivity(intent)
+    }
+
+    fun pickUpLocationShowInfo() {
+
+    }
+
 
 }
