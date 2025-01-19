@@ -4,9 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
-            name="showPickupLocationInformationDialogViewModel"
-            type="com.judamie_user.android.viewmodel.componentviewmodel.ShowPickupLocationInformationDialogViewModel" />
+            name="settingPickupLocationDialogViewModel"
+            type="com.judamie_user.android.viewmodel.componentviewmodel.SettingPickupLocationDialogViewModel" />
 
     </data>
 
@@ -16,13 +17,13 @@
         android:background="@color/white">
 
         <TextView
-            android:id="@+id/textViewDialogShowPickupLocationInformationName"
+            android:id="@+id/textViewDialogSettingPickupLocationName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:maxLength="10"
             android:maxLines="1"
-            android:text="@{showPickupLocationInformationDialogViewModel.textViewDialogShowPickupLocationInformationNameText}"
+            android:text="@{settingPickupLocationDialogViewModel.textViewDialogSettingPickupLocationNameText}"
             android:textColor="@color/mainColor"
             android:textSize="40sp"
             android:textStyle="bold"
@@ -66,12 +67,12 @@
             android:layout_height="37dp"
             android:layout_marginTop="10dp"
             android:background="@drawable/dialog_call_button"
-            android:onClick="@{(view) -> showPickupLocationInformationDialogViewModel.buttonPickupLocationCallOnClick()}"
+            android:onClick="@{(view) -> settingPickupLocationDialogViewModel.buttonPickupLocationCallOnClick()}"
             android:textAppearance="@style/TextAppearance.AppCompat.Small"
             android:textColor="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textViewDialogShowPickupLocationInformationName" />
+            app:layout_constraintTop_toBottomOf="@+id/textViewDialogSettingPickupLocationName" />
 
         <TextView
             android:id="@+id/textViewDialogSettingPickupLocationDetail"
@@ -79,7 +80,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="30dp"
             android:layout_marginTop="10dp"
-            android:text="@{showPickupLocationInformationDialogViewModel.textViewDialogShowPickupLocationInformationDetailText}"
+            android:text="@{settingPickupLocationDialogViewModel.textViewDialogSettingPickupLocationDetailText}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView14" />
 
@@ -89,14 +90,16 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
-            android:background="@drawable/button_round_activated"
-            android:textColor="@color/white"
-            android:onClick="@{()->showPickupLocationInformationDialogViewModel.DialogShowPickupLocationInformationCloseOnClick()}"
+            android:background="@drawable/button_round_deactivated"
+            android:onClick="@{()->settingPickupLocationDialogViewModel.DialogSettingPickupLocationCloseOnClick()}"
             android:text="닫기"
+            android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.25"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textViewDialogSettingPickupLocationDetail" />
+            app:layout_constraintTop_toBottomOf="@+id/textViewDialogSettingPickupLocationDetail"
+            app:layout_constraintVertical_bias="1.0" />
 
         <TextView
             android:id="@+id/textViewDialogSettingPickupLocationOpenTime"
@@ -104,7 +107,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
-            android:text="@{showPickupLocationInformationDialogViewModel.textViewDialogShowPickupLocationInformationOpenTimeText}"
+            android:text="@{settingPickupLocationDialogViewModel.textViewDialogSettingPickupLocationOpenTimeText}"
             app:layout_constraintStart_toEndOf="@+id/textView12"
             app:layout_constraintTop_toBottomOf="@+id/buttonSettingPickupLocationCall" />
 
@@ -114,7 +117,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
-            android:text="@{showPickupLocationInformationDialogViewModel.textViewDialogShowPickupLocationInformationAddressDetailText}"
+            android:text="@{settingPickupLocationDialogViewModel.textViewDialogSettingPickupLocationAddressDetailText}"
             app:layout_constraintStart_toEndOf="@id/textView13"
             app:layout_constraintTop_toBottomOf="@id/textViewDialogSettingPickupLocationStreetAddress" />
 
@@ -124,7 +127,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
-            android:text="@{showPickupLocationInformationDialogViewModel.textViewDialogShowPickupLocationInformationPhoneNumberText}"
+            android:text="@{settingPickupLocationDialogViewModel.textViewDialogSettingPickupLocationPhoneNumberText}"
             app:layout_constraintStart_toEndOf="@+id/textView14"
             app:layout_constraintTop_toBottomOf="@id/textViewDialogSettingPickupLocationAddressDetail" />
 
@@ -134,9 +137,26 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
-            android:text="@{showPickupLocationInformationDialogViewModel.textViewDialogShowPickupLocationInformationStreetAddressText}"
+            android:text="@{settingPickupLocationDialogViewModel.textViewDialogSettingPickupLocationStreetAddressText}"
             app:layout_constraintStart_toEndOf="@+id/textView13"
             app:layout_constraintTop_toBottomOf="@+id/textViewDialogSettingPickupLocationOpenTime" />
+
+        <android.widget.Button
+            android:id="@+id/DialogSettingPickupLocationChoice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/button_round_activated"
+            android:onClick="@{()->settingPickupLocationDialogViewModel.DialogSettingPickupLocationChoiceOnClick()}"
+            android:padding="10dp"
+            android:text="이곳으로 지정하기"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.75"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewDialogSettingPickupLocationDetail" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

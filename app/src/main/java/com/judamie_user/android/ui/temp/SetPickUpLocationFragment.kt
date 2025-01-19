@@ -2,7 +2,6 @@ package com.judamie_user.android.ui.temp
 
 import android.Manifest
 import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Geocoder
@@ -21,7 +20,6 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity.LOCATION_SERVICE
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.databinding.DataBindingUtil
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -36,19 +34,17 @@ import com.judamie_user.android.databinding.FragmentSetPickUpLocationBinding
 import com.judamie_user.android.ui.fragment.MainFragment
 import com.judamie_user.android.ui.fragment.ShopSubFragmentName
 import com.judamie_user.android.viewmodel.temp.SetPickUpLocationViewModel
-import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import java.io.IOException
 import java.util.Locale
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.drawable.Drawable
-import android.widget.Button
-import android.widget.TextView
 import androidx.core.content.ContextCompat
-import com.judamie_user.android.databinding.FragmentShowPickupLocationDialogBinding
-import com.judamie_user.android.viewmodel.componentviewmodel.ShowPickupLocationDialogViewModel
+import com.judamie_user.android.databinding.DialogSettingPickupLocationBinding
+import com.judamie_user.android.databinding.DialogShowPickupLocationInformationBinding
+import com.judamie_user.android.viewmodel.componentviewmodel.SettingPickupLocationDialogViewModel
+import com.judamie_user.android.viewmodel.componentviewmodel.ShowPickupLocationInformationDialogViewModel
 
 
 class SetPickUpLocationFragment(val mainFragment: MainFragment) : Fragment() {
@@ -85,12 +81,6 @@ class SetPickUpLocationFragment(val mainFragment: MainFragment) : Fragment() {
         "1159 N Rengstorff Ave, Mountain View, CA 94043",
         "1600 Amphitheatre Pkwy, Mountain View, CA 94043",
         "2000 N Shoreline Blvd Ground Floor, Mountain View, CA 94043"
-    )
-
-    val addressMap = mapOf(
-        "A픽업지" to "1600 Amphitheatre Pkwy, Mountain View, CA 94043",
-        "B픽업지" to "2000 N Shoreline Blvd Ground Floor, Mountain View, CA 94043"
-
     )
 
     // 마커와 주소를 매핑하는 맵
@@ -177,7 +167,7 @@ class SetPickUpLocationFragment(val mainFragment: MainFragment) : Fragment() {
             childFragmentManager.findFragmentById(R.id.mapFragmentSetPickupLocation) as SupportMapFragment
         mapFragment.getMapAsync {
             mainGoogleMap = it
-            mainGoogleMap.uiSettings.isZoomControlsEnabled = false
+            mainGoogleMap.uiSettings.isZoomControlsEnabled = true
             mainGoogleMap.mapType = GoogleMap.MAP_TYPE_NORMAL
 
             locationManager = requireContext().getSystemService(LOCATION_SERVICE) as LocationManager
@@ -215,13 +205,13 @@ class SetPickUpLocationFragment(val mainFragment: MainFragment) : Fragment() {
 
             // 주소 리스트의 모든 주소를 처리
 
-            addressMap.forEach{
-                addMarker(it.value)
-            }
-
-//            addressList.forEach { address ->
-//                addMarker(address)
+//            addressMap.forEach{
+//                addMarker(it.value)
 //            }
+
+            addressList.forEach { address ->
+                addMarker(address)
+            }
 
 
             // 카메라가 이동을 멈춘 후 호출되는 리스너
@@ -233,42 +223,33 @@ class SetPickUpLocationFragment(val mainFragment: MainFragment) : Fragment() {
     }
 
     fun addCenterMarker(centerLatLng: LatLng): String? {
-        // 기존 중심 마커 제거
         centerMarker?.remove()
 
-        // 새로운 중심 마커 옵션 설정
         val markerOptions = MarkerOptions()
             .position(centerLatLng)
             .title("선택한 위치")
-            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)) // 마커 색상
+            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
 
-        // VectorDrawable을 Bitmap으로 변환하여 마커에 적용
         val markerBitmap = vectorToBitmap(requireContext(), R.drawable.red_marker)
         markerOptions.icon(BitmapDescriptorFactory.fromBitmap(markerBitmap))
-
-        // 마커 추가
         centerMarker = mainGoogleMap.addMarker(markerOptions)
 
-        // 위치에 대한 주소 표시
-        val geocoder = Geocoder(requireContext(), Locale.KOREAN) // 한국어 설정
+        val geocoder = Geocoder(requireContext(), Locale.KOREAN)
         return try {
             val addresses = geocoder.getFromLocation(centerLatLng.latitude, centerLatLng.longitude, 1)
-            if (!addresses.isNullOrEmpty()) {
-                val address = addresses[0].getAddressLine(0) // 한글 주소
+            val roadNameAddress = addresses?.firstOrNull()?.thoroughfare
+            val fullAddress = addresses?.firstOrNull()?.getAddressLine(0)
 
-
-                fragmentSetPickUpLocationBinding.setPickUpLocationViewModel?.textViewSetPickUpLocationCenterAddressText?.value = address
-                Log.d("CenterMarker", "한글 주소: $address")
-                address // 반환
-            } else {
-                Log.e("CenterMarker", "주소를 찾을 수 없습니다.")
-                null
-            }
+            val finalAddress = roadNameAddress ?: fullAddress
+            fragmentSetPickUpLocationBinding.setPickUpLocationViewModel?.textViewSetPickUpLocationCenterAddressText?.value = finalAddress
+            Log.d("CenterMarker", "도로명 주소: $finalAddress")
+            finalAddress
         } catch (e: IOException) {
             Log.e("Geocoder", "Geocoding 에러: $e")
             null
         }
     }
+
 
     // 권한 확인을 위해 사용할 런처 생성
     fun createPermissionCheckLauncher() {
@@ -395,29 +376,35 @@ class SetPickUpLocationFragment(val mainFragment: MainFragment) : Fragment() {
         if (address != null) {
             Log.d("test", "클릭된 마커의 주소: $address")
 
-            val binding: FragmentShowPickupLocationDialogBinding = DataBindingUtil.inflate(
+            val binding: DialogSettingPickupLocationBinding = DataBindingUtil.inflate(
                 layoutInflater,
-                R.layout.fragment_show_pickup_location_dialog,
+                R.layout.dialog_setting_pickup_location,
                 null,
                 false
             )
 
             //뷰모델 객체를 만든다
-            val viewModel = ShowPickupLocationDialogViewModel()
-            binding.showPickupLocationDialogViewModel = viewModel
+            val viewModel = SettingPickupLocationDialogViewModel()
+            binding.settingPickupLocationDialogViewModel = viewModel
             binding.lifecycleOwner = this
 
             val dialog = MaterialAlertDialogBuilder(requireContext())
                 .setView(binding.root)
                 .create()
 
+            viewModel.textViewDialogSettingPickupLocationNameText?.value = "GS25 창전삼성점"
+            viewModel.textViewDialogSettingPickupLocationOpenTimeText?.value = "연중무휴"
+            viewModel.textViewDialogSettingPickupLocationStreetAddressText?.value= "서울 마포구 서강로 97"
+            viewModel.textViewDialogSettingPickupLocationAddressDetailText?.value = "삼성아파트단지 상가 114호"
+            viewModel.textViewDialogSettingPickupLocationPhoneNumberText?.value = "02-337-3291"
+            viewModel.textViewDialogSettingPickupLocationDetailText?.value = "24시간 편의점"
+
             // 클릭리스너의 동작을 설정한다
-            viewModel.onCancelClick = {
+            viewModel.onCloseClick = {
                 dialog.dismiss()
             }
 
-            viewModel.onSelectClick = {
-                // Handle "Select" action here
+            viewModel.onChoiceClick = {
                 fragmentSetPickUpLocationBinding.setPickUpLocationViewModel?.textViewSetPickUpLocationNameText?.value = address
                 dialog.dismiss()
             }
@@ -428,9 +415,6 @@ class SetPickUpLocationFragment(val mainFragment: MainFragment) : Fragment() {
                 }
                 startActivity(intent)
             }
-
-            viewModel.pickupLocationNameText.value = "cu"
-            viewModel.pickupLocationDetailText.value = address
 
             // Show the dialog
             dialog.show()
@@ -453,15 +437,46 @@ class SetPickUpLocationFragment(val mainFragment: MainFragment) : Fragment() {
         return bitmap
     }
 
-    fun callToPickupLocation() {
-        val intent = Intent(Intent.ACTION_DIAL).apply {
-            data = Uri.parse("tel:$01012345678")
-        }
-        startActivity(intent)
-    }
-
     fun pickUpLocationShowInfo() {
+        val binding: DialogShowPickupLocationInformationBinding = DataBindingUtil.inflate(
+            layoutInflater,
+            R.layout.dialog_show_pickup_location_information,
+            null,
+            false
+        )
 
+        //뷰모델 객체를 만든다
+        val viewModel = ShowPickupLocationInformationDialogViewModel()
+        binding.showPickupLocationInformationDialogViewModel = viewModel
+        binding.lifecycleOwner = this
+
+        val dialog = MaterialAlertDialogBuilder(requireContext())
+            .setView(binding.root)
+            .create()
+
+        //유저 컬렉션에서 유저의 지정픽업지를 가져오고
+        //지정 픽업지의 정보를 가져와서 보여준다
+
+        viewModel.textViewDialogShowPickupLocationInformationNameText?.value = "GS25 창전삼성점"
+        viewModel.textViewDialogShowPickupLocationInformationOpenTimeText?.value = "연중무휴"
+        viewModel.textViewDialogShowPickupLocationInformationStreetAddressText?.value= "서울 마포구 서강로 97"
+        viewModel.textViewDialogShowPickupLocationInformationAddressDetailText?.value = "삼성아파트단지 상가 114호"
+        viewModel.textViewDialogShowPickupLocationInformationPhoneNumberText?.value = "02-337-3291"
+        viewModel.textViewDialogShowPickupLocationInformationDetailText?.value = "24시간 편의점"
+
+        viewModel.onCallClick = {
+            val intent = Intent(Intent.ACTION_DIAL).apply {
+                data = Uri.parse("tel:$01012345678")
+            }
+            startActivity(intent)
+        }
+
+        viewModel.onCloseClick = {
+            dialog.dismiss()
+        }
+
+        // Show the dialog
+        dialog.show()
     }
 
 
