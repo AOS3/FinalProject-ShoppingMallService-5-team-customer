@@ -26,6 +26,7 @@ class HomeFragment(val mainFragment:MainFragment) : Fragment() {
 
     lateinit var fragmentHomeBinding: FragmentHomeBinding
     lateinit var shopActivity: ShopActivity
+    lateinit var mainFragment1: MainFragment
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
