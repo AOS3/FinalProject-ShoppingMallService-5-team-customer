@@ -6,7 +6,7 @@
     <data>
         <variable
             name="showUserCouponListViewModel"
-            type="com.judamie_user.android.viewmodel.temp.ShowUserCouponListViewModel" />
+            type="com.judamie_user.android.viewmodel.fragmentviewmodel.ShowUserCouponListViewModel" />
 
     </data>
 

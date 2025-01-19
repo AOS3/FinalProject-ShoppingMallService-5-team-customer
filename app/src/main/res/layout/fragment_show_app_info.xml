@@ -1,24 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
         <variable
             name="showAppInfoViewModel"
-            type="com.judamie_user.android.viewmodel.temp.ShowAppInfoViewModel" />
+            type="com.judamie_user.android.viewmodel.fragmentviewmodel.ShowAppInfoViewModel" />
 
     </data>
 
-    <FrameLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.temp.ShowAppInfoFragment">
+        android:transitionGroup="true"
+        android:background="@color/white">
 
-        <!-- TODO: Update blank fragment layout -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="@string/hello_blank_fragment" />
-
-    </FrameLayout>
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/materialToolbarShowAppInfo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="?attr/actionBarTheme"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:onNavigationClickShowAppInfo = "@{showAppInfoViewModel.showAppInfoFragment}"
+            app:layout_constraintTop_toTopOf="parent"
+            app:navigationIcon="@drawable/arrow_back_ios_24px"
+            app:title="주다미 소개 &amp; 이용 방법"
+            app:titleCentered="true" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

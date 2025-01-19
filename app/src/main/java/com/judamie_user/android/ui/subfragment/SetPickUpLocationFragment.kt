@@ -1,4 +1,4 @@
-package com.judamie_user.android.ui.temp
+package com.judamie_user.android.ui.subfragment
 
 import android.Manifest
 import android.content.Context
@@ -33,7 +33,7 @@ import com.judamie_user.android.R
 import com.judamie_user.android.databinding.FragmentSetPickUpLocationBinding
 import com.judamie_user.android.ui.fragment.MainFragment
 import com.judamie_user.android.ui.fragment.ShopSubFragmentName
-import com.judamie_user.android.viewmodel.temp.SetPickUpLocationViewModel
+import com.judamie_user.android.viewmodel.fragmentviewmodel.SetPickUpLocationViewModel
 import com.google.android.gms.maps.SupportMapFragment
 import java.io.IOException
 import java.util.Locale

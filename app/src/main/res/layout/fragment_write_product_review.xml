@@ -7,7 +7,7 @@
 
         <variable
             name="writeProductReviewViewModel"
-            type="com.judamie_user.android.viewmodel.temp.WriteProductReviewViewModel" />
+            type="com.judamie_user.android.viewmodel.fragmentviewmodel.WriteProductReviewViewModel" />
 
     </data>
 

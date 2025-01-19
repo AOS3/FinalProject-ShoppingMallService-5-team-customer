@@ -1,12 +1,11 @@
-package com.judamie_user.android.viewmodel.temp
+package com.judamie_user.android.viewmodel.fragmentviewmodel
 
 import android.view.View
 import androidx.databinding.BindingAdapter
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.android.material.appbar.MaterialToolbar
-import com.judamie_user.android.ui.subfragment.ModifyUserInfoFragment
-import com.judamie_user.android.ui.temp.UserNotificationListFragment
+import com.judamie_user.android.ui.subfragment.UserNotificationListFragment
 
 class UserNotificationListViewModel(val userNotificationListFragment: UserNotificationListFragment):ViewModel() {
     // materialToolbarUserNotificationList

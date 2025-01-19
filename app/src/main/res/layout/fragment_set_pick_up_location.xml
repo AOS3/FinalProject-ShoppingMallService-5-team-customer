@@ -6,7 +6,7 @@
     <data>
         <variable
             name="setPickUpLocationViewModel"
-            type="com.judamie_user.android.viewmodel.temp.SetPickUpLocationViewModel" />
+            type="com.judamie_user.android.viewmodel.fragmentviewmodel.SetPickUpLocationViewModel" />
 
     </data>
 

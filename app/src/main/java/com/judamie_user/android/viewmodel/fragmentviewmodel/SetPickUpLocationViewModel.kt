@@ -1,11 +1,10 @@
-package com.judamie_user.android.viewmodel.temp
+package com.judamie_user.android.viewmodel.fragmentviewmodel
 
 import androidx.databinding.BindingAdapter
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.android.material.appbar.MaterialToolbar
-import com.judamie_user.android.ui.temp.SetPickUpLocationFragment
-import com.judamie_user.android.ui.temp.ShowUserCouponListFragment
+import com.judamie_user.android.ui.subfragment.SetPickUpLocationFragment
 
 class SetPickUpLocationViewModel(val setPickUpLocationFragment: SetPickUpLocationFragment):ViewModel() {
     //materialToolbarSetPickupLocation

@@ -4,12 +4,9 @@ import android.os.Bundle
 import android.os.SystemClock
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.updatePadding
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -19,9 +16,9 @@ import com.google.android.material.transition.MaterialSharedAxis
 import com.judamie_user.android.R
 import com.judamie_user.android.databinding.ActivityShopBinding
 import com.judamie_user.android.ui.fragment.MainFragment
-import com.judamie_user.android.ui.temp.SetPickUpLocationFragment
-import com.judamie_user.android.ui.temp.UserNotificationListFragment
-import com.judamie_user.android.ui.temp.WriteProductReviewFragment
+import com.judamie_user.android.ui.subfragment.SetPickUpLocationFragment
+import com.judamie_user.android.ui.subfragment.UserNotificationListFragment
+import com.judamie_user.android.ui.subfragment.WriteProductReviewFragment
 
 import com.judamie_user.android.viewmodel.activityviewmodel.ShopViewModel
 import kotlin.concurrent.thread
