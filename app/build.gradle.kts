@@ -67,10 +67,12 @@ dependencies {
     implementation (libs.glide)
     annotationProcessor (libs.compiler)
 
-    implementation ("com.github.bumptech.glide:glide:4.15.1")
-    annotationProcessor ("com.github.bumptech.glide:compiler:4.15.1")
+    implementation (libs.glide.v4151)
+    annotationProcessor (libs.compiler.v4151)
 
-    implementation ("com.google.android.gms:play-services-maps:18.1.0")
+    implementation (libs.play.services.maps.v1810)
+
+
 
 
 }

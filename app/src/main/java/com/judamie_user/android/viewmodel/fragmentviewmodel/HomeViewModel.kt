@@ -17,5 +17,5 @@ data class HomeViewModel(val homeFragment: HomeFragment) : ViewModel() {
     }
 
     //buttonHomePickupLoc - Text
-    val buttonHomePickupLocText = MutableLiveData("03900, 서울 마포구 하늘공원로 84 (상암동)")
+    val buttonHomePickupLocText = MutableLiveData("없음")
 }

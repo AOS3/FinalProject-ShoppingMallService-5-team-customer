@@ -23,7 +23,7 @@ class SetPickUpLocationViewModel(val setPickUpLocationFragment: SetPickUpLocatio
 
 
     //textViewSetPickUpLocationName
-    val textViewSetPickUpLocationNameText = MutableLiveData("CU")
+    val textViewSetPickUpLocationNameText = MutableLiveData("")
 
     //textViewSetPickUpLocationCenterAddress
     val textViewSetPickUpLocationCenterAddressText = MutableLiveData("")
