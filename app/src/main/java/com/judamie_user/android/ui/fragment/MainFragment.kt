@@ -17,16 +17,16 @@ import com.judamie_user.android.ui.subfragment.ProductInfoFragment
 import com.judamie_user.android.ui.subfragment.ProductReviewListFragment
 import com.judamie_user.android.ui.subfragment.SettingUserNotificationFragment
 import com.judamie_user.android.ui.subfragment.ShowReviewPhotoFragment
-import com.judamie_user.android.ui.temp.ShowUserCouponListFragment
+import com.judamie_user.android.ui.subfragment.ShowUserCouponListFragment
 import com.judamie_user.android.ui.subfragment.ShowUserOrderListFragment
 import com.judamie_user.android.ui.subfragment.UserSettingFragment
-import com.judamie_user.android.ui.temp.SetPickUpLocationFragment
-import com.judamie_user.android.ui.temp.ShowAppInfoFragment
-import com.judamie_user.android.ui.temp.ShowAppPrivacyPolicyFragment
-import com.judamie_user.android.ui.temp.ShowAppTOSFragment
-import com.judamie_user.android.ui.temp.ShowUserOrderInfoFragment
-import com.judamie_user.android.ui.temp.UserNotificationListFragment
-import com.judamie_user.android.ui.temp.WriteProductReviewFragment
+import com.judamie_user.android.ui.subfragment.SetPickUpLocationFragment
+import com.judamie_user.android.ui.subfragment.ShowAppInfoFragment
+import com.judamie_user.android.ui.subfragment.ShowAppPrivacyPolicyFragment
+import com.judamie_user.android.ui.subfragment.ShowAppTOSFragment
+import com.judamie_user.android.ui.subfragment.ShowUserOrderInfoFragment
+import com.judamie_user.android.ui.subfragment.UserNotificationListFragment
+import com.judamie_user.android.ui.subfragment.WriteProductReviewFragment
 import com.judamie_user.android.viewmodel.fragmentviewmodel.MainFragmentViewModel
 
 

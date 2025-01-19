@@ -1,4 +1,4 @@
-package com.judamie_user.android.ui.temp
+package com.judamie_user.android.ui.subfragment
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -9,7 +9,8 @@ import androidx.databinding.DataBindingUtil
 import com.judamie_user.android.R
 import com.judamie_user.android.databinding.FragmentShowAppTOSBinding
 import com.judamie_user.android.ui.fragment.MainFragment
-import com.judamie_user.android.viewmodel.temp.ShowAppTOSViewModel
+import com.judamie_user.android.ui.fragment.ShopSubFragmentName
+import com.judamie_user.android.viewmodel.fragmentviewmodel.ShowAppTOSViewModel
 
 
 class ShowAppTOSFragment(val mainFragment: MainFragment) : Fragment() {
@@ -24,6 +25,10 @@ class ShowAppTOSFragment(val mainFragment: MainFragment) : Fragment() {
         fragmentShowAppTOSBinding.lifecycleOwner = viewLifecycleOwner
 
         return fragmentShowAppTOSBinding.root
+    }
+
+    fun movePrevFragment() {
+        mainFragment.removeFragment(ShopSubFragmentName.SHOW_APP_TOS_FRAGMENT)
     }
 
 
