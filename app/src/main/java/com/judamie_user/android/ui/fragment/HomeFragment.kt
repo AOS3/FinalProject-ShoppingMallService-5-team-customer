@@ -164,6 +164,10 @@ class HomeFragment(val mainFragment:MainFragment) : Fragment() {
         }
     }
 
+    fun goSetPickupLocationFragment() {
+        mainFragment.replaceFragment(ShopSubFragmentName.SET_PICKUP_LOCATION_FRAGMENT,true,true,null)
+    }
+
     // ViewPager2의 Adapter
     inner class ViewPagerAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle, val mainFragment: MainFragment) :
         FragmentStateAdapter(fragmentManager, lifecycle) {

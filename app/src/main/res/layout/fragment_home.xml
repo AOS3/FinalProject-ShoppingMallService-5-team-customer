@@ -158,6 +158,7 @@
 
             <Button
                 android:id="@+id/buttonHomePickupLoc"
+                android:onClick="@{()->homeViewModel.buttonHomePickupLocOnClick()}"
                 android:layout_width="262dp"
                 android:layout_height="match_parent"
                 android:backgroundTint="@android:color/transparent"
