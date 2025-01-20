@@ -7,32 +7,42 @@
         <item name="android:textColorPrimary">@android:color/black</item>       <!-- 탭바 선택된 텍스트 -->
         <item name="android:textColorSecondary">@android:color/black</item>     <!-- 탭바 텍스트 -->
 
-        <item name="colorAccent">@color/mainColor</item>                    <!-- 하단 움직이는 바 색-->
+        <item name="colorAccent">@android:color/white</item>                    <!-- 하단 움직이는 바 색-->
     </style>
 
-    <!-- 탭 레이아웃 text size -->
+    <!-- 탭레이아웃 text size -->
     <style name="tab_text" parent="TextAppearance.Design.Tab">
         <item name="android:textSize">14sp</item>
     </style>
 
+    <style name="CustomMaterialSwitch" parent="Widget.Material3.CompoundButton.MaterialSwitch">
+        <item name="trackTint">@color/switch_track_color</item>
+    </style>
+
+    <!-- BottomNavigationView 아이콘 색상 -->
+
+    <style name="BottomNavStyle" parent="Widget.MaterialComponents.BottomNavigationView">
+        <!-- 텍스트 색상 상태별로 지정 -->
+        <item name="itemTextColor">@color/bottom_nav_color</item>
+        <!-- 아이콘 색상 상태별로 지정 -->
+        <item name="itemIconTint">@color/bottom_nav_color</item>
+    </style>
+
     <!-- 레이팅바 금색으로 채우기-->
     <style name="RatingBar" parent="Theme.AppCompat">
-        <item name="colorControlNormal">#D7D1D1</item>
+        <item name="colorControlNormal">@color/gray</item>
         <item name="colorControlActivated">@color/pickupDone</item>
     </style>
 
-    <!-- 레이팅바 금색으로 채우기 / 작은 레이팅바-->
-    <style name="SmallRatingBar" parent="Theme.AppCompat">
-        <item name="colorControlNormal">#D7D1D1</item>
-        <item name="colorControlActivated">@color/pickupDone</item>
-        <item name="ratingBarStyle">@style/Widget.AppCompat.RatingBar.Small</item>
+    <style name="ImageRatingBar" parent="Widget.AppCompat.RatingBar">
+        <item name="android:progressDrawable">@drawable/custom_judamie_ratingbar</item>
     </style>
 
-    <!-- 레이팅바 금색으로 채우기 / 미듐 레이팅바 안댐안댐-->
-    <style name="MediumRatingBar" parent="Theme.AppCompat">
-        <item name="colorControlNormal">#D7D1D1</item>
-        <item name="colorControlActivated">@color/pickupDone</item>
-        <item name="ratingBarStyle">@style/Widget.AppCompat.RatingBar.Indicator</item>
+    <style name="SmallRatingBar" parent="Widget.AppCompat.RatingBar">
+        <item name="android:progressDrawable">@drawable/custom_judamie_ratingbar</item>
     </style>
+
+
+
 
 </resources>

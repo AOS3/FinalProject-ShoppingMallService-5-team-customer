@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="userNotificationListViewModel"
+            type="com.judamie_user.android.viewmodel.temp.UserNotificationListViewModel" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:transitionGroup="true">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/materialToolbarUserNotificationList"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@android:drawable/screen_background_light_transparent"
+            app:onNavigationClickBarUserNotificationList="@{userNotificationListViewModel.userNotificationListFragment}"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="?attr/actionBarTheme"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:navigationIcon="@drawable/arrow_back_ios_24px"
+            app:title="알림"
+            app:titleCentered="true" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewUserNotificationList"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/materialToolbarUserNotificationList" />
+
+        <TextView
+            android:id="@+id/textViewNoNotification"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="표시할 알림이 없습니다"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:visibility="@{userNotificationListViewModel.textViewNoNotificationVisibleVisibility}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/materialToolbarUserNotificationList" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

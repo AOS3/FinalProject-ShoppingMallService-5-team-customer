@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="150dp"
+        android:layout_height="wrap_content">
+
+        <!-- 사진 이미지뷰 -->
+        <!-- 히든개발자 세훈 -->
+        <ImageView
+            android:id="@+id/imageViewPhoto"
+            android:layout_width="110dp"
+            android:layout_height="110dp"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/picture_rounded_corners"
+            android:clipToOutline="true"
+            android:contentDescription="사진"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- 삭제 버튼 -->
+        <ImageButton
+            android:id="@+id/buttonDeletePhoto"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_margin="4dp"
+            android:layout_marginEnd="4dp"
+            android:background="@android:color/transparent"
+            android:contentDescription="삭제 버튼"
+            android:src="@drawable/close_24px"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/black" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

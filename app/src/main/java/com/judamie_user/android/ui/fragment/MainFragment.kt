@@ -1,30 +1,34 @@
 package com.judamie_user.android.ui.fragment
 
 import android.os.Bundle
-import android.os.SystemClock
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
-import androidx.appcompat.app.AppCompatActivity.INPUT_METHOD_SERVICE
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.commit
 import com.google.android.material.transition.MaterialSharedAxis
 import com.judamie_user.android.R
 import com.judamie_user.android.databinding.FragmentMainBinding
+import com.judamie_user.android.ui.component.ShowPickupLocationDialogFragment
 import com.judamie_user.android.ui.subfragment.ModifyUserInfoFragment
 import com.judamie_user.android.ui.subfragment.PaymentProductFragment
 import com.judamie_user.android.ui.subfragment.ProductInfoFragment
 import com.judamie_user.android.ui.subfragment.ProductReviewListFragment
 import com.judamie_user.android.ui.subfragment.SettingUserNotificationFragment
 import com.judamie_user.android.ui.subfragment.ShowReviewPhotoFragment
+import com.judamie_user.android.ui.temp.ShowUserCouponListFragment
 import com.judamie_user.android.ui.subfragment.ShowUserOrderListFragment
 import com.judamie_user.android.ui.subfragment.UserSettingFragment
+import com.judamie_user.android.ui.temp.SetPickUpLocationFragment
+import com.judamie_user.android.ui.temp.ShowAppInfoFragment
+import com.judamie_user.android.ui.temp.ShowAppPrivacyPolicyFragment
+import com.judamie_user.android.ui.temp.ShowAppTOSFragment
+import com.judamie_user.android.ui.temp.ShowUserOrderInfoFragment
+import com.judamie_user.android.ui.temp.UserNotificationListFragment
+import com.judamie_user.android.ui.temp.WriteProductReviewFragment
 import com.judamie_user.android.viewmodel.fragmentviewmodel.MainFragmentViewModel
-import kotlin.concurrent.thread
 
 
 class MainFragment() : Fragment() {
@@ -52,37 +56,6 @@ class MainFragment() : Fragment() {
                 fragmentMainBinding.bottomNavigationView.visibility = View.VISIBLE
             }
         }
-
-        //코드 동작 설명 from gpt
-        //kotlin
-        //코드 복사
-        //// BackStack 변경 시 하단 네비게이션 visibility 설정
-        //requireActivity().supportFragmentManager.addOnBackStackChangedListener {
-        //    if (requireActivity().supportFragmentManager.backStackEntryCount == 0) {
-        //        fragmentMainBinding.bottomNavigationView.visibility = View.VISIBLE
-        //    }
-        //}
-        //addOnBackStackChangedListener:
-        //이 코드는 FragmentManager의 **BackStack(뒤로 가기 스택)**이 변경될 때 호출되는 리스너입니다. 즉, 프래그먼트를 교체하거나 뒤로 가기(Back)를 했을 때마다 호출됩니다.
-        //
-        //backStackEntryCount == 0 체크:
-        //supportFragmentManager.backStackEntryCount는 현재 BackStack에 남아 있는 프래그먼트의 개수를 나타냅니다.
-        //
-        //만약 backStackEntryCount가 0이면, BackStack에 아무런 프래그먼트도 남아 있지 않다는 의미입니다.
-        //즉, MainFragment가 화면에 다시 나타난 상태입니다.
-        //따라서 하단 네비게이션이 필요한 MainFragment가 다시 보이게 되었으므로 하단 네비게이션을 VISIBLE로 설정합니다.
-        //왜 필요한가?
-        //replaceFragment 메서드에서 하단 네비게이션을 숨기도록 설정(View.GONE) 했기 때문에, enum 클래스에 정의된 하위 프래그먼트로 이동하면 하단 네비게이션이 보이지 않게 됩니다.
-        //그러나 사용자가 뒤로 가기(Back)를 눌러 MainFragment로 돌아오면, 하단 네비게이션이 다시 보여야 하므로 VISIBLE로 설정해야 합니다.
-        //이 동작을 자동으로 처리하기 위해 BackStack의 상태가 변경될 때 하단 네비게이션을 다시 보이도록 리스너를 설정한 것입니다.
-        //동작 흐름 요약
-        //MainFragment에서 하단 네비게이션을 관리하며, 특정 프래그먼트로 이동할 때는 replaceFragment에서 하단 네비게이션을 숨김(GONE).
-        //뒤로 가기(Back)를 하면 BackStack에 남아 있는 프래그먼트가 제거되면서 MainFragment로 돌아오게 됨.
-        //이때 BackStack 변경 리스너가 호출되고, backStackEntryCount == 0인 경우 하단 네비게이션을 다시 보이도록 설정.
-        //정리
-        //네, 이 부분이 바로 하단 네비게이션이 필요한 프래그먼트(MainFragment)로 돌아올 때 다시 하단 네비게이션을 보이게 해주는 역할을 합니다.
-        //
-        //혹시 더 궁금한 부분이 있으면 말씀해 주세요! 😊
 
         // 앱 초기 실행 시 홈화면으로 설정
         if (savedInstanceState == null) {
@@ -154,9 +127,19 @@ class MainFragment() : Fragment() {
             ShopSubFragmentName.USER_SETTING_FRAGMENT -> UserSettingFragment(this)
             ShopSubFragmentName.SHOP_CART_FRAGMENT -> ShopCartFragment(this)
             ShopSubFragmentName.PAYMENT_PRODUCT_FRAGMENT -> PaymentProductFragment(this)
+            ShopSubFragmentName.SHOW_USER_COUPON_LIST_FRAGMENT -> ShowUserCouponListFragment(this)
+            ShopSubFragmentName.SHOW_USER_ORDER_INFO_FRAGMENT -> ShowUserOrderInfoFragment(this)
+            ShopSubFragmentName.WRITE_PRODUCT_REVIEW_FRAGMENT -> WriteProductReviewFragment(this)
+            ShopSubFragmentName.SHOW_APP_INFO_FRAGMENT -> ShowAppInfoFragment(this)
+            ShopSubFragmentName.SHOW_APP_PRIVACY_POLICY_FRAGMENT -> ShowAppPrivacyPolicyFragment(this)
+            ShopSubFragmentName.SHOW_APP_TOS_FRAGMENT -> ShowAppTOSFragment(this)
+            ShopSubFragmentName.USER_NOTIFICATION_LIST_FRAGMENT -> UserNotificationListFragment(this)
+            ShopSubFragmentName.SET_PICKUP_LOCATION_FRAGMENT -> SetPickUpLocationFragment(this)
+            ShopSubFragmentName.SHOW_PICKUP_LOCATION_DIALOG_FRAGMENT -> ShowPickupLocationDialogFragment(this)
             ShopSubFragmentName.PRODUCT_INFO_FRAGMENT -> ProductInfoFragment(this)
             ShopSubFragmentName.PRODUCT_REVIEW_LIST_FRAGMENT -> ProductReviewListFragment(this)
             ShopSubFragmentName.SHOW_REVIEW_PHOTO_FRAGMENT -> ShowReviewPhotoFragment(this)
+            ShopSubFragmentName.VIEW_PAGER_FRAGMENT -> ViewPagerFragment(this)
         }
 
         // bundle 객체가 null이 아니라면
@@ -203,7 +186,6 @@ class MainFragment() : Fragment() {
             FragmentManager.POP_BACK_STACK_INCLUSIVE
         )
     }
-
 }
 
 // 프래그먼트들을 나타내는 값들
@@ -235,27 +217,34 @@ enum class ShopSubFragmentName(var number: Int, var str: String) {
     // 리뷰 사진 크게보기 화면
     SHOW_REVIEW_PHOTO_FRAGMENT(13,"ShowReviewPhotoFragment"),
 
-//    //주문내역
-//    ShowUserOrderListFragment
-//
-////주문상세
-//    ShowUserOrderInfoFragment
-//
-////리뷰작성
-//    WriteProductReviewFragment
-//
-////쿠폰보기
-//    ShowUserCouponListFragment
-//
-////앱정보보기
-//    ShowAppInfoFragment
-//
-////개인정보 처리방침
-//    ShowAppPrivacyPolicyFragment
-//
-////서비스 이용약관
-//    ShowAppTOSFragment
-//
-////알림창
-//    UserNotificationListFragment
+    // 주문상세 ShowUserOrderInfoFragment
+    SHOW_USER_ORDER_INFO_FRAGMENT(14,"ShowUserOrderInfoFragment"),
+
+    // 리뷰작성 WriteProductReviewFragment
+    WRITE_PRODUCT_REVIEW_FRAGMENT(15,"WriteProductReviewFragment"),
+
+    // 쿠폰보기 화면
+    SHOW_USER_COUPON_LIST_FRAGMENT(16,"ShowUserCouponListFragment"),
+
+    // 앱정보 보기 ShowAppInfoFragment
+    SHOW_APP_INFO_FRAGMENT(17,"ShowAppInfoFragment"),
+
+    // 개인정보 처리방침 ShowAppPrivacyPolicyFragment
+    SHOW_APP_PRIVACY_POLICY_FRAGMENT(18,"ShowAppPrivacyPolicyFragment"),
+
+    // 서비스이용약관 ShowAppTOSFragment
+    SHOW_APP_TOS_FRAGMENT(19,"ShowAppTOSFragment"),
+
+    // 알림창 UserNotificationListFragment
+    USER_NOTIFICATION_LIST_FRAGMENT(20,"UserNotificationListFragment"),
+
+    // 지도에서 픽업지 선택 SetPickUpLocationFragment
+    SET_PICKUP_LOCATION_FRAGMENT(21,"SetPickUpLocationFragment"),
+
+    // 픽업지 다이얼로그 ShowPickupLocationDialogFragment
+    SHOW_PICKUP_LOCATION_DIALOG_FRAGMENT(22,"ShowPickupLocationDialogFragment"),
+
+    // Home 화면 상품 목록 (ViewPager)
+    VIEW_PAGER_FRAGMENT(23, "ViewPagerFragment")
+
 }

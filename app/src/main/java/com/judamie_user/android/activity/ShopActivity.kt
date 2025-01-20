@@ -18,7 +18,11 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.transition.MaterialSharedAxis
 import com.judamie_user.android.R
 import com.judamie_user.android.databinding.ActivityShopBinding
+import com.judamie_user.android.ui.component.ShowPickupLocationDialogFragment
 import com.judamie_user.android.ui.fragment.MainFragment
+import com.judamie_user.android.ui.temp.SetPickUpLocationFragment
+import com.judamie_user.android.ui.temp.UserNotificationListFragment
+import com.judamie_user.android.ui.temp.WriteProductReviewFragment
 
 import com.judamie_user.android.viewmodel.activityviewmodel.ShopViewModel
 import kotlin.concurrent.thread
@@ -42,11 +46,7 @@ class ShopActivity : AppCompatActivity() {
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.updatePadding(
-                top = systemBars.top,
-                left = 0, // 왼쪽은 적용하지 않음
-                right = 0 // 오른쪽은 적용하지 않음
-            )
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
         replaceFragment(ShopFragmentName.MAIN_FRAGMENT, false, false, null)
@@ -68,6 +68,10 @@ class ShopActivity : AppCompatActivity() {
         newFragment = when (fragmentName) {
             // 메인 화면 (상품 목록 화면)
             ShopFragmentName.MAIN_FRAGMENT -> MainFragment()
+            ShopFragmentName.write -> WriteProductReviewFragment(MainFragment())
+            ShopFragmentName.notifi -> UserNotificationListFragment(MainFragment())
+            ShopFragmentName.map -> SetPickUpLocationFragment(MainFragment())
+            ShopFragmentName.SHOW_PICKUP_LOCATION_DIALOG_FRAGMENT -> ShowPickupLocationDialogFragment(MainFragment())
         }
 
         // bundle 객체가 null이 아니라면
@@ -114,17 +118,20 @@ class ShopActivity : AppCompatActivity() {
 
     // 키보드 올리는 메서드
     fun showSoftInput(view: View){
-        // 입력을 관리하는 매니저
-        val inputManager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-        // 포커스를 준다.
-        view.requestFocus()
+        view.post{
+            // 입력을 관리하는 매니저
+            val inputManager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+            // 포커스를 준다.
+            view.requestFocus()
 
-        thread {
-            SystemClock.sleep(500)
-            // 키보드를 올린다.
-            inputManager.showSoftInput(view, 0)
+            thread {
+                SystemClock.sleep(500)
+                // 키보드를 올린다.
+                inputManager.showSoftInput(view, 0)
+            }
         }
     }
+
     // 키보드를 내리는 메서드
     fun hideSoftInput(){
         // 포커스가 있는 뷰가 있다면
@@ -142,5 +149,10 @@ class ShopActivity : AppCompatActivity() {
 
 // 프래그먼트들을 나타내는 값들
 enum class ShopFragmentName(var number: Int, var str: String) {
-    MAIN_FRAGMENT(1,"MainFragment")
+    MAIN_FRAGMENT(1,"MainFragment"),
+    write(2,"write"),
+    notifi(3,"notifi"),
+    map(4,"map"),
+    // 픽업지 다이얼로그 ShowPickupLocationDialogFragment
+    SHOW_PICKUP_LOCATION_DIALOG_FRAGMENT(19,"ShowPickupLocationDialogFragment")
 }

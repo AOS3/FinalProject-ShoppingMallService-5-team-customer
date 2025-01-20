@@ -5,7 +5,7 @@
 
     <data>
         <variable
-            name="RowOrderListViewModel"
+            name="rowOrderListViewModel"
             type="com.judamie_user.android.viewmodel.rowviewmodel.RowOrderListViewModel" />
     </data>
 
@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
-            android:text="@{RowOrderListViewModel.textViewOrderDateText}"
+            android:text="@{rowOrderListViewModel.textViewOrderDateText}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -57,14 +57,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="@{RowOrderListViewModel.textViewOrderNameText}"
+                android:text="@{rowOrderListViewModel.textViewOrderNameText}"
                 tools:text="더 발베니 14년 캐리비안 캐스크 피.." />
 
             <TextView
                 android:id="@+id/textViewCountMore"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@{RowOrderListViewModel.textViewCountMoreText}"
+                android:text="@{rowOrderListViewModel.textViewCountMoreText}"
                 tools:text="외 5개의 제품" />
 
             <LinearLayout
@@ -78,7 +78,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@{RowOrderListViewModel.textViewTotalPrice}"
+                    android:text="@{rowOrderListViewModel.textViewTotalPrice}"
                     tools:text="343,000원" />
 
                 <TextView
@@ -86,7 +86,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="@{RowOrderListViewModel.textViewOrderCount}"
+                    android:text="@{rowOrderListViewModel.textViewOrderCount}"
                     tools:text="• 6개" />
             </LinearLayout>
 
@@ -97,7 +97,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="30dp"
-            android:text="@{RowOrderListViewModel.textViewPickupState}"
+            android:text="@{rowOrderListViewModel.textViewPickupState}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/linearLayout"

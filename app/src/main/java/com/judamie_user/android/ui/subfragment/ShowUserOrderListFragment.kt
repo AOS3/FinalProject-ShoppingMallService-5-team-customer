@@ -91,7 +91,13 @@ class ShowUserOrderListFragment(val mainFragment: MainFragment) : Fragment() {
     inner class RecyclerViewAdapter :
         RecyclerView.Adapter<RecyclerViewAdapter.RecyclerViewHolder>() {
         inner class RecyclerViewHolder(val rowOrderListBinding: RowOrderListBinding) :
-            RecyclerView.ViewHolder(rowOrderListBinding.root)
+            RecyclerView.ViewHolder(rowOrderListBinding.root){
+                init {
+                    rowOrderListBinding.root.setOnClickListener {
+                        mainFragment.replaceFragment(ShopSubFragmentName.SHOW_USER_ORDER_INFO_FRAGMENT,true,true,null)
+                    }
+                }
+            }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerViewHolder {
             val rowOrderListBinding = DataBindingUtil.inflate<RowOrderListBinding>(
@@ -101,8 +107,7 @@ class ShowUserOrderListFragment(val mainFragment: MainFragment) : Fragment() {
                 false
             )
 
-            rowOrderListBinding.rowOrderListViewModel =
-                RowOrderListViewModel(this@ShowUserOrderListFragment)
+            rowOrderListBinding.rowOrderListViewModel = RowOrderListViewModel(this@ShowUserOrderListFragment)
             rowOrderListBinding.lifecycleOwner = viewLifecycleOwner
 
             return RecyclerViewHolder(rowOrderListBinding)

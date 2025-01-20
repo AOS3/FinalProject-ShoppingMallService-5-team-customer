@@ -6,6 +6,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.core.view.children
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentManager
@@ -46,21 +50,28 @@ class HomeFragment(val mainFragment:MainFragment) : Fragment() {
 
         // 툴바 구성 메서드 호출
         settingToolbar()
-
+        // 탭 레이아웃 동작 메서드 호출
+        showCategory()
 
         return fragmentHomeBinding.root
     }
 
     // 툴바를 구성하는 메서드
-    fun settingToolbar(){
+    fun settingToolbar() {
         fragmentHomeBinding.apply {
             toolbarHome.setOnMenuItemClickListener {
-                when(it.itemId){
+                when (it.itemId) {
                     R.id.menuItemHomeNotification -> {
 
                     }
+
                     R.id.menuItemHomeShoppingCart -> {
-                        mainFragment.replaceFragment(ShopSubFragmentName.SHOP_CART_FRAGMENT, true, true, null)
+                        mainFragment.replaceFragment(
+                            ShopSubFragmentName.SHOP_CART_FRAGMENT,
+                            true,
+                            true,
+                            null
+                        )
                     }
                 }
                 true
@@ -69,7 +80,7 @@ class HomeFragment(val mainFragment:MainFragment) : Fragment() {
     }
 
     // 검색 화면으로 이동 메서드
-    fun moveToSearch(){
+    fun moveToSearch() {
         fragmentHomeBinding.apply {
             mainFragment.replaceFragment(ShopSubFragmentName.SEARCH_FRAGMENT, true, true, null)
         }
@@ -78,61 +89,101 @@ class HomeFragment(val mainFragment:MainFragment) : Fragment() {
     // 탭 레이아웃 동작 메서드
     fun showCategory() {
         fragmentHomeBinding.apply {
-            tabLayoutHome.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-                override fun onTabSelected(tab: TabLayout.Tab?) {
-                    // position : 사용자가 누른 탭의 순서 값
-
-                }
-
-                override fun onTabUnselected(tab: TabLayout.Tab?) {
-                    TODO("Not yet implemented")
-                }
-
-                override fun onTabReselected(tab: TabLayout.Tab?) {
-                    TODO("Not yet implemented")
-                }
-            })
+//            tabLayoutHome.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+//                override fun onTabSelected(tab: TabLayout.Tab?) {
+//                    // position : 사용자가 누른 탭의 순서 값
+//
+//                }
+//                override fun onTabUnselected(tab: TabLayout.Tab?) {
+//                    TODO("Not yet implemented")
+//                }
+//
+//                override fun onTabReselected(tab: TabLayout.Tab?) {
+//                    TODO("Not yet implemented")
+//                }
+//            })
 
             // ViewPager2 Adapter 설정
-            pagerHome.adapter = ViewPagerAdapter(childFragmentManager, lifecycle)
+            pagerHome.adapter = ViewPagerAdapter(childFragmentManager, lifecycle, mainFragment)
 
-            // TabLayout <-> ViewPager2 상호 작용을 위한 연동
-            val tabLayoutMediator = TabLayoutMediator(tabLayoutHome, pagerHome) { tab, position ->
-                // position 별로 분기하여 처리
+            // TabLayout <-> ViewPager2 상호작용 설정
+            TabLayoutMediator(tabLayoutHome, pagerHome) { tab, position ->
+                val customView = LayoutInflater.from(requireContext()).inflate(R.layout.customtab_home, null)
+                val iconView = customView.findViewById<ImageView>(R.id.imageViewTabIcon)
+                val textView = customView.findViewById<TextView>(R.id.textViewTabText)
 
-            }
-            tabLayoutMediator.attach()
+                // 텍스트와 아이콘 설정
+                textView.text = (pagerHome.adapter as ViewPagerAdapter).tabTitles[position]
+                // 탭 별 아이콘 설정
+                when(position) {
+                    0 -> {
+                        iconView.setImageResource(R.drawable.categoryall)
+                    }
+                    1 -> {
+                        iconView.setImageResource(R.drawable.winebottle)
+                    }
+                    2 -> {
+                        iconView.setImageResource(R.drawable.whiskey)
+                    }
+                    3 -> {
+                        iconView.setImageResource(R.drawable.vodka)
+                    }
+                    4 -> {
+                        iconView.setImageResource(R.drawable.tequila)
+                    }
+                    5 -> {
+                        iconView.setImageResource(R.drawable.soju)
+                    }
+                    6 -> {
+                        iconView.setImageResource(R.drawable.sake)
+                    }
+                    7 -> {
+                        iconView.setImageResource(R.drawable.rum)
+                    }
+                    8 -> {
+                        iconView.setImageResource(R.drawable.riquere)
+                    }
+                    9 -> {
+                        iconView.setImageResource(R.drawable.chinabottle)
+                    }
+                    10 -> {
+                        iconView.setImageResource(R.drawable.brandy)
+                    }
+                    11 -> {
+                        iconView.setImageResource(R.drawable.beer)
+                    }
+                    12 -> {
+                        iconView.setImageResource(R.drawable.nonalcoholic)
+                    }
+
+
+                    else -> null
+                }
+                tab.customView = customView
+            }.attach()
         }
     }
 
     // ViewPager2의 Adapter
-    inner class ViewPagerAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) : FragmentStateAdapter(fragmentManager, lifecycle) {
-        // ViewPager2 - Fragment 개수
+    inner class ViewPagerAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle, val mainFragment: MainFragment) :
+        FragmentStateAdapter(fragmentManager, lifecycle) {
+
+        val tabTitles = listOf(
+            "전체", "와인", "위스키", "보드카", "데낄라", "우리술", "사케", "럼", "리큐르", "중국술",
+            "브랜디", "맥주", "논알콜"
+        )
+
         override fun getItemCount(): Int {
-            return 12
+            return tabTitles.size
         }
 
-        // position 번째 사용할 Fragment 객체를 생성하여 반환
         override fun createFragment(position: Int): Fragment {
-            val newFragment = when (position) {
-                0 -> ViewPagerFragment()
-                1 -> ViewPagerFragment()
-                2 -> ViewPagerFragment()
-                3 -> ViewPagerFragment()
-                4 -> ViewPagerFragment()
-                5 -> ViewPagerFragment()
-                6 -> ViewPagerFragment()
-                7 -> ViewPagerFragment()
-                8 -> ViewPagerFragment()
-                9 -> ViewPagerFragment()
-                10 -> ViewPagerFragment()
-                11 -> ViewPagerFragment()
-                else -> ViewPagerFragment()
+            return ViewPagerFragment(mainFragment).apply {
+                arguments = Bundle().apply {
+                    putInt("TAB_INDEX", position)
+                    putString("TAB_TITLE", tabTitles[position])
+                }
             }
-            return newFragment
         }
-
     }
-
-
 }
