@@ -6,7 +6,7 @@
     <data>
         <variable
             name="userNotificationListViewModel"
-            type="com.judamie_user.android.viewmodel.fragmentviewmodel.UserNotificationListViewModel" />
+            type="com.judamie_user.android.viewmodel.temp.UserNotificationListViewModel" />
 
     </data>
 

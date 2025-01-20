@@ -24,7 +24,7 @@ data class SearchViewModel(val searchFragment: SearchFragment) : ViewModel() {
     companion object{
         // toolbarSearch - onNavigationClickSearch
         @JvmStatic
-        @BindingAdapter("onNavigationClickRegisterVerification")
+        @BindingAdapter("onNavigationClickSearch")
         fun onNavigationClickSearch(materialToolbar: MaterialToolbar, searchFragment: SearchFragment){
             materialToolbar.setNavigationOnClickListener {
                 // 이전으로 돌아가는 메서드 호출

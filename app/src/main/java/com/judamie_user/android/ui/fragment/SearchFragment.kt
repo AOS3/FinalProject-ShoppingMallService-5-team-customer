@@ -5,11 +5,14 @@ import android.content.res.ColorStateList
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
+import android.widget.SearchView
+import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.databinding.DataBindingUtil
@@ -38,10 +41,18 @@ class SearchFragment(val mainFragment: MainFragment) : Fragment() {
     lateinit var fragmentSearchBinding: FragmentSearchBinding
     lateinit var shopActivity: ShopActivity
 
-    //  RecyclerView를 구성하기 위해 사용할 리스트
-    var searchList = Array(50, {
-        "항목 ${it + 1}"
-    })
+    // 검색 RecyclerView 임시 리스트
+    var recyclerViewSearchList = mutableListOf<String>()
+
+    // RecyclerView 구성을 위한 임시 데이터
+    val tempList = arrayOf(
+        "조니워커 블루",
+        "발렌타인",
+        "마오타이",
+        "조니워커 블랙",
+        "발렌타인 12년"
+    )
+
     // 검색어를 담을 변수
     var searchKeyword = ""
 
@@ -49,18 +60,32 @@ class SearchFragment(val mainFragment: MainFragment) : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        fragmentSearchBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_search, container, false)
         fragmentSearchBinding.searchViewModel =
             SearchViewModel(this@SearchFragment)
         fragmentSearchBinding.lifecycleOwner = this@SearchFragment
 
         shopActivity = activity as ShopActivity
 
-        // textViewSearchEmptyProduct - visibility : gone
+        // RecyclerView 초기 visibility 설정
+        fragmentSearchBinding.recyclerViewSearch.visibility = View.GONE
+
+        // RecyclerView 구성을 위한 리스트를 초기화한다.
+        recyclerViewSearchList.clear()
+
+        // 키보드 활성화 및 포커스 처리
+        fragmentSearchBinding.editTextSearchInput.post {
+            shopActivity.showSoftInput(fragmentSearchBinding.editTextSearchInput)
+        }
 
         // 툴바 구성 메서드 호출
         settingToolbar()
+        // 검색 설정 메서드 호출
+        settingSearchView()
+        // 검색 결과 갱신 메서드 호출
+        refreshSearchRecyclerView()
         // Search RecyclerView 설정 메서드 호출
-        settingCartRecyclerView()
+        settingSearchRecyclerView()
 
         return fragmentSearchBinding.root
     }
@@ -80,8 +105,30 @@ class SearchFragment(val mainFragment: MainFragment) : Fragment() {
         mainFragment.removeFragment(ShopSubFragmentName.SEARCH_FRAGMENT)
     }
 
+    fun settingSearchView() {
+        fragmentSearchBinding.apply {
+            editTextSearchInput.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                    // 실시간 검색어 갱신
+                    searchKeyword = s?.toString()?.trim() ?: ""
+
+                    // 로그로 검색어 출력
+                    Log.d("test100", "실시간 입력된 검색어: $searchKeyword")
+
+                    // 검색 결과 갱신
+                    refreshSearchRecyclerView()
+                }
+
+                override fun afterTextChanged(s: Editable?) {}
+            })
+        }
+    }
+
+
     // 검색 RecyclerView 구성 메서드
-    fun settingCartRecyclerView() {
+    fun settingSearchRecyclerView() {
         fragmentSearchBinding.apply {
             recyclerViewSearch.layoutManager = GridLayoutManager(requireContext(), 2)
             recyclerViewSearch.adapter = SearchRecyclerViewAdapter()
@@ -142,7 +189,7 @@ class SearchFragment(val mainFragment: MainFragment) : Fragment() {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchViewHolder {
             val rowSearchListBinding = DataBindingUtil.inflate<RowSearchListBinding>(
                 layoutInflater,
-                R.layout.row_cart_product_list,
+                R.layout.row_search_list,
                 parent,
                 false
             )
@@ -150,66 +197,62 @@ class SearchFragment(val mainFragment: MainFragment) : Fragment() {
                 RowSearchListViewModel(this@SearchFragment)
             rowSearchListBinding.lifecycleOwner = this@SearchFragment
 
+            // 리사이클러뷰 항목 클릭시 상세 거래 완료 내역 보기 화면으로 이동
+            rowSearchListBinding.root.setOnClickListener {
+                mainFragment.replaceFragment(ShopSubFragmentName.PRODUCT_INFO_FRAGMENT, true, true, null)
+            }
 
             val searchViewHolder = SearchViewHolder(rowSearchListBinding)
 
+            // 리사이클러뷰 항목 클릭시 상세 거래 완료 내역 보기 화면으로 이동
             rowSearchListBinding.root.setOnClickListener {
                 // 사용자가 누른 항목의 게시글 문서 번호를 담아서 전달
-//                val dataBundle = Bundle()
+                val dataBundle = Bundle()
 //                dataBundle.putString("boardDocumentId", recyclerViewList[mainViewHolder.adapterPosition].boardDocumentId)
-//                boardMainFragment.replaceFragment(BoardSubFragmentName.BOARD_READ_FRAGMENT, true, true, dataBundle)
+//
+                mainFragment.replaceFragment(ShopSubFragmentName.PRODUCT_INFO_FRAGMENT, true, true, dataBundle)
             }
+
 
             return searchViewHolder
         }
 
         override fun getItemCount(): Int {
-            if (searchList.size > 0) {
+            if (recyclerViewSearchList.size > 0) {
                 fragmentSearchBinding.apply {
                     textViewSearchEmptyProduct?.text = "일치하는 상품이 없습니다.\uD83D\uDE22"
                 }
             }
-            return searchList.size
+            return recyclerViewSearchList.size
 
             //return 0
         }
 
         override fun onBindViewHolder(holder: SearchViewHolder, position: Int) {
             holder.rowSearchListBinding.rowSearchListViewModel?.textViewSearchProductNameText?.value =
-                searchList[position]
+                recyclerViewSearchList[position]
 
         }
-    }
-
-    // 검색 처리
-    fun proSearch() {
-        fragmentSearchBinding.apply {
-            // 검색창에 포커스를 둔다.
-            shopActivity.showSoftInput(editTextSearchInput!!)
-            // 키보드의 엔터를 누르면 동작하는 리스너
-//            editTextSearchInput.setOnClickListener { v, actionId, event ->
-//                // 검색 데이터를 가져와 보여준다.
-//                CoroutineScope(Dispatchers.Main).launch {
-//                    val work1 = async(Dispatchers.IO) {
-//                        val keyword = editTextSearchInput?.text.toString()
-//                        ShopRepository.selectProductDataAllByProductName(shopActivity, keyword)
-//                    }
-//                    searchList = work1.awat()
-//                    recyclerViewSearch.adapter?.notifyDataSetChanged()
-//                }
-//                shopActivity.hideSoftInput()
-//                true
-//            }
-        }
-    }
-
-    // 실시간으로 검색
-    fun searchWheneverItChanges() {
-
     }
 
     // 검색 결과를 가져와 RecyclerView를 갱신하는 메서드
-    fun refreshSearchRecyclerView(){
+    fun refreshSearchRecyclerView() {
+        val keyword = fragmentSearchBinding.editTextSearchInput.toString()
 
+        recyclerViewSearchList.clear()
+        recyclerViewSearchList.addAll(tempList.filter { it.contains(searchKeyword, ignoreCase = true) })
+        // 검색에 결과가 없으면
+        if (recyclerViewSearchList.isEmpty()) {
+            // 메시지를 표시
+            fragmentSearchBinding.textViewSearchEmptyProduct.visibility = View.VISIBLE
+            fragmentSearchBinding.recyclerViewSearch.visibility = View.GONE
+        } else {
+            // 결과가 있으면 리사이클러뷰 표시
+            fragmentSearchBinding.textViewSearchEmptyProduct.visibility = View.GONE
+            fragmentSearchBinding.recyclerViewSearch.visibility = View.VISIBLE
+        }
+        // 검색 결과에 맞는 RecyclerView의 어댑터를 갱신
+        fragmentSearchBinding.recyclerViewSearch.adapter?.notifyDataSetChanged()
     }
+
 }

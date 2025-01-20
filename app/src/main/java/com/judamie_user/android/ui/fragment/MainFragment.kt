@@ -11,22 +11,23 @@ import androidx.fragment.app.commit
 import com.google.android.material.transition.MaterialSharedAxis
 import com.judamie_user.android.R
 import com.judamie_user.android.databinding.FragmentMainBinding
+import com.judamie_user.android.ui.component.ShowPickupLocationDialogFragment
 import com.judamie_user.android.ui.subfragment.ModifyUserInfoFragment
 import com.judamie_user.android.ui.subfragment.PaymentProductFragment
 import com.judamie_user.android.ui.subfragment.ProductInfoFragment
 import com.judamie_user.android.ui.subfragment.ProductReviewListFragment
 import com.judamie_user.android.ui.subfragment.SettingUserNotificationFragment
 import com.judamie_user.android.ui.subfragment.ShowReviewPhotoFragment
-import com.judamie_user.android.ui.subfragment.ShowUserCouponListFragment
+import com.judamie_user.android.ui.temp.ShowUserCouponListFragment
 import com.judamie_user.android.ui.subfragment.ShowUserOrderListFragment
 import com.judamie_user.android.ui.subfragment.UserSettingFragment
-import com.judamie_user.android.ui.subfragment.SetPickUpLocationFragment
-import com.judamie_user.android.ui.subfragment.ShowAppInfoFragment
-import com.judamie_user.android.ui.subfragment.ShowAppPrivacyPolicyFragment
-import com.judamie_user.android.ui.subfragment.ShowAppTOSFragment
-import com.judamie_user.android.ui.subfragment.ShowUserOrderInfoFragment
-import com.judamie_user.android.ui.subfragment.UserNotificationListFragment
-import com.judamie_user.android.ui.subfragment.WriteProductReviewFragment
+import com.judamie_user.android.ui.temp.SetPickUpLocationFragment
+import com.judamie_user.android.ui.temp.ShowAppInfoFragment
+import com.judamie_user.android.ui.temp.ShowAppPrivacyPolicyFragment
+import com.judamie_user.android.ui.temp.ShowAppTOSFragment
+import com.judamie_user.android.ui.temp.ShowUserOrderInfoFragment
+import com.judamie_user.android.ui.temp.UserNotificationListFragment
+import com.judamie_user.android.ui.temp.WriteProductReviewFragment
 import com.judamie_user.android.viewmodel.fragmentviewmodel.MainFragmentViewModel
 
 
@@ -134,9 +135,11 @@ class MainFragment() : Fragment() {
             ShopSubFragmentName.SHOW_APP_TOS_FRAGMENT -> ShowAppTOSFragment(this)
             ShopSubFragmentName.USER_NOTIFICATION_LIST_FRAGMENT -> UserNotificationListFragment(this)
             ShopSubFragmentName.SET_PICKUP_LOCATION_FRAGMENT -> SetPickUpLocationFragment(this)
+            ShopSubFragmentName.SHOW_PICKUP_LOCATION_DIALOG_FRAGMENT -> ShowPickupLocationDialogFragment(this)
             ShopSubFragmentName.PRODUCT_INFO_FRAGMENT -> ProductInfoFragment(this)
             ShopSubFragmentName.PRODUCT_REVIEW_LIST_FRAGMENT -> ProductReviewListFragment(this)
             ShopSubFragmentName.SHOW_REVIEW_PHOTO_FRAGMENT -> ShowReviewPhotoFragment(this)
+            ShopSubFragmentName.VIEW_PAGER_FRAGMENT -> ViewPagerFragment(this)
         }
 
         // bundle 객체가 null이 아니라면
@@ -238,5 +241,10 @@ enum class ShopSubFragmentName(var number: Int, var str: String) {
     // 지도에서 픽업지 선택 SetPickUpLocationFragment
     SET_PICKUP_LOCATION_FRAGMENT(21,"SetPickUpLocationFragment"),
 
+    // 픽업지 다이얼로그 ShowPickupLocationDialogFragment
+    SHOW_PICKUP_LOCATION_DIALOG_FRAGMENT(22,"ShowPickupLocationDialogFragment"),
+
+    // Home 화면 상품 목록 (ViewPager)
+    VIEW_PAGER_FRAGMENT(23, "ViewPagerFragment")
 
 }

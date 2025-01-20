@@ -4,9 +4,12 @@ import android.os.Bundle
 import android.os.SystemClock
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -15,10 +18,11 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.transition.MaterialSharedAxis
 import com.judamie_user.android.R
 import com.judamie_user.android.databinding.ActivityShopBinding
+import com.judamie_user.android.ui.component.ShowPickupLocationDialogFragment
 import com.judamie_user.android.ui.fragment.MainFragment
-import com.judamie_user.android.ui.subfragment.SetPickUpLocationFragment
-import com.judamie_user.android.ui.subfragment.UserNotificationListFragment
-import com.judamie_user.android.ui.subfragment.WriteProductReviewFragment
+import com.judamie_user.android.ui.temp.SetPickUpLocationFragment
+import com.judamie_user.android.ui.temp.UserNotificationListFragment
+import com.judamie_user.android.ui.temp.WriteProductReviewFragment
 
 import com.judamie_user.android.viewmodel.activityviewmodel.ShopViewModel
 import kotlin.concurrent.thread
@@ -67,6 +71,7 @@ class ShopActivity : AppCompatActivity() {
             ShopFragmentName.write -> WriteProductReviewFragment(MainFragment())
             ShopFragmentName.notifi -> UserNotificationListFragment(MainFragment())
             ShopFragmentName.map -> SetPickUpLocationFragment(MainFragment())
+            ShopFragmentName.SHOW_PICKUP_LOCATION_DIALOG_FRAGMENT -> ShowPickupLocationDialogFragment(MainFragment())
         }
 
         // bundle 객체가 null이 아니라면
@@ -113,17 +118,20 @@ class ShopActivity : AppCompatActivity() {
 
     // 키보드 올리는 메서드
     fun showSoftInput(view: View){
-        // 입력을 관리하는 매니저
-        val inputManager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-        // 포커스를 준다.
-        view.requestFocus()
+        view.post{
+            // 입력을 관리하는 매니저
+            val inputManager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+            // 포커스를 준다.
+            view.requestFocus()
 
-        thread {
-            SystemClock.sleep(500)
-            // 키보드를 올린다.
-            inputManager.showSoftInput(view, 0)
+            thread {
+                SystemClock.sleep(500)
+                // 키보드를 올린다.
+                inputManager.showSoftInput(view, 0)
+            }
         }
     }
+
     // 키보드를 내리는 메서드
     fun hideSoftInput(){
         // 포커스가 있는 뷰가 있다면
@@ -145,4 +153,6 @@ enum class ShopFragmentName(var number: Int, var str: String) {
     write(2,"write"),
     notifi(3,"notifi"),
     map(4,"map"),
+    // 픽업지 다이얼로그 ShowPickupLocationDialogFragment
+    SHOW_PICKUP_LOCATION_DIALOG_FRAGMENT(19,"ShowPickupLocationDialogFragment")
 }
