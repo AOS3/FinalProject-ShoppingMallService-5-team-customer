@@ -77,5 +77,4 @@ class UserInfoFragment(val mainFragment: MainFragment) : Fragment() {
         mainFragment.replaceFragment(ShopSubFragmentName.SHOW_APP_TOS_FRAGMENT,true,true,null)
     }
 
-
 }
