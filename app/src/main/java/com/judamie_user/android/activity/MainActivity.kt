@@ -29,6 +29,6 @@ class MainActivity : AppCompatActivity() {
         // MainActivity를 종료한다.
         finish()
 
-
+        // 안녕하세요
     }
 }
