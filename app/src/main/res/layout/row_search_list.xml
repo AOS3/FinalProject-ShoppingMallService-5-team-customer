@@ -32,7 +32,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
                 android:scaleType="centerCrop"
-                app:srcCompat="@drawable/img" />
+                app:srcCompat="@drawable/sampleproductimage_gp18" />
 
             <ImageView
                 android:id="@+id/imageButtonSearchSetWishList"
