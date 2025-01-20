@@ -76,7 +76,6 @@ class MainFragment() : Fragment() {
                         .commit()
                     true
                 }
-
                 R.id.SEARCH_PRODUCT_FRAGMENT -> {
                     requireActivity().supportFragmentManager.beginTransaction()
                         .replace(R.id.mainFragmentContainerView, SearchFragment(this))
