@@ -48,6 +48,9 @@ class HomeFragment(val mainFragment:MainFragment) : Fragment() {
         // 툴바 구성 메서드 호출
         settingToolbar()
 
+        // 탭 레이아웃 동작 메서드
+        showCategory()
+
 
         return fragmentHomeBinding.root
     }
