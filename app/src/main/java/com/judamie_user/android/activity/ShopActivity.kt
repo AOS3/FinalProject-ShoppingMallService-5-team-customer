@@ -20,9 +20,10 @@ import com.judamie_user.android.R
 import com.judamie_user.android.databinding.ActivityShopBinding
 import com.judamie_user.android.ui.component.ShowPickupLocationDialogFragment
 import com.judamie_user.android.ui.fragment.MainFragment
-import com.judamie_user.android.ui.temp.SetPickUpLocationFragment
-import com.judamie_user.android.ui.temp.UserNotificationListFragment
-import com.judamie_user.android.ui.temp.WriteProductReviewFragment
+import com.judamie_user.android.ui.subfragment.SetPickUpLocationFragment
+import com.judamie_user.android.ui.subfragment.UserNotificationListFragment
+import com.judamie_user.android.ui.subfragment.WriteProductReviewFragment
+
 
 import com.judamie_user.android.viewmodel.activityviewmodel.ShopViewModel
 import kotlin.concurrent.thread
@@ -118,17 +119,20 @@ class ShopActivity : AppCompatActivity() {
 
     // 키보드 올리는 메서드
     fun showSoftInput(view: View){
-        // 입력을 관리하는 매니저
-        val inputManager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-        // 포커스를 준다.
-        view.requestFocus()
+        view.post{
+            // 입력을 관리하는 매니저
+            val inputManager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+            // 포커스를 준다.
+            view.requestFocus()
 
-        thread {
-            SystemClock.sleep(500)
-            // 키보드를 올린다.
-            inputManager.showSoftInput(view, 0)
+            thread {
+                SystemClock.sleep(500)
+                // 키보드를 올린다.
+                inputManager.showSoftInput(view, 0)
+            }
         }
     }
+
     // 키보드를 내리는 메서드
     fun hideSoftInput(){
         // 포커스가 있는 뷰가 있다면

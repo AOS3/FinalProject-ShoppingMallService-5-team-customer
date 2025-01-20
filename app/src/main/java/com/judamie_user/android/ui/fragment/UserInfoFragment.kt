@@ -62,5 +62,20 @@ class UserInfoFragment(val mainFragment: MainFragment) : Fragment() {
         mainFragment.replaceFragment(ShopSubFragmentName.SHOW_USER_COUPON_LIST_FRAGMENT,true,true,null)
     }
 
+    // 주다미 소개 & 이용방법 화면 가기
+    fun goShowAppInfoFragment(){
+        mainFragment.replaceFragment(ShopSubFragmentName.SHOW_APP_INFO_FRAGMENT,true,true,null)
+    }
+
+    //개인정보 처리방침
+    fun goShowAppPrivacyPolicyFragment(){
+        mainFragment.replaceFragment(ShopSubFragmentName.SHOW_APP_PRIVACY_POLICY_FRAGMENT,true,true,null)
+    }
+
+    //서비스이용약관
+    fun goShowAppTOSFragment(){
+        mainFragment.replaceFragment(ShopSubFragmentName.SHOW_APP_TOS_FRAGMENT,true,true,null)
+    }
+
 
 }

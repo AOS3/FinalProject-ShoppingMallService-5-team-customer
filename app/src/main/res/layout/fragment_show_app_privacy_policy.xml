@@ -5,7 +5,7 @@
     <data>
         <variable
             name="showAppPrivacyPolicyViewModel"
-            type="com.judamie_user.android.viewmodel.temp.ShowAppPrivacyPolicyViewModel" />
+            type="com.judamie_user.android.viewmodel.fragmentviewmodel.ShowAppPrivacyPolicyViewModel" />
 
     </data>
 

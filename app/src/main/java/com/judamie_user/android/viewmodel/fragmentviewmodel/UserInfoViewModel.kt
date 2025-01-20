@@ -26,16 +26,16 @@ class UserInfoViewModel(val userInfoFragment: UserInfoFragment) : ViewModel() {
 
     //textViewIntroduceAndHowToUse
     fun textViewIntroduceAndHowToUseOnClick(){
-        Log.d("test","textViewIntroduceAndHowToUseOnClick")
+        userInfoFragment.goShowAppInfoFragment()
     }
 
     //textViewAppPrivacyPolicy
     fun textViewAppPrivacyPolicyOnClick(){
-        Log.d("test","textViewAppPrivacyPolicyOnClick")
+        userInfoFragment.goShowAppPrivacyPolicyFragment()
     }
 
     //textViewAppTOS
     fun textViewAppTOSOnClick(){
-        Log.d("test","textViewAppTOSOnClick")
+        userInfoFragment.goShowAppTOSFragment()
     }
 }

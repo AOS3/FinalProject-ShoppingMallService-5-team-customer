@@ -1,10 +1,12 @@
 package com.judamie_user.android.viewmodel.rowviewmodel
 
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.judamie_user.android.ui.fragment.HomeFragment
 import com.judamie_user.android.ui.fragment.SearchFragment
 
-data class RowSearchListViewModel(val searchFragment: SearchFragment) : ViewModel() {
+data class RowSearchListViewModel(val fragment: Fragment) : ViewModel() {
 
     // 상품 이름
     // textViewSearchProductName - text

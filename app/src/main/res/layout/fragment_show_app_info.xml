@@ -5,7 +5,7 @@
     <data>
         <variable
             name="showAppInfoViewModel"
-            type="com.judamie_user.android.viewmodel.temp.ShowAppInfoViewModel" />
+            type="com.judamie_user.android.viewmodel.fragmentviewmodel.ShowAppInfoViewModel" />
 
     </data>
 

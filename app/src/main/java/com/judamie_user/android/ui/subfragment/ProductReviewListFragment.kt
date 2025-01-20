@@ -15,6 +15,7 @@ import com.judamie_user.android.databinding.FragmentProductReviewListBinding
 import com.judamie_user.android.databinding.RowProductReviewAttachBinding
 import com.judamie_user.android.databinding.RowProductReviewListBinding
 import com.judamie_user.android.ui.fragment.MainFragment
+import com.judamie_user.android.ui.fragment.ShopSubFragmentName
 import com.judamie_user.android.viewmodel.fragmentviewmodel.ProductReviewListViewModel
 import com.judamie_user.android.viewmodel.rowviewmodel.RowProductReviewListViewModel
 
@@ -66,6 +67,11 @@ class ProductReviewListFragment(val mainFragment: MainFragment) : Fragment() {
         // 상품 아이디 전달
     }
 
+    // 사용자 리뷰 화면으로 이동하는 메서드
+    fun moveToUserProductReviewFragment() {
+        mainFragment.replaceFragment(ShopSubFragmentName.USER_PRODUCT_REVIEW_FRAGMENT, true, true, null)
+    }
+
     // 상품 리뷰 목록 RecyclerView 구성 메서드
     fun settingProductReviewRecyclerView(){
         fragmentProductReviewListBinding.apply {
@@ -97,6 +103,12 @@ class ProductReviewListFragment(val mainFragment: MainFragment) : Fragment() {
 
         override fun onBindViewHolder(holder: ProductReviewViewHolder, position: Int) {
             holder.rowProductReviewListBinding.rowProductReviewListViewModel?.rowTextViewProductReviewNameText?.value = tempList1[position]
+
+            // 클릭 이벤트 설정
+            holder.rowProductReviewListBinding.rowTextViewProductReviewName.setOnClickListener {
+                // 클릭 시 UserProductReviewFragment로 이동
+                moveToUserProductReviewFragment()
+            }
             // Nested RecyclerView 설정
             holder.rowProductReviewListBinding.rowRecyclerViewProductReviewAttach.apply {
                 layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)

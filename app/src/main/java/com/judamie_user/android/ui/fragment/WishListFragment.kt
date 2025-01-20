@@ -72,7 +72,7 @@ class WishListFragment(val mainFragment: MainFragment) : Fragment() {
     //스크롤 위에서 아래로잡아당겨서 업데이트
     private fun refreshData() {
         //찜 목록이 비어있다면 스와이프 비활성화
-        if (recyclerViewWishList.size == 0){
+        if (recyclerViewWishList.size == 0) {
             fragmentWishListBinding.swipeRefreshLayout.isEnabled = false
         }
         if (recyclerViewWishList.size > 0) {
@@ -109,7 +109,6 @@ class WishListFragment(val mainFragment: MainFragment) : Fragment() {
         }
     }
 
-    //찜 목록 리사이클러뷰어댑터
     inner class RecyclerViewAdapter :
         RecyclerView.Adapter<RecyclerViewAdapter.RecyclerViewHolder>() {
 
@@ -117,42 +116,22 @@ class WishListFragment(val mainFragment: MainFragment) : Fragment() {
             RecyclerView.ViewHolder(rowProductListBinding.root) {
 
             init {
-                // 초기 상태 설정
-                rowProductListBinding.imageButtonSetWishList.apply {
-                    setImageResource(R.drawable.bookmark_filled_24px) // 초기 아이콘
-                    imageTintList = ColorStateList.valueOf(
-                        ContextCompat.getColor(itemView.context, R.color.mainColor)
-                    )
-                    tag = "filled" // 초기 태그
-                }
-
-                // 클릭 이벤트 설정
-                rowProductListBinding.imageButtonSetWishList.setOnClickListener {
-                    rowProductListBinding.apply {
-                        val isFilled = imageButtonSetWishList.tag == "filled"
-
-                        if (isFilled) {
-                            // Outline으로 변경
-                            imageButtonSetWishList.setImageResource(R.drawable.bookmark_outline_24px)
-                            imageButtonSetWishList.imageTintList = ColorStateList.valueOf(
-                                ContextCompat.getColor(itemView.context, R.color.mainColor)
-                            )
-                            imageButtonSetWishList.tag = "outline" // 태그 업데이트
-                        } else {
-                            // Filled로 변경
-                            imageButtonSetWishList.setImageResource(R.drawable.bookmark_filled_24px)
-                            imageButtonSetWishList.imageTintList = ColorStateList.valueOf(
-                                ContextCompat.getColor(itemView.context, R.color.mainColor)
-                            )
-                            imageButtonSetWishList.tag = "filled" // 태그 업데이트
-                        }
+                rowProductListBinding.apply {
+                    // root 클릭 이벤트 설정
+                    root.setOnClickListener {
+                        val dataBundle = Bundle()
+                        val position = adapterPosition.takeIf { it != RecyclerView.NO_POSITION }
+                            ?: return@setOnClickListener
+                        dataBundle.putString("productDocumentId", recyclerViewWishList[position])
+                        mainFragment.replaceFragment(
+                            ShopSubFragmentName.PRODUCT_INFO_FRAGMENT,
+                            true,
+                            true,
+                            null
+                        )
                     }
                 }
             }
-
-
-
-
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerViewHolder {
@@ -162,29 +141,32 @@ class WishListFragment(val mainFragment: MainFragment) : Fragment() {
                 parent,
                 false
             )
-            rowProductListBinding.rowProductListViewModel =
-                RowProductListViewModel(this@WishListFragment)
+
             rowProductListBinding.lifecycleOwner = viewLifecycleOwner
 
             return RecyclerViewHolder(rowProductListBinding)
         }
 
         override fun getItemCount(): Int {
-            if (recyclerViewWishList.size>0){
+            if (recyclerViewWishList.isNotEmpty()) {
                 fragmentWishListBinding.apply {
                     wishListViewModel?.textViewEmptyWishListText1?.value = ""
                     wishListViewModel?.textViewEmptyWishListText2?.value = ""
                 }
             }
             return recyclerViewWishList.size
-
-            //return 0
         }
 
         override fun onBindViewHolder(holder: RecyclerViewHolder, position: Int) {
-            holder.rowProductListBinding.rowProductListViewModel?.textViewProductNameText?.value =
-                recyclerViewWishList[position]
+            val viewModel = RowProductListViewModel(this@WishListFragment)
+            holder.rowProductListBinding.rowProductListViewModel = viewModel
+
+            // LiveData 상태 초기화
+            val isWishListed = /* recyclerViewWishList[position].isWishListed */ true // 실제 데이터로 설정
+            viewModel.isWishListed.value = isWishListed
         }
     }
+
+
 
 }

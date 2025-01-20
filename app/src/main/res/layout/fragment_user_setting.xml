@@ -13,6 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white"
+        android:transitionGroup="true"
         tools:context=".ui.subfragment.UserSettingFragment">
 
         <com.google.android.material.appbar.MaterialToolbar
@@ -38,6 +39,7 @@
             android:layout_marginTop="40dp"
             android:onClick="@{()->UserSettingViewModel.textViewModifyUserInfoOnClick()}"
             android:text="개인정보 변경"
+            android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/materialToolbarUserSetting" />
 
@@ -49,6 +51,7 @@
             android:layout_marginTop="40dp"
             android:onClick="@{()->UserSettingViewModel.textViewSettingNotificationOnClick()}"
             android:text="알림설정"
+            android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textViewModifyUserInfo" />
 
@@ -60,6 +63,7 @@
             android:layout_marginTop="40dp"
             android:onClick="@{()->UserSettingViewModel.textViewMembershipWithdrawalOnClick()}"
             android:text="회원 탈퇴"
+            android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textViewSettingNotification" />
 
@@ -71,6 +75,7 @@
             android:layout_marginTop="40dp"
             android:onClick="@{()->UserSettingViewModel.textViewLogoutOcClick()}"
             android:text="로그아웃"
+            android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textViewMembershipWithdrawal" />
 
