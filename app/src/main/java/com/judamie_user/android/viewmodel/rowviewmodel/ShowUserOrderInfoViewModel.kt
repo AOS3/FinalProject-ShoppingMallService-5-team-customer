@@ -1,4 +1,4 @@
-package com.judamie_user.android.viewmodel.temp
+package com.judamie_user.android.viewmodel.rowviewmodel
 
 import androidx.databinding.BindingAdapter
 import androidx.lifecycle.MutableLiveData

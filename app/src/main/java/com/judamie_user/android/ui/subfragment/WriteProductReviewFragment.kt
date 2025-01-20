@@ -1,4 +1,4 @@
-package com.judamie_user.android.ui.temp
+package com.judamie_user.android.ui.subfragment
 
 import android.graphics.Bitmap
 import android.net.Uri

@@ -1,4 +1,4 @@
-package com.judamie_user.android.ui.temp
+package com.judamie_user.android.ui.subfragment
 
 import android.content.res.ColorStateList
 import android.os.Bundle

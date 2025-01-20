@@ -1,4 +1,4 @@
-package com.judamie_user.android.ui.temp
+package com.judamie_user.android.ui.subfragment
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

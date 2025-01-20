@@ -1,4 +1,4 @@
-package com.judamie_user.android.viewmodel.temp
+package com.judamie_user.android.viewmodel.rowviewmodel
 
 import android.util.Log
 import androidx.databinding.BindingAdapter
