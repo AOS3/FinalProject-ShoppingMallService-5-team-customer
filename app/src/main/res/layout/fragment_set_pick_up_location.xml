@@ -36,17 +36,19 @@
             android:name="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toTopOf="@id/lineaLayout2"
+            app:layout_constraintBottom_toTopOf="@+id/linearLayout"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/materialToolbarSetPickupLocation" />
+            app:layout_constraintTop_toBottomOf="@id/materialToolbarSetPickupLocation"
+            app:layout_constraintVertical_bias="0.0" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/floatingActionButtonSetPickupLocation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="5dp"
-            android:layout_marginBottom="200dp"
+            android:layout_marginEnd="7dp"
+            android:layout_marginBottom="50dp"
             android:background="@color/white"
             android:clickable="true"
             android:onClick="@{()->setPickUpLocationViewModel.floatingActionButtonSetPickupLocationOnClick()}"
@@ -66,10 +68,9 @@
             android:text="@={setPickUpLocationViewModel.textViewSetPickUpLocationCenterAddressText}"
             android:textColor="@color/black"
             android:textSize="16sp"
-            app:layout_constraintBottom_toTopOf="@id/linearLayout"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintBottom_toBottomOf="@id/mapFragmentSetPickupLocation"
+            app:layout_constraintEnd_toEndOf="@+id/mapFragmentSetPickupLocation"
+            app:layout_constraintStart_toStartOf="@+id/mapFragmentSetPickupLocation" />
 
         <LinearLayout
             android:id="@+id/linearLayout"
@@ -78,9 +79,10 @@
             android:background="@color/white"
             android:gravity="center"
             android:orientation="horizontal"
-            app:layout_constraintBottom_toBottomOf="@id/mapFragmentSetPickupLocation"
-            app:layout_constraintEnd_toEndOf="@id/mapFragmentSetPickupLocation"
-            app:layout_constraintStart_toStartOf="@+id/mapFragmentSetPickupLocation">
+            app:layout_constraintBottom_toTopOf="@+id/lineaLayout2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent">
 
             <TextView
                 android:id="@+id/textView5"
@@ -94,7 +96,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:srcCompat="@drawable/arrow_drop_down_24px" />
-
         </LinearLayout>
 
         <LinearLayout
@@ -128,7 +129,32 @@
                 android:onClick="@{(view)->setPickUpLocationViewModel.buttonSetPickUpLocationShowInfoOnClick()}"
                 android:text="정보 보기"
                 android:textColor="@color/white" />
+
         </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/zoomInButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="22dp"
+            android:layout_marginBottom="168dp"
+            android:background="@color/white"
+            android:tint="@color/mainColor"
+            app:layout_constraintBottom_toBottomOf="@id/mapFragmentSetPickupLocation"
+            app:layout_constraintEnd_toEndOf="@id/mapFragmentSetPickupLocation"
+            app:srcCompat="@drawable/add_24px" />
+
+        <ImageButton
+            android:id="@+id/zoomOutButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="22dp"
+            android:layout_marginBottom="128dp"
+            android:background="@color/white"
+            android:tint="@color/mainColor"
+            app:layout_constraintBottom_toBottomOf="@+id/mapFragmentSetPickupLocation"
+            app:layout_constraintEnd_toEndOf="@id/mapFragmentSetPickupLocation"
+            app:srcCompat="@drawable/remove_24px" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

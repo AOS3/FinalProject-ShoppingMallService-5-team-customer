@@ -19,7 +19,7 @@ class UserProductReviewListFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        fragmentUserProductReviewListBinding = DataBindingUtil.inflate(inflater,R.layout.fragment_product_review_list,container,false)
+        fragmentUserProductReviewListBinding = DataBindingUtil.inflate(inflater,R.layout.fragment_user_product_review_list,container,false)
         fragmentUserProductReviewListBinding.viewModel = UserProductReviewListViewModel(this)
         fragmentUserProductReviewListBinding.lifecycleOwner = viewLifecycleOwner
 

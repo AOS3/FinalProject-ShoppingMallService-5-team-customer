@@ -40,6 +40,7 @@ import java.util.Locale
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.drawable.Drawable
+import android.widget.ImageButton
 import androidx.core.content.ContextCompat
 import com.judamie_user.android.databinding.DialogSettingPickupLocationBinding
 import com.judamie_user.android.databinding.DialogShowPickupLocationInformationBinding
@@ -118,12 +119,27 @@ class SetPickUpLocationFragment(val mainFragment: MainFragment) : Fragment() {
         // 구글 맵 설정
         settingGoogleMap()
 
+        setupCustomZoomControls()
+
         return fragmentSetPickUpLocationBinding.root
     }
 
     fun movePrevFragment() {
         mainFragment.removeFragment(ShopSubFragmentName.SET_PICKUP_LOCATION_FRAGMENT)
     }
+    private fun setupCustomZoomControls() {
+        val zoomInButton = fragmentSetPickUpLocationBinding.root.findViewById<ImageButton>(R.id.zoomInButton)
+        val zoomOutButton = fragmentSetPickUpLocationBinding.root.findViewById<ImageButton>(R.id.zoomOutButton)
+
+        zoomInButton.setOnClickListener {
+            mainGoogleMap.animateCamera(CameraUpdateFactory.zoomIn())
+        }
+
+        zoomOutButton.setOnClickListener {
+            mainGoogleMap.animateCamera(CameraUpdateFactory.zoomOut())
+        }
+    }
+
 
     // 위치 측정에 성공하면 동작하는 리스너
     inner class MyLocationListener : LocationListener {
@@ -167,7 +183,7 @@ class SetPickUpLocationFragment(val mainFragment: MainFragment) : Fragment() {
             childFragmentManager.findFragmentById(R.id.mapFragmentSetPickupLocation) as SupportMapFragment
         mapFragment.getMapAsync {
             mainGoogleMap = it
-            mainGoogleMap.uiSettings.isZoomControlsEnabled = true
+            mainGoogleMap.uiSettings.isZoomControlsEnabled = false
             mainGoogleMap.mapType = GoogleMap.MAP_TYPE_NORMAL
 
             locationManager = requireContext().getSystemService(LOCATION_SERVICE) as LocationManager
@@ -223,32 +239,48 @@ class SetPickUpLocationFragment(val mainFragment: MainFragment) : Fragment() {
     }
 
     fun addCenterMarker(centerLatLng: LatLng): String? {
+        // 기존 중심 마커 제거
         centerMarker?.remove()
 
+        // 마커 옵션 설정
         val markerOptions = MarkerOptions()
             .position(centerLatLng)
             .title("선택한 위치")
             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
 
+        // 커스텀 마커 아이콘 설정
         val markerBitmap = vectorToBitmap(requireContext(), R.drawable.red_marker)
         markerOptions.icon(BitmapDescriptorFactory.fromBitmap(markerBitmap))
         centerMarker = mainGoogleMap.addMarker(markerOptions)
 
+        // Geocoder 사용
         val geocoder = Geocoder(requireContext(), Locale.KOREAN)
         return try {
             val addresses = geocoder.getFromLocation(centerLatLng.latitude, centerLatLng.longitude, 1)
-            val roadNameAddress = addresses?.firstOrNull()?.thoroughfare
-            val fullAddress = addresses?.firstOrNull()?.getAddressLine(0)
 
-            val finalAddress = roadNameAddress ?: fullAddress
-            fragmentSetPickUpLocationBinding.setPickUpLocationViewModel?.textViewSetPickUpLocationCenterAddressText?.value = finalAddress
-            Log.d("CenterMarker", "도로명 주소: $finalAddress")
-            finalAddress
+            if (!addresses.isNullOrEmpty()) {
+                val thoroughfare = addresses[0].thoroughfare // 도로명 주소
+                val subThoroughfare = addresses[0].subThoroughfare // 건물 번호
+                val roadNameAddress = if (thoroughfare != null && subThoroughfare != null) {
+                    "$thoroughfare $subThoroughfare" // 도로명 주소와 건물 번호를 조합
+                } else {
+                    thoroughfare ?: addresses[0].getAddressLine(0) // 도로명 주소 또는 전체 주소
+                }
+
+                // ViewModel에 주소 설정
+                fragmentSetPickUpLocationBinding.setPickUpLocationViewModel?.textViewSetPickUpLocationCenterAddressText?.value = roadNameAddress
+                Log.d("CenterMarker", "도로명 주소: $roadNameAddress")
+                roadNameAddress // 반환
+            } else {
+                Log.e("CenterMarker", "주소를 찾을 수 없습니다.")
+                null
+            }
         } catch (e: IOException) {
             Log.e("Geocoder", "Geocoding 에러: $e")
             null
         }
     }
+
 
 
     // 권한 확인을 위해 사용할 런처 생성
