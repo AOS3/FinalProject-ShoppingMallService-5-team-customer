@@ -9,7 +9,6 @@ import androidx.databinding.DataBindingUtil
 import com.judamie_user.android.R
 import com.judamie_user.android.databinding.FragmentShowAppInfoBinding
 import com.judamie_user.android.ui.fragment.MainFragment
-import com.judamie_user.android.ui.fragment.ShopSubFragmentName
 import com.judamie_user.android.viewmodel.fragmentviewmodel.ShowAppInfoViewModel
 
 class ShowAppInfoFragment(val mainFragment: MainFragment) : Fragment() {
@@ -27,10 +26,6 @@ class ShowAppInfoFragment(val mainFragment: MainFragment) : Fragment() {
 
 
         return fragmentShowAppInfoBinding.root
-    }
-
-    fun movePrevFragment() {
-        mainFragment.removeFragment(ShopSubFragmentName.SHOW_APP_INFO_FRAGMENT)
     }
 
 

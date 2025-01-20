@@ -9,7 +9,6 @@ import androidx.databinding.DataBindingUtil
 import com.judamie_user.android.R
 import com.judamie_user.android.databinding.FragmentShowAppPrivacyPolicyBinding
 import com.judamie_user.android.ui.fragment.MainFragment
-import com.judamie_user.android.ui.fragment.ShopSubFragmentName
 import com.judamie_user.android.viewmodel.fragmentviewmodel.ShowAppPrivacyPolicyViewModel
 
 
@@ -27,10 +26,6 @@ class ShowAppPrivacyPolicyFragment(val mainFragment: MainFragment) : Fragment() 
 
 
         return fragmentShowAppPrivacyPolicyBinding.root
-    }
-
-    fun movePrevFragment() {
-        mainFragment.removeFragment(ShopSubFragmentName.SHOW_APP_PRIVACY_POLICY_FRAGMENT)
     }
 
 

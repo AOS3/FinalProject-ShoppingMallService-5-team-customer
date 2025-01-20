@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import com.google.android.material.appbar.MaterialToolbar
 import com.judamie_user.android.ui.subfragment.ShowUserCouponListFragment
 
+
 class ShowUserCouponListViewModel(val showUserCouponListFragment: ShowUserCouponListFragment):ViewModel() {
 
     //materialToolbarShowUserCouponList

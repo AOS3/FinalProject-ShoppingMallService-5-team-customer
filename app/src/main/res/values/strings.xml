@@ -12,4 +12,11 @@
     <string name="orderDone">주문 완료</string>
     <string name="deliveryDone">배송 완료</string>
     <string name="pickupDone">픽업 완료</string>
+
+    <!-- 상품 목록 정렬을 위한 리스트 -->
+    <string-array name="select_view">
+        <item>최신순</item>
+        <item>가격 낮은순</item>
+        <item>가격 높은순</item>
+    </string-array>
 </resources>

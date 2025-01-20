@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.divider.MaterialDividerItemDecoration
@@ -14,8 +15,8 @@ import com.judamie_user.android.databinding.FragmentShowUserOrderInfoBinding
 import com.judamie_user.android.databinding.RowOrderInfoBinding
 import com.judamie_user.android.ui.fragment.MainFragment
 import com.judamie_user.android.ui.fragment.ShopSubFragmentName
-import com.judamie_user.android.viewmodel.rowviewmodel.RowOrderInfoViewModel
 import com.judamie_user.android.viewmodel.fragmentviewmodel.ShowUserOrderInfoViewModel
+import com.judamie_user.android.viewmodel.rowviewmodel.RowOrderInfoViewModel
 
 class ShowUserOrderInfoFragment(val mainFragment: MainFragment) : Fragment() {
     lateinit var fragmentShowUserOrderInfoBinding: FragmentShowUserOrderInfoBinding

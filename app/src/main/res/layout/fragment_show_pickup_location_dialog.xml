@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="showPickupLocationDialogViewModel"
+            type="com.judamie_user.android.viewmodel.componentviewmodel.ShowPickupLocationDialogViewModel" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/view_round_white_dialog">
+
+
+        <TextView
+            android:id="@+id/textViewpickupLocationName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:text="@{showPickupLocationDialogViewModel.pickupLocationNameText}"
+            android:textColor="#00696B"
+            android:textSize="45sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textViewpickupLocationDetailText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:text="@{showPickupLocationDialogViewModel.pickupLocationDetailText}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewpickupLocationName" />
+
+        <android.widget.Button
+            android:id="@+id/buttonPickupLocationCall"
+            android:layout_width="96dp"
+            android:layout_height="37dp"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/dialog_call_button"
+            android:onClick="@{(view) -> showPickupLocationDialogViewModel.buttonPickupLocationCallOnClick()}"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="@color/black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewpickupLocationDetailText" />
+
+        <android.widget.Button
+            android:id="@+id/buttonPickupLocationCancle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="30dp"
+            android:background="@drawable/button_round_deactivated"
+            android:onClick="@{(view) -> showPickupLocationDialogViewModel.buttonPickupLocationCancleOnClick()}"
+            android:text="다른 픽업지 고르기"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/buttonPickupLocationCall" />
+
+        <android.widget.Button
+            android:id="@+id/buttonPickupLocationSelect"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="30dp"
+            android:background="@drawable/button_round_activated"
+            android:onClick="@{(view) -> showPickupLocationDialogViewModel.buttonPickupLocationSelectOnClick()}"
+            android:text="해당 지점 고르기"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.8"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/buttonPickupLocationCall" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

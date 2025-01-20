@@ -8,13 +8,15 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.divider.MaterialDividerItemDecoration
 import com.judamie_user.android.R
 import com.judamie_user.android.databinding.FragmentShowUserCouponListBinding
 import com.judamie_user.android.databinding.RowCouponBinding
+import com.judamie_user.android.databinding.RowOrderListBinding
 import com.judamie_user.android.ui.fragment.MainFragment
 import com.judamie_user.android.ui.fragment.ShopSubFragmentName
-import com.judamie_user.android.viewmodel.rowviewmodel.RowCouponViewModel
 import com.judamie_user.android.viewmodel.fragmentviewmodel.ShowUserCouponListViewModel
+import com.judamie_user.android.viewmodel.rowviewmodel.RowCouponViewModel
 
 class ShowUserCouponListFragment(val mainFragment: MainFragment) : Fragment() {
     lateinit var fragmentShowUserCouponListBinding: FragmentShowUserCouponListBinding

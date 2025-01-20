@@ -5,7 +5,7 @@
 
     <data>
         <variable
-            name="viewModel"
+            name="userProductReviewViewModel"
             type="com.judamie_user.android.viewmodel.fragmentviewmodel.UserProductReviewListViewModel" />
 
     </data>
@@ -17,7 +17,7 @@
         android:transitionGroup="true">
 
         <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/materialToolbar"
+            android:id="@+id/toolbarUserProductReview"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="@color/white"
@@ -26,10 +26,13 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:navigationIcon="@drawable/arrow_back_ios_24px" />
+            app:navigationIcon="@{userProductReviewViewModel.toolbarUserProductReviewNavigationIcon}"
+            app:title="@{userProductReviewViewModel.toolbarUserProductReviewTitle}"
+            app:titleCentered="true"
+            onNavigationClickUserProductReviewList="@{userProductReviewViewModel.userProductReviewListFragment}" />
 
         <TextView
-            android:id="@+id/textViewProductReviewCnt"
+            android:id="@+id/textViewUserProductReviewCnt"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
@@ -39,7 +42,7 @@
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/materialToolbar" />
+            app:layout_constraintTop_toBottomOf="@id/toolbarUserProductReview" />
 
         <View
             android:id="@+id/divider4"
@@ -49,9 +52,10 @@
             android:background="?android:attr/listDivider"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textViewProductReviewCnt" />
+            app:layout_constraintTop_toBottomOf="@+id/textViewUserProductReviewCnt" />
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewUserProductReview"
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"

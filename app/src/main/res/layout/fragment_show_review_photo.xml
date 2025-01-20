@@ -1,14 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
     <data>
         <variable
             name="showReviewPhotoViewModel"
             type="com.judamie_user.android.viewmodel.fragmentviewmodel.ShowReviewPhotoViewModel" />
     </data>
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:transitionGroup="true"
-        tools:context=".ui.subfragment.ShowReviewPhotoFragment" />
+        android:background="@color/white"
+        tools:context=".ui.subfragment.ShowReviewPhotoFragment">
+
+        <ImageView
+            android:id="@+id/imageViewReviewPhoto"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="100dp"
+            android:layout_marginBottom="100dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0"
+            app:srcCompat="@drawable/liquor_24px" />
+
+        <ImageButton
+            android:id="@+id/buttonReviewPhotoClose"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:backgroundTint="@color/white"
+            android:tint="@color/black"
+            app:layout_constraintBottom_toTopOf="@+id/imageViewReviewPhoto"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/close_24px" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import com.google.android.material.appbar.MaterialToolbar
 import com.judamie_user.android.ui.subfragment.UserNotificationListFragment
 
+
 class UserNotificationListViewModel(val userNotificationListFragment: UserNotificationListFragment):ViewModel() {
     // materialToolbarUserNotificationList
     // materialToolbarUserNotificationList

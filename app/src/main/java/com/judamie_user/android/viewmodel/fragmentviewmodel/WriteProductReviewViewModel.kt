@@ -1,5 +1,6 @@
 package com.judamie_user.android.viewmodel.fragmentviewmodel
 
+import android.util.Log
 import androidx.databinding.BindingAdapter
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

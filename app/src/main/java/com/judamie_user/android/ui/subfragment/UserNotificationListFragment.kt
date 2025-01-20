@@ -1,21 +1,26 @@
 package com.judamie_user.android.ui.subfragment
 
+import android.content.res.ColorStateList
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.divider.MaterialDividerItemDecoration
 import com.judamie_user.android.R
 import com.judamie_user.android.databinding.FragmentUserNotificationListBinding
 import com.judamie_user.android.databinding.RowNotificationBinding
+import com.judamie_user.android.databinding.RowProductListBinding
 import com.judamie_user.android.ui.fragment.MainFragment
 import com.judamie_user.android.ui.fragment.ShopSubFragmentName
-import com.judamie_user.android.viewmodel.rowviewmodel.RowNotificationViewModel
 import com.judamie_user.android.viewmodel.fragmentviewmodel.UserNotificationListViewModel
+import com.judamie_user.android.viewmodel.rowviewmodel.RowNotificationViewModel
+import com.judamie_user.android.viewmodel.rowviewmodel.RowProductListViewModel
 
 
 class UserNotificationListFragment(val mainFragment: MainFragment) : Fragment() {
