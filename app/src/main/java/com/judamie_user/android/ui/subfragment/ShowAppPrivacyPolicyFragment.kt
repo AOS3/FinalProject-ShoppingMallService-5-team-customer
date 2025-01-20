@@ -9,7 +9,7 @@ import androidx.databinding.DataBindingUtil
 import com.judamie_user.android.R
 import com.judamie_user.android.databinding.FragmentShowAppPrivacyPolicyBinding
 import com.judamie_user.android.ui.fragment.MainFragment
-import com.judamie_user.android.viewmodel.temp.ShowAppPrivacyPolicyViewModel
+import com.judamie_user.android.viewmodel.fragmentviewmodel.ShowAppPrivacyPolicyViewModel
 
 
 class ShowAppPrivacyPolicyFragment(val mainFragment: MainFragment) : Fragment() {

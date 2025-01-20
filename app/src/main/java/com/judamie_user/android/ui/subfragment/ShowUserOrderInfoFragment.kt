@@ -15,8 +15,8 @@ import com.judamie_user.android.databinding.FragmentShowUserOrderInfoBinding
 import com.judamie_user.android.databinding.RowOrderInfoBinding
 import com.judamie_user.android.ui.fragment.MainFragment
 import com.judamie_user.android.ui.fragment.ShopSubFragmentName
+import com.judamie_user.android.viewmodel.fragmentviewmodel.ShowUserOrderInfoViewModel
 import com.judamie_user.android.viewmodel.rowviewmodel.RowOrderInfoViewModel
-import com.judamie_user.android.viewmodel.temp.ShowUserOrderInfoViewModel
 
 class ShowUserOrderInfoFragment(val mainFragment: MainFragment) : Fragment() {
     lateinit var fragmentShowUserOrderInfoBinding: FragmentShowUserOrderInfoBinding

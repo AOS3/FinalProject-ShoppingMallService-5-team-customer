@@ -10,7 +10,7 @@ import com.judamie_user.android.R
 import com.judamie_user.android.databinding.FragmentSetPickUpLocationBinding
 import com.judamie_user.android.ui.fragment.MainFragment
 import com.judamie_user.android.ui.fragment.ShopSubFragmentName
-import com.judamie_user.android.viewmodel.temp.SetPickUpLocationViewModel
+import com.judamie_user.android.viewmodel.fragmentviewmodel.SetPickUpLocationViewModel
 
 
 class SetPickUpLocationFragment(val mainFragment: MainFragment) : Fragment() {

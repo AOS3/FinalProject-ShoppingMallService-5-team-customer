@@ -9,7 +9,7 @@ import androidx.databinding.DataBindingUtil
 import com.judamie_user.android.R
 import com.judamie_user.android.databinding.FragmentShowAppInfoBinding
 import com.judamie_user.android.ui.fragment.MainFragment
-import com.judamie_user.android.viewmodel.temp.ShowAppInfoViewModel
+import com.judamie_user.android.viewmodel.fragmentviewmodel.ShowAppInfoViewModel
 
 class ShowAppInfoFragment(val mainFragment: MainFragment) : Fragment() {
     lateinit var fragmentShowAppInfoBinding: FragmentShowAppInfoBinding

@@ -9,7 +9,7 @@ import androidx.databinding.DataBindingUtil
 import com.judamie_user.android.R
 import com.judamie_user.android.databinding.FragmentShowAppTOSBinding
 import com.judamie_user.android.ui.fragment.MainFragment
-import com.judamie_user.android.viewmodel.temp.ShowAppTOSViewModel
+import com.judamie_user.android.viewmodel.fragmentviewmodel.ShowAppTOSViewModel
 
 
 class ShowAppTOSFragment(val mainFragment: MainFragment) : Fragment() {

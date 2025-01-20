@@ -18,9 +18,9 @@ import com.judamie_user.android.databinding.RowNotificationBinding
 import com.judamie_user.android.databinding.RowProductListBinding
 import com.judamie_user.android.ui.fragment.MainFragment
 import com.judamie_user.android.ui.fragment.ShopSubFragmentName
+import com.judamie_user.android.viewmodel.fragmentviewmodel.UserNotificationListViewModel
 import com.judamie_user.android.viewmodel.rowviewmodel.RowNotificationViewModel
 import com.judamie_user.android.viewmodel.rowviewmodel.RowProductListViewModel
-import com.judamie_user.android.viewmodel.temp.UserNotificationListViewModel
 
 
 class UserNotificationListFragment(val mainFragment: MainFragment) : Fragment() {

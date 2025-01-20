@@ -15,9 +15,8 @@ import com.judamie_user.android.databinding.RowCouponBinding
 import com.judamie_user.android.databinding.RowOrderListBinding
 import com.judamie_user.android.ui.fragment.MainFragment
 import com.judamie_user.android.ui.fragment.ShopSubFragmentName
+import com.judamie_user.android.viewmodel.fragmentviewmodel.ShowUserCouponListViewModel
 import com.judamie_user.android.viewmodel.rowviewmodel.RowCouponViewModel
-import com.judamie_user.android.viewmodel.rowviewmodel.RowOrderListViewModel
-import com.judamie_user.android.viewmodel.temp.ShowUserCouponListViewModel
 
 class ShowUserCouponListFragment(val mainFragment: MainFragment) : Fragment() {
     lateinit var fragmentShowUserCouponListBinding: FragmentShowUserCouponListBinding

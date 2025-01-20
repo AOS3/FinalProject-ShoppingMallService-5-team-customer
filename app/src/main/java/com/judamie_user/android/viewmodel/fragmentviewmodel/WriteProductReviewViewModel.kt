@@ -1,11 +1,11 @@
-package com.judamie_user.android.viewmodel.rowviewmodel
+package com.judamie_user.android.viewmodel.fragmentviewmodel
 
 import android.util.Log
 import androidx.databinding.BindingAdapter
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.android.material.appbar.MaterialToolbar
-import com.judamie_user.android.ui.temp.WriteProductReviewFragment
+import com.judamie_user.android.ui.subfragment.WriteProductReviewFragment
 
 class WriteProductReviewViewModel(val writeProductReviewFragment: WriteProductReviewFragment):ViewModel() {
 

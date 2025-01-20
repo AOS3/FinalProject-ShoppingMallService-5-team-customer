@@ -2,7 +2,7 @@ package com.judamie_user.android.viewmodel.rowviewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.judamie_user.android.ui.temp.ShowUserOrderInfoFragment
+import com.judamie_user.android.ui.subfragment.ShowUserOrderInfoFragment
 
 class RowOrderInfoViewModel(showUserOrderInfoFragment: ShowUserOrderInfoFragment):ViewModel() {
     //textViewRowOrderInfoProductName

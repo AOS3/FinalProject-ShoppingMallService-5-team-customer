@@ -28,7 +28,7 @@ import com.judamie_user.android.databinding.ItemPhotoBinding
 import com.judamie_user.android.ui.fragment.MainFragment
 import com.judamie_user.android.ui.fragment.ShopSubFragmentName
 import com.judamie_user.android.util.PictureHandler
-import com.judamie_user.android.viewmodel.temp.WriteProductReviewViewModel
+import com.judamie_user.android.viewmodel.fragmentviewmodel.WriteProductReviewViewModel
 import java.io.File
 
 class WriteProductReviewFragment(val mainFragment: MainFragment) : Fragment() {
