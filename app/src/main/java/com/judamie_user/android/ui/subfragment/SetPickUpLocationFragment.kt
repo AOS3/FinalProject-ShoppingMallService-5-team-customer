@@ -42,10 +42,22 @@ import android.graphics.Canvas
 import android.graphics.drawable.Drawable
 import android.widget.ImageButton
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import com.judamie_user.android.databinding.DialogSettingPickupLocationBinding
 import com.judamie_user.android.databinding.DialogShowPickupLocationInformationBinding
 import com.judamie_user.android.viewmodel.componentviewmodel.SettingPickupLocationDialogViewModel
 import com.judamie_user.android.viewmodel.componentviewmodel.ShowPickupLocationInformationDialogViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.withContext
+import okhttp3.Call
+import okhttp3.Callback
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.Response
+import org.json.JSONArray
+import org.json.JSONObject
 
 
 class SetPickUpLocationFragment(val mainFragment: MainFragment) : Fragment() {
@@ -72,16 +84,15 @@ class SetPickUpLocationFragment(val mainFragment: MainFragment) : Fragment() {
     // 현재 사용자가 보고있는 지도의 중심마커
     var centerMarker: Marker? = null
 
+    // okHttp3 객체생성
+    val client = OkHttpClient()
+
     // 임시 픽업지 주소 리스트
     val addressList = listOf(
         "서울특별시 종로구 세종대로 175",
         "서울특별시 강남구 테헤란로 123",
         "충청북도 청주시 흥덕구 오송읍 오송생명5로 184-4",
-        "03900, 서울 마포구 하늘공원로 84 (상암동)",
-        "155 W Center Street Promenade, Anaheim, CA 92805",
-        "1159 N Rengstorff Ave, Mountain View, CA 94043",
-        "1600 Amphitheatre Pkwy, Mountain View, CA 94043",
-        "2000 N Shoreline Blvd Ground Floor, Mountain View, CA 94043"
+        "서울 마포구 서강로 97 삼성아파트단지 상가 114호",
     )
 
     // 마커와 주소를 매핑하는 맵
@@ -181,8 +192,8 @@ class SetPickUpLocationFragment(val mainFragment: MainFragment) : Fragment() {
     fun settingGoogleMap() {
         val mapFragment =
             childFragmentManager.findFragmentById(R.id.mapFragmentSetPickupLocation) as SupportMapFragment
-        mapFragment.getMapAsync {
-            mainGoogleMap = it
+        mapFragment.getMapAsync { googleMap ->
+            mainGoogleMap = googleMap
             mainGoogleMap.uiSettings.isZoomControlsEnabled = false
             mainGoogleMap.mapType = GoogleMap.MAP_TYPE_NORMAL
 
@@ -204,12 +215,9 @@ class SetPickUpLocationFragment(val mainFragment: MainFragment) : Fragment() {
                 return@getMapAsync
             }
 
-            val gpsSavedLocation =
-                locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
-            val networkSavedLocation =
-                locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
-            val passiveSavedLocation =
-                locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER)
+            val gpsSavedLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+            val networkSavedLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
+            val passiveSavedLocation = locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER)
 
             if (gpsSavedLocation != null) {
                 setMyLocation(gpsSavedLocation)
@@ -219,16 +227,18 @@ class SetPickUpLocationFragment(val mainFragment: MainFragment) : Fragment() {
                 setMyLocation(passiveSavedLocation)
             }
 
-            // 주소 리스트의 모든 주소를 처리
-
-//            addressMap.forEach{
-//                addMarker(it.value)
-//            }
-
-            addressList.forEach { address ->
-                addMarker(address)
+            // 코루틴을 사용하여 addressList의 각 주소에 대해 마커 추가
+            lifecycleScope.launch {
+                addressList.forEach { address ->
+                    withContext(Dispatchers.IO) {
+                        try {
+                            addMarkerOnMap(address)
+                        } catch (e: Exception) {
+                            Log.e("settingGoogleMap", "Failed to add marker for address $address: ${e.message}")
+                        }
+                    }
+                }
             }
-
 
             // 카메라가 이동을 멈춘 후 호출되는 리스너
             mainGoogleMap.setOnCameraIdleListener {
@@ -237,6 +247,7 @@ class SetPickUpLocationFragment(val mainFragment: MainFragment) : Fragment() {
             }
         }
     }
+
 
     fun addCenterMarker(centerLatLng: LatLng): String? {
         // 기존 중심 마커 제거
@@ -511,5 +522,78 @@ class SetPickUpLocationFragment(val mainFragment: MainFragment) : Fragment() {
         dialog.show()
     }
 
+    suspend fun addMarkerOnMap(address: String) {
+        val kakaoApiKey = requireContext().getString(R.string.KAKAO_API_KEY)
 
+        // 카카오 REST API URL
+        val url = "https://dapi.kakao.com/v2/local/search/address.json?query=$address"
+
+        val request = Request.Builder()
+            .url(url)
+            .header("Authorization", "KakaoAK $kakaoApiKey")
+            .build()
+
+        try {
+            // 네트워크 작업은 Dispatchers.IO에서 실행
+            val response = withContext(Dispatchers.IO) {
+                client.suspendCall(request)
+            }
+
+            if (response.isSuccessful) {
+                val responseBody = response.body?.string()
+                val jsonObject = JSONObject(responseBody ?: "")
+                val documents: JSONArray = jsonObject.getJSONArray("documents")
+
+                if (documents.length() > 0) {
+                    val firstResult = documents.getJSONObject(0)
+                    val longitude = firstResult.getString("x").toDouble()
+                    val latitude = firstResult.getString("y").toDouble()
+
+                    // 메인 스레드에서 UI 작업
+                    withContext(Dispatchers.Main) {
+                        val latLng = LatLng(latitude, longitude)
+
+                        val markerOptions = MarkerOptions()
+                            .position(latLng)
+                            .title(address)
+
+                        val markerBitmap = vectorToBitmap(requireContext(), R.drawable.locationmark)
+                        markerOptions.icon(BitmapDescriptorFactory.fromBitmap(markerBitmap))
+
+                        val marker = mainGoogleMap.addMarker(markerOptions)
+                        if (marker != null) {
+                            markerAddressMap[marker] = address
+                        }
+
+                        setupMarkerClickListener(mainGoogleMap)
+                    }
+                } else {
+                    Log.d("SetPickUpLocationFragment", "No results found for the address.")
+                }
+            } else {
+                Log.e("SetPickUpLocationFragment", "Request failed with code: ${response.code}")
+            }
+        } catch (e: Exception) {
+            Log.e("SetPickUpLocationFragment", "Failed to make request: ${e.message}")
+        }
+    }
+
+    // OkHttp 클라이언트를 코루틴에서 사용하기 위한 확장 함수
+    suspend fun OkHttpClient.suspendCall(request: Request): Response {
+        return suspendCancellableCoroutine { continuation ->
+            val call = newCall(request)
+            continuation.invokeOnCancellation { call.cancel() }
+            call.enqueue(object : Callback {
+                override fun onFailure(call: Call, e: IOException) {
+                    if (continuation.isActive) {
+                        continuation.resumeWith(Result.failure(e))
+                    }
+                }
+
+                override fun onResponse(call: Call, response: Response) {
+                    continuation.resumeWith(Result.success(response))
+                }
+            })
+        }
+    }
 }

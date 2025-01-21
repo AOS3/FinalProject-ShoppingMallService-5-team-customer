@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.commit
@@ -71,36 +72,42 @@ class MainFragment() : Fragment() {
         fragmentMainBinding.bottomNavigationView.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.HOME_FRAGMENT -> {
-                    requireActivity().supportFragmentManager.beginTransaction()
-                        .replace(R.id.mainFragmentContainerView, HomeFragment(this))
-                        .commit()
+                    navigateWithoutBackStack(HomeFragment(this))
                     true
                 }
                 R.id.SEARCH_PRODUCT_FRAGMENT -> {
-                    requireActivity().supportFragmentManager.beginTransaction()
-                        .replace(R.id.mainFragmentContainerView, SearchFragment(this))
-                        .commit()
-                    true
+                    navigateWithBackStack(SearchFragment(this), "SearchFragment")
+                    fragmentMainBinding.bottomNavigationView.visibility = View.GONE
+                    false
                 }
-
                 R.id.WISH_LIST_FRAGMENT -> {
-                    requireActivity().supportFragmentManager.beginTransaction()
-                        .replace(R.id.mainFragmentContainerView, WishListFragment(this))
-                        .commit()
+                    navigateWithoutBackStack(WishListFragment(this))
                     true
                 }
-
                 R.id.USER_INFO_FRAGMENT -> {
-                    requireActivity().supportFragmentManager.beginTransaction()
-                        .replace(R.id.mainFragmentContainerView, UserInfoFragment(this))
-                        .commit()
+                    navigateWithoutBackStack(UserInfoFragment(this))
                     true
                 }
-
                 else -> false
             }
         }
     }
+
+    // 백스택 없이 프래그먼트 교체
+    private fun navigateWithoutBackStack(fragment: Fragment) {
+        requireActivity().supportFragmentManager.commit {
+            replace(R.id.mainFragmentContainerView, fragment)
+        }
+    }
+
+    // 백스택에 추가하면서 프래그먼트 교체
+    private fun navigateWithBackStack(fragment: Fragment, tag: String) {
+        requireActivity().supportFragmentManager.commit {
+            replace(R.id.mainFragmentContainerView, fragment)
+            addToBackStack(tag) // 백스택에 추가
+        }
+    }
+
 
 
     // 프래그먼트를 교체하는 함수

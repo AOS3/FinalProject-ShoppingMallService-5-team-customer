@@ -40,7 +40,6 @@
                 android:id="@+id/buttonProductReviewWrite"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="right|center_vertical"
                 android:layout_marginStart="1dp"
                 android:background="@android:color/transparent"
                 android:text="리뷰쓰기"

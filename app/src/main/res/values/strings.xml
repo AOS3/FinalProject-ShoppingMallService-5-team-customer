@@ -19,4 +19,7 @@
         <item>가격 낮은순</item>
         <item>가격 높은순</item>
     </string-array>
+
+    <!-- kakao restAPI 키 -->
+    <string name="KAKAO_API_KEY">"7408a4fcdc7806fc13b00c0ba79cf02c"</string>
 </resources>
