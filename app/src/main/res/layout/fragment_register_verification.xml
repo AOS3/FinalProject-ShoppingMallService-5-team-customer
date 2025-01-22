@@ -42,7 +42,7 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/textFieldRegisterVerificationFragmentPhoneNo"
                     android:layout_width="350dp"
-                    android:layout_height="60dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     android:hint="휴대폰 번호"
                     app:errorEnabled="true"
@@ -55,7 +55,7 @@
                         android:layout_height="wrap_content"
                         android:digits="@string/digit_value_onlyNo"
                         android:singleLine="true"
-                        android:text=""
+                        android:text="@={registerVerificationViewModel.textFieldRegisterVerificationPhoneNoEditTextText}"
                         android:textSize="16sp" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -69,12 +69,17 @@
                     android:text="인증 요청"
                     android:textColor="#FFFFFF"
                     android:textSize="14sp"
-                    tools:cornerRadius="10dp" />
+                    tools:cornerRadius="10dp"
+                    android:onClick="@{(view) -> registerVerificationViewModel.buttonRegisterVerificationRequestVerificationOnClick()}"/>
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/textFieldRegisterVerificationFragmentVerificationNo"
                     android:layout_width="350dp"
-                    android:layout_height="60dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     android:hint="인증 번호"
                     app:errorEnabled="true"
@@ -87,7 +92,7 @@
                         android:layout_height="wrap_content"
                         android:digits="@string/digit_value_onlyNo"
                         android:singleLine="true"
-                        android:text=""
+                        android:text="@={registerVerificationViewModel.textFieldRegisterVerificationVerificationNoEditTextText}"
                         android:textSize="16sp"
                         app:boxStrokeColor="@color/material_on_surface_stroke"
                         app:hintTextColor="@color/material_dynamic_primary10"/>
@@ -103,7 +108,8 @@
                     android:text="인증 확인"
                     android:textColor="#FFFFFF"
                     android:textSize="14sp"
-                    tools:cornerRadius="10dp" />
+                    tools:cornerRadius="10dp"
+                    android:onClick="@{registerVerificationViewModel.buttonRegisterVerificationCheckInfoOnClick}"/>
             </LinearLayout>
 
 
@@ -126,7 +132,7 @@
                 android:textColor="#FFFFFF"
                 android:textSize="14sp"
                 tools:cornerRadius="10dp"
-                android:onClick="@{(view) -> registerVerificationViewModel.buttonRegisterVerificationSubmitOnClick()}"/>
+                android:onClick="@{registerVerificationViewModel.buttonRegisterVerificationSubmitOnClick}"/>
         </LinearLayout>
 
     </LinearLayout>
