@@ -7,19 +7,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.widget.addTextChangedListener
 import androidx.databinding.DataBindingUtil
-import com.google.android.material.textfield.TextInputEditText
 import com.judamie_user.android.R
 import com.judamie_user.android.activity.FragmentName
 import com.judamie_user.android.activity.LoginActivity
 import com.judamie_user.android.activity.ShopActivity
 import com.judamie_user.android.databinding.FragmentLoginBinding
 import com.judamie_user.android.viewmodel.fragmentviewmodel.LoginViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
 
 class LoginFragment : Fragment() {
 
@@ -69,6 +63,65 @@ class LoginFragment : Fragment() {
 //
 //            }
 
+//            // 사용자가 입력한 아이디와 비밀번호
+//            val loginUserId = loginViewModel?.textFieldLoginFragmentIdEditTextText?.value!!
+//            val loginUserPw = loginViewModel?.textFieldLoginFragmentIdEditTextText?.value!!
+//
+//            CoroutineScope(Dispatchers.Main).launch {
+//                val work1 = async(Dispatchers.IO) {
+//                    UserService.checkLogin(loginUserId, loginUserPw)
+//                }
+//                // 로그인 결과를 가져온다.
+//                val loginResult = work1.await()
+//                // Log.d("test100", loginResult.str)
+//
+//                // 로그인 결과로 분기
+//                when(loginResult) {
+//                    // 등록되지 않은 아이디
+//                    LoginResult.LOGIN_RESULT_ID_NOT_EXIST -> {
+//                        textFieldLoginFragmentId.error = "등록되지않은 아이디입니다."
+//                        loginActivity.showSoftInput(textFieldLoginFragmentId.editText!!)
+//                    }
+//                    // 비밀번호 틀림
+//                    LoginResult.LOGIN_RESULT_PASSWORD_INCORRECT -> {
+//                        textFieldLoginFragmentPw.error = "잘못된 비밀번호입니다."
+//                        loginActivity.showSoftInput(textFieldLoginFragmentPw.editText!!)
+//                    }
+//                    // 탈퇴 회원
+//                    LoginResult.LOGIN_RESULT_SIGN_OUT_MEMBER -> {
+//                        loginActivity.showMessageDialog("로그인 실패", "탈퇴한 회원 입니다", "확인") {
+//                            loginViewModel?.textFieldLoginFragmentIdEditTextText?.value = ""
+//                            loginViewModel?.textFieldLoginFragmentPwEditTextText?.value = ""
+//                            loginActivity.showSoftInput(textFieldLoginFragmentId.editText!!)
+//                        }
+//                    }
+//                    // 로그인 성공
+//                    LoginResult.LOGIN_RESULT_SUCCESS -> {
+//                        // 로그인 사용자 정보를 가져온다.
+//                        val work2 = async(Dispatchers.IO) {
+//                            UserService.selectUserDataBuUserIdOne(loginUserId)
+//                        }
+//                        val loginUserModel = work2.await()
+//
+//                        // 자동 로그인 체크 시,
+//                        if (loginViewModel?.checkBoxLoginFragmentLoginAutoChecked?.value!!) {
+//                            CoroutineScope(Dispatchers.Main).launch {
+//                                val work3 = async(Dispatchers.IO) {
+//                                    UserService.updateUserAutoLoginToken(loginActivity, loginUserModel.userDocumentId)
+//                                }
+//                                work3.join()
+//                            }
+//                        }
+//
+//                        // LoginActivity 종료, ShopActivity 실행
+//                        val shopIntent = Intent(loginActivity, ShopActivity::class.java)
+//                        shopIntent.putExtra("user_document_id", loginUserModel.userDocumentId)
+//                        shopIntent.putExtra("user_name", loginUserModel.userName)
+//                        startActivity(shopIntent)
+//                        loginActivity.finish()
+//                    }
+//                }
+//            }
             // 로그인 성공 처리
             val shopIntent = Intent(loginActivity, ShopActivity::class.java)
             startActivity(shopIntent)

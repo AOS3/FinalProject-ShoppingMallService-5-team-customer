@@ -2,10 +2,12 @@ package com.judamie_user.android.util
 
 //주류 카테고리
 enum class ProductCategory(val number:Int,val str:String){
+    //기본값
+    PRODUCT_CATEGORY_DEFAULT(0,"전체"),
     //와인
     PRODUCT_CATEGORY_WINE(1,"와인"),
     //위스키
-    PRODUCT_CATEGORY_WHISKEY(3,"위스키"),
+    PRODUCT_CATEGORY_WHISKEY(2,"위스키"),
     //보드카
     PRODUCT_CATEGORY_VODKA(3,"보드카"),
     //데낄라
@@ -25,10 +27,7 @@ enum class ProductCategory(val number:Int,val str:String){
     //맥주
     PRODUCT_CATEGORY_BEER(11,"맥주"),
     //논알콜
-    PRODUCT_CATEGORY_NON_ALC(12,"논알콜"),
-    //기본값
-    PRODUCT_CATEGORY_DEFAULT(13,"기본값"),
-
+    PRODUCT_CATEGORY_NON_ALC(12,"논알콜")
 }
 
 //상품 상태(품절과 무관하고 판매자가 제품을 삭제했을때 2로바뀜)
@@ -62,3 +61,12 @@ enum class UserState(val number:Int, val str:String){
     // 탈퇴
     USER_STATE_SIGN_OUT(2, "탈퇴")
 }
+
+// 로그인 결과 값
+enum class LoginResult(val number: Int, val str: String) {
+    LOGIN_RESULT_SUCCESS(1, "로그인 성공"),
+    LOGIN_RESULT_ID_NOT_EXIST(2, "존재하지 않는 아이디"),
+    LOGIN_RESULT_PASSWORD_INCORRECT(3, "잘못된 비밀번호"),
+    LOGIN_RESULT_SIGN_OUT_MEMBER(4, "탈퇴한 회원"),
+}
+

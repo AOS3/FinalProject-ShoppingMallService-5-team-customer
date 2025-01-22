@@ -197,11 +197,6 @@ class SearchFragment(val mainFragment: MainFragment) : Fragment() {
                 RowSearchListViewModel(this@SearchFragment)
             rowSearchListBinding.lifecycleOwner = this@SearchFragment
 
-            // 리사이클러뷰 항목 클릭시 상세 거래 완료 내역 보기 화면으로 이동
-            rowSearchListBinding.root.setOnClickListener {
-                mainFragment.replaceFragment(ShopSubFragmentName.PRODUCT_INFO_FRAGMENT, true, true, null)
-            }
-
             val searchViewHolder = SearchViewHolder(rowSearchListBinding)
 
             // 리사이클러뷰 항목 클릭시 상세 거래 완료 내역 보기 화면으로 이동
