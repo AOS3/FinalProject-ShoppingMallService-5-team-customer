@@ -1,6 +1,7 @@
 package com.judamie_user.android.ui.subfragment
 
 import android.graphics.Bitmap
+import android.media.ExifInterface
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -25,11 +26,21 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.judamie_user.android.R
 import com.judamie_user.android.databinding.FragmentWriteProductReviewBinding
 import com.judamie_user.android.databinding.ItemPhotoBinding
+import com.judamie_user.android.firebase.model.ReviewModel
+import com.judamie_user.android.firebase.service.ReviewService
 import com.judamie_user.android.ui.fragment.MainFragment
 import com.judamie_user.android.ui.fragment.ShopSubFragmentName
 import com.judamie_user.android.util.PictureHandler
 import com.judamie_user.android.viewmodel.fragmentviewmodel.WriteProductReviewViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.File
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class WriteProductReviewFragment(val mainFragment: MainFragment) : Fragment() {
     private lateinit var fragmentWriteProductReviewBinding: FragmentWriteProductReviewBinding
@@ -37,11 +48,16 @@ class WriteProductReviewFragment(val mainFragment: MainFragment) : Fragment() {
 
     private val photoList = mutableListOf<Uri>() // 사진 파일 리스트
 
+    private val photoFileNameList = mutableListOf<String>() // 저장되는 이름의 사진 파일이름
+
     private lateinit var photoAdapter: PhotoAdapter
 
     // 사진 가져오기 런처
     private lateinit var cameraLauncher: ActivityResultLauncher<Uri>
     private lateinit var albumLauncher: ActivityResultLauncher<PickVisualMediaRequest>
+
+    // 촬영된 사진이 위치할 경로
+    lateinit var filePath: String
 
     // 임시 사진 저장 URI
     private lateinit var tempPhotoUri: Uri
@@ -54,8 +70,14 @@ class WriteProductReviewFragment(val mainFragment: MainFragment) : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        fragmentWriteProductReviewBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_write_product_review, container, false)
-        fragmentWriteProductReviewBinding.writeProductReviewViewModel = WriteProductReviewViewModel(this@WriteProductReviewFragment)
+        fragmentWriteProductReviewBinding = DataBindingUtil.inflate(
+            inflater,
+            R.layout.fragment_write_product_review,
+            container,
+            false
+        )
+        fragmentWriteProductReviewBinding.writeProductReviewViewModel =
+            WriteProductReviewViewModel(this@WriteProductReviewFragment)
         fragmentWriteProductReviewBinding.lifecycleOwner = viewLifecycleOwner
 
         // PictureHandler 초기화
@@ -73,7 +95,7 @@ class WriteProductReviewFragment(val mainFragment: MainFragment) : Fragment() {
             photoAdapter = PhotoAdapter(photoList) { position ->
                 if (position in 0 until photoList.size) {
                     photoList.removeAt(position) // Bitmap 리스트에서 삭제
-                    Log.d("test",photoList.toString())
+                    Log.d("test", photoList.toString())
                     photoAdapter.notifyItemRemoved(position)
                     photoAdapter.notifyItemRangeChanged(position, photoList.size) // 이후 항목 위치 업데이트
                     updatePhotoCountText()
@@ -84,7 +106,8 @@ class WriteProductReviewFragment(val mainFragment: MainFragment) : Fragment() {
 
             // RecyclerView 설정
             recyclerViewWriteProductReviewPhotos.apply {
-                layoutManager = GridLayoutManager(requireContext(), 1, GridLayoutManager.HORIZONTAL, false)
+                layoutManager =
+                    GridLayoutManager(requireContext(), 1, GridLayoutManager.HORIZONTAL, false)
                 adapter = photoAdapter
             }
 
@@ -94,21 +117,22 @@ class WriteProductReviewFragment(val mainFragment: MainFragment) : Fragment() {
     }
 
 
-
     private fun initializeLaunchers() {
         // 카메라 런처 초기화
-        cameraLauncher = registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
-            if (success) {
-                processCapturedPhoto(tempPhotoUri)
-            } else {
-                showToast("사진 촬영 실패")
+        cameraLauncher =
+            registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
+                if (success) {
+                    processCapturedPhoto(tempPhotoUri)
+                } else {
+                    showToast("사진 촬영 실패")
+                }
             }
-        }
 
         // 앨범 런처 초기화
-        albumLauncher = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
-            uri?.let { processSelectedPhoto(it) } ?: showToast("사진 선택 취소")
-        }
+        albumLauncher =
+            registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+                uri?.let { processSelectedPhoto(it) } ?: showToast("사진 선택 취소")
+            }
     }
 
     fun buttonWriteProductReviewAddPhotoOnclick() {
@@ -117,8 +141,10 @@ class WriteProductReviewFragment(val mainFragment: MainFragment) : Fragment() {
             val bottomSheetDialog = BottomSheetDialog(requireContext())
             bottomSheetDialog.setContentView(bottomSheetView)
 
-            val buttonPhotoPickFromCamera = bottomSheetView.findViewById<TextView>(R.id.buttonPhotoPickFromCamera)
-            val buttonPhotoPickFromAlbum = bottomSheetView.findViewById<TextView>(R.id.buttonPhotoPickFromAlbum)
+            val buttonPhotoPickFromCamera =
+                bottomSheetView.findViewById<TextView>(R.id.buttonPhotoPickFromCamera)
+            val buttonPhotoPickFromAlbum =
+                bottomSheetView.findViewById<TextView>(R.id.buttonPhotoPickFromAlbum)
 
             buttonPhotoPickFromCamera.setOnClickListener {
                 val fileName = "temp_${System.currentTimeMillis()}.jpg"
@@ -135,7 +161,8 @@ class WriteProductReviewFragment(val mainFragment: MainFragment) : Fragment() {
             }
 
             buttonPhotoPickFromAlbum.setOnClickListener {
-                val request = PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                val request =
+                    PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
                 albumLauncher.launch(request)
                 bottomSheetDialog.dismiss()
             }
@@ -159,7 +186,6 @@ class WriteProductReviewFragment(val mainFragment: MainFragment) : Fragment() {
     }
 
 
-
     private fun updatePhotoCountText() {
         fragmentWriteProductReviewBinding.textViewTitle.text =
             "사진 첨부 (선택) (${photoList.size}/5)"
@@ -175,38 +201,105 @@ class WriteProductReviewFragment(val mainFragment: MainFragment) : Fragment() {
 
     fun saveReview() {
         fragmentWriteProductReviewBinding.apply {
-            if (writeProductReviewViewModel?.textInputLayoutWriteProductReviewContentText?.value?.length!! < 10) {
+            val reviewRating = writeProductReviewViewModel?.ratingBarWriteProductReviewRate?.value
+            val reviewContent = writeProductReviewViewModel?.textInputLayoutWriteProductReviewContentText?.value
+            val reviewTimestamp = System.currentTimeMillis()
+            val reviewDate = getCurrentDate()
+
+            if (reviewContent.isNullOrEmpty() || reviewContent.length < 10) {
                 showToast("리뷰를 최소 10자 이상 작성해주세요")
-            } else {
-                // 다이얼로그 빌더 생성
-                val builder = MaterialAlertDialogBuilder(requireContext())
-
-                val dialog = builder.setTitle("리뷰 저장")
-                    .setMessage("작성한 리뷰를 저장하시겠습니까?")
-                    .setPositiveButton("확인") { dialog, _ ->
-                        // 리뷰 저장 로직 실행
-                        showToast("리뷰가 저장되었습니다.")
-
-                        // 현재 프래그먼트 제거
-                        mainFragment.removeFragment(ShopSubFragmentName.WRITE_PRODUCT_REVIEW_FRAGMENT)
-
-                        dialog.dismiss()
-                    }
-                    .setNegativeButton("취소") { dialog, _ ->
-                        // 다이얼로그 닫기
-                        dialog.dismiss()
-                    }
-                    .setCancelable(true) // 다이얼로그 외부 터치로 닫을 수 있음
-                    .create() // 다이얼로그 생성
-
-                // 배경색을 흰색으로 설정
-                dialog.window?.setBackgroundDrawableResource(android.R.color.white)
-
-                dialog.show() // 다이얼로그 표시
+                return
             }
+
+            val builder = MaterialAlertDialogBuilder(requireContext())
+
+            val dialog = builder.setTitle("리뷰 저장")
+                .setMessage("작성한 리뷰와 사진을 저장하시겠습니까?")
+                .setPositiveButton("확인") { dialog, _ ->
+                    CoroutineScope(Dispatchers.Main).launch {
+                        try {
+                            showToast("사진 업로드 중입니다...")
+
+                            // 사진 업로드
+                            uploadPhotosToFirebase { success ->
+                                if (success) {
+                                    // 사진 업로드 완료 후 리뷰 생성
+                                    val reviewModel = ReviewModel().also {
+                                        it.reviewContent = reviewContent
+                                        it.reviewRating = reviewRating!!
+                                        it.reviewTimeStamp = reviewTimestamp
+                                        it.reviewWriteDate = reviewDate
+                                        it.reviewPhoto = photoFileNameList // 업로드된 사진 파일명 추가
+                                    }
+
+                                    // 리뷰 업로드
+                                    CoroutineScope(Dispatchers.IO).launch {
+                                        var reviewDocumentID = ReviewService.addReviewData(reviewModel)
+
+                                        val work = async {
+                                            ReviewService.addReviewDataInProduct(reviewDocumentID,"8DynxD5PPXsWOYPXQFmF")
+                                        }
+                                        work.join()
+
+
+                                        withContext(Dispatchers.Main) {
+                                            showToast("리뷰가 저장되었습니다.")
+                                            mainFragment.removeFragment(ShopSubFragmentName.WRITE_PRODUCT_REVIEW_FRAGMENT)
+                                        }
+                                    }
+                                } else {
+                                    showToast("사진 업로드 실패")
+                                }
+                            }
+                        } catch (e: Exception) {
+                            Log.e("test100", "사진 업로드 중 오류 발생", e)
+                            showToast("사진 업로드 실패: ${e.message}")
+                        } finally {
+                            dialog.dismiss()
+                        }
+                    }
+                }
+                .setNegativeButton("취소") { dialog, _ -> dialog.dismiss() }
+                .setCancelable(true)
+                .create()
+
+            dialog.window?.setBackgroundDrawableResource(android.R.color.white)
+            dialog.show()
         }
     }
 
+
+
+    // 현재 날짜를 반환하는 함수
+    private fun getCurrentDate(): String {
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        val date = Date()
+        return dateFormat.format(date)
+    }
+
+
+    private suspend fun uploadPhotosToFirebase(onComplete: (Boolean) -> Unit) {
+        withContext(Dispatchers.IO) {
+            try {
+                photoList.forEachIndexed { index, uri ->
+                    val serverFilePath = "review_photos/photo_${System.currentTimeMillis()}_$index.jpg"
+                    photoFileNameList.add(serverFilePath) // 파일명을 리스트에 추가
+
+                    // URI를 직접 Firebase Storage에 업로드
+                    ReviewService.uploadImageFromUri(uri, serverFilePath)
+                    Log.d("uploadPhotosToFirebase", "사진 업로드 완료: $serverFilePath")
+                }
+                withContext(Dispatchers.Main) {
+                    onComplete(true)
+                }
+            } catch (e: Exception) {
+                Log.e("uploadPhotosToFirebase", "사진 업로드 실패", e)
+                withContext(Dispatchers.Main) {
+                    onComplete(false)
+                }
+            }
+        }
+    }
 
 
     inner class PhotoAdapter(
@@ -240,9 +333,9 @@ class WriteProductReviewFragment(val mainFragment: MainFragment) : Fragment() {
 
         override fun getItemCount(): Int = photos.size
 
-        inner class PhotoViewHolder(val binding: ItemPhotoBinding) : RecyclerView.ViewHolder(binding.root)
+        inner class PhotoViewHolder(val binding: ItemPhotoBinding) :
+            RecyclerView.ViewHolder(binding.root)
     }
-
 
 
 }

@@ -111,7 +111,9 @@
                     style="@style/ImageRatingBar"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textViewWriteProductReviewProductSeller" />
+                    app:layout_constraintTop_toBottomOf="@+id/textViewWriteProductReviewProductSeller"
+                    app:onRatingChanged="@{writeProductReviewViewModel}" />
+
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/textInputLayoutWriteProductReviewContent"
