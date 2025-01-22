@@ -20,12 +20,61 @@ data class RegisterStep1ViewModel(val registerStep1Fragment: RegisterStep1Fragme
     val textFieldRegisterStep1Pw1EditTextText = MutableLiveData("")
     // textFieldRegisterStep1Pw2 - EditText - text
     val textFieldRegisterStep1Pw2EditTextText = MutableLiveData("")
+    // textFieldRegisterStep1FragmentName - EditText - Text
+    val textFieldRegisterStep1FragmentNameEditTextText = MutableLiveData("")
 
 
     // buttonLoginNextStep - onClick
-    fun buttonLoginNextStepOnClick(){
-        registerStep1Fragment.moveToUserVerification()
+    fun buttonLoginNextStepOnClick() {
+        registerStep1Fragment.apply {
+
+            // 입력 요소 검사
+            if (textFieldRegisterStep1IdEditTextText.value?.isEmpty()!!) {
+                // 아이디 입력란에 에러 메시지 표시
+                fragmentRegisterStep1Binding.textFieldRegisterStep1Id.error = "아이디를 입력해주세요"
+                loginActivity.showSoftInput(fragmentRegisterStep1Binding.textFieldRegisterStep1Id.editText!!)
+                return
+            }
+
+            if (textFieldRegisterStep1Pw1EditTextText.value?.isEmpty()!!) {
+                // 비밀번호 입력란에 에러 메시지 표시
+                fragmentRegisterStep1Binding.textFieldRegisterStep1Pw1.error = "비밀번호를 입력해주세요"
+                loginActivity.showSoftInput(fragmentRegisterStep1Binding.textFieldRegisterStep1Pw1.editText!!)
+                return
+            }
+
+            if (textFieldRegisterStep1Pw2EditTextText.value?.isEmpty()!!) {
+                // 비밀번호 확인 입력란에 에러 메시지 표시
+                fragmentRegisterStep1Binding.textFieldRegisterStep1Pw2.error = "비밀번호를 입력해주세요"
+                loginActivity.showSoftInput(fragmentRegisterStep1Binding.textFieldRegisterStep1Pw2.editText!!)
+                return
+            }
+
+            if (textFieldRegisterStep1Pw1EditTextText.value != textFieldRegisterStep1Pw2EditTextText.value) {
+                // 비밀번호 불일치 에러 메시지 표시
+                fragmentRegisterStep1Binding.textFieldRegisterStep1Pw1.error = "비밀번호가 다릅니다"
+                fragmentRegisterStep1Binding.textFieldRegisterStep1Pw2.error = "비밀번호가 다릅니다"
+                fragmentRegisterStep1Binding.registerStep1ViewModel?.textFieldRegisterStep1Pw1EditTextText?.value = ""
+                fragmentRegisterStep1Binding.registerStep1ViewModel?.textFieldRegisterStep1Pw2EditTextText?.value = ""
+                loginActivity.showSoftInput(fragmentRegisterStep1Binding.textFieldRegisterStep1Pw1.editText!!)
+                return
+            }
+
+            // 입력 요소 검사
+            if (textFieldRegisterStep1FragmentNameEditTextText.value?.isEmpty()!!) {
+                // 아이디 입력란에 에러 메시지 표시
+                fragmentRegisterStep1Binding.textFieldRegisterStep1FragmentName.error = "이름을 입력해주세요"
+                loginActivity.showSoftInput(fragmentRegisterStep1Binding.textFieldRegisterStep1FragmentName.editText!!)
+                return
+            }
+
+            // 중복 확인
+            checkRegisterIdName()
+            // 다음 화면으로 이동
+            moveToUserVerification()
+        }
     }
+
 
     companion object{
         // toolbarRegisterStep1 - onNavigationClickRegisterStep1

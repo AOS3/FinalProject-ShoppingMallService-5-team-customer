@@ -11,6 +11,7 @@ import com.judamie_user.android.activity.FragmentName
 import com.judamie_user.android.activity.LoginActivity
 import com.judamie_user.android.databinding.FragmentLoginBinding
 import com.judamie_user.android.databinding.FragmentRegisterStep1Binding
+import com.judamie_user.android.firebase.service.UserService
 import com.judamie_user.android.viewmodel.fragmentviewmodel.LoginViewModel
 import com.judamie_user.android.viewmodel.fragmentviewmodel.RegisterStep1ViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -23,12 +24,7 @@ class RegisterStep1Fragment : Fragment() {
     lateinit var fragmentRegisterStep1Binding: FragmentRegisterStep1Binding
     lateinit var loginActivity: LoginActivity
 
-
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         fragmentRegisterStep1Binding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_register_step1, container, false)
         fragmentRegisterStep1Binding.registerStep1ViewModel = RegisterStep1ViewModel(this@RegisterStep1Fragment)
@@ -70,9 +66,47 @@ class RegisterStep1Fragment : Fragment() {
 
     // 이름, 아이디 중복 처리 메서드
     fun checkRegisterIdName() {
+        // 사용자가 입력한 아이디
+        val userId = fragmentRegisterStep1Binding.registerStep1ViewModel?.textFieldRegisterStep1IdEditTextText?.value!!
+        // 사용자가 입력한 이름
+        val userName = fragmentRegisterStep1Binding.registerStep1ViewModel?.textFieldRegisterStep1FragmentNameEditTextText?.value!!
 
+        // 사용할 수 있는 아이디인지 검사
+        CoroutineScope(Dispatchers.Main).launch {
+            val work1 = async(Dispatchers.IO){
+                // 아이디 중복 체크
+                val isIdAvailable = UserService.checkJoinUserId(userId)
+                // 이름 중복 체크
+                val isNameAvailable = UserService.checkJoinUserName(userName)
+
+                Pair(isIdAvailable, isNameAvailable)
+            }
+
+            val (isIdAvailable, isNameAvailable) = work1.await()
+
+            // 아이디 중복 여부 처리
+            if (isIdAvailable) {
+                // 사용할 수 있는 아이디일 때는 에러 메시지 제거
+                fragmentRegisterStep1Binding.textFieldRegisterStep1Id.error = null
+            } else {
+                // 이미 존재하는 아이디일 때 에러 메시지 표시
+                fragmentRegisterStep1Binding.textFieldRegisterStep1Id.error = "이미 존재하는 아이디입니다"
+                // 소프트 키보드 표시
+                loginActivity.showSoftInput(fragmentRegisterStep1Binding.textFieldRegisterStep1Id)
+            }
+
+            // 이름 중복 여부 처리
+            if (isNameAvailable) {
+                // 사용할 수 있는 이름일 때는 에러 메시지 제거
+                fragmentRegisterStep1Binding.textFieldRegisterStep1FragmentName.error = null
+            } else {
+                // 이미 존재하는 이름일 때 에러 메시지 표시
+                fragmentRegisterStep1Binding.textFieldRegisterStep1FragmentName.error = "이미 존재하는 이름입니다"
+                // 소프트 키보드 표시
+                loginActivity.showSoftInput(fragmentRegisterStep1Binding.textFieldRegisterStep1FragmentName)
+            }
+        }
     }
 
-    // 필드 입력 여부 처리 메서드
 
 }
