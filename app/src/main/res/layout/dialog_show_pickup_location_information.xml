@@ -31,16 +31,6 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/textView12"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="30dp"
-            android:layout_marginTop="10dp"
-            android:text="영업시간 :"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/buttonSettingPickupLocationCall" />
-
-        <TextView
             android:id="@+id/textView13"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -48,7 +38,7 @@
             android:layout_marginTop="10dp"
             android:text="주소 :"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView12" />
+            app:layout_constraintTop_toBottomOf="@+id/buttonSettingPickupLocationCall" />
 
         <TextView
             android:id="@+id/textView14"
@@ -99,16 +89,6 @@
             app:layout_constraintTop_toBottomOf="@+id/textViewDialogSettingPickupLocationDetail" />
 
         <TextView
-            android:id="@+id/textViewDialogSettingPickupLocationOpenTime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
-            android:text="@{showPickupLocationInformationDialogViewModel.textViewDialogShowPickupLocationInformationOpenTimeText}"
-            app:layout_constraintStart_toEndOf="@+id/textView12"
-            app:layout_constraintTop_toBottomOf="@+id/buttonSettingPickupLocationCall" />
-
-        <TextView
             android:id="@+id/textViewDialogSettingPickupLocationAddressDetail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -136,7 +116,7 @@
             android:layout_marginTop="10dp"
             android:text="@{showPickupLocationInformationDialogViewModel.textViewDialogShowPickupLocationInformationStreetAddressText}"
             app:layout_constraintStart_toEndOf="@+id/textView13"
-            app:layout_constraintTop_toBottomOf="@+id/textViewDialogSettingPickupLocationOpenTime" />
+            app:layout_constraintTop_toBottomOf="@+id/buttonSettingPickupLocationCall" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
