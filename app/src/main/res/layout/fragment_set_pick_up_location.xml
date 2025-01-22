@@ -126,7 +126,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:background="@drawable/button_round_activated"
-                android:onClick="@{(view)->setPickUpLocationViewModel.buttonSetPickUpLocationShowInfoOnClick()}"
+                android:onClick="@{()->setPickUpLocationViewModel.buttonSetPickUpLocationShowInfoOnClick()}"
                 android:text="정보 보기"
                 android:textColor="@color/white" />
 

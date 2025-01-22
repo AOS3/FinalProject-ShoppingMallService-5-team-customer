@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    id("com.google.gms.google-services")
     kotlin("kapt")
 }
 
@@ -71,8 +72,6 @@ dependencies {
     annotationProcessor ("com.github.bumptech.glide:compiler:4.15.1")
 
     implementation ("com.google.android.gms:play-services-maps:18.1.0")
-
-    implementation ("com.squareup.okhttp3:okhttp:4.12.0")
 
 
 }

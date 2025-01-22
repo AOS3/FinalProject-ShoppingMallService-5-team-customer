@@ -38,3 +38,27 @@ enum class ProductState(val number:Int,val str:String){
     // 상품 팔지않음
     PRODUCT_DELETE(2,"팔지않음")
 }
+
+// 픽업지 상태를 나타내는 값
+enum class PickupStateType(var num:Int, var str: String){
+    // 기본
+    PICKUP_STATE_NORMAL(1, "정상"),
+    // 삭제
+    PICKUP_STATE_DELETE(2, "삭제")
+}
+
+// 쿠폰 사용 여부를 나타내는 값
+enum class CouponUsableType(var num:Int, var str: String){
+    // 사용 가능
+    COUPON_USABLE(1, "사용 가능"),
+    // 사용 불가능
+    COUPON_UNUSABLE(2, "사용 불가능")
+}
+
+// 사용자 상태 값
+enum class UserState(val number:Int, val str:String){
+    // 정상
+    USER_STATE_NORMAL(1, "정상"),
+    // 탈퇴
+    USER_STATE_SIGN_OUT(2, "탈퇴")
+}

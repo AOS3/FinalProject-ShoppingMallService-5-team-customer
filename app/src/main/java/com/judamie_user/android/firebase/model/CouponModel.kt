@@ -1,20 +1,33 @@
-package com.judamie_user.android.firebase.model
+package com.judamie_manager.firebase.model
+
+import com.judamie_manager.firebase.vo.CouponVO
+import com.judamie_user.android.util.CouponUsableType
+
 
 class CouponModel {
-
-    var couponDocumentId = ""
-
-    var couponDiscountRate:Int = 0
-
+    // 쿠폰 id
+    var couponDocumentID = ""
+    // 쿠폰 이름
     var couponName = ""
-
+    // 쿠폰 할인율
+    var couponDiscountRate = ""
+    // 쿠폰 사용 기한
     var couponPeriod = ""
+    // 쿠폰 사용 가능 여부
+    var couponState = CouponUsableType.COUPON_USABLE
+    // 시간
+    var couponTimeStamp = 0L
 
-    var couponState = ""
+    fun toCouponVO():CouponVO{
+        val couponVO = CouponVO()
+        couponVO.couponName = couponName
+        couponVO.couponDiscountRate = couponDiscountRate
+        couponVO.couponPeriod = couponPeriod
+        couponVO.couponState = couponState.num
+        couponVO.couponTimeStamp = couponTimeStamp
 
-    var couponTimeStamp = ""
-
-
-
-
+        return couponVO
+    }
 }
+
+
