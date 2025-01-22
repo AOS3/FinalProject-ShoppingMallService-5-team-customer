@@ -54,12 +54,14 @@ class RegisterStep1Fragment : Fragment() {
             // 사용자가 입력한 데이터를 가져온다.
             val userId = registerStep1ViewModel?.textFieldRegisterStep1IdEditTextText?.value!!
             val userPw = registerStep1ViewModel?.textFieldRegisterStep1Pw1EditTextText?.value!!
+            val userName = registerStep1ViewModel?.textFieldRegisterStep1FragmentNameEditTextText?.value!!
             // Log.d("test100", userId)
             // Log.d("test100", userPw)
             // 데이터를 담는다.
             val dataBundle = Bundle()
             dataBundle.putString("userId", userId)
             dataBundle.putString("userPw", userPw)
+            dataBundle.putString("userName", userName)
             loginActivity.replaceFragment(FragmentName.REGISTER_VERIFICATION_FRAGMENT, true, true, dataBundle)
         }
     }

@@ -42,7 +42,7 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/textFieldRegisterVerificationFragmentPhoneNo"
                     android:layout_width="350dp"
-                    android:layout_height="60dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     android:hint="휴대폰 번호"
                     app:errorEnabled="true"
@@ -72,10 +72,14 @@
                     tools:cornerRadius="10dp"
                     android:onClick="@{(view) -> registerVerificationViewModel.buttonRegisterVerificationRequestVerificationOnClick()}"/>
 
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp" />
+
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/textFieldRegisterVerificationFragmentVerificationNo"
                     android:layout_width="350dp"
-                    android:layout_height="60dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     android:hint="인증 번호"
                     app:errorEnabled="true"
@@ -105,7 +109,7 @@
                     android:textColor="#FFFFFF"
                     android:textSize="14sp"
                     tools:cornerRadius="10dp"
-                    android:onClick="@{(view) -> registerVerificationViewModel.buttonRegisterVerificationCheckInfoOnClick}"/>
+                    android:onClick="@{registerVerificationViewModel.buttonRegisterVerificationCheckInfoOnClick}"/>
             </LinearLayout>
 
 
@@ -128,7 +132,7 @@
                 android:textColor="#FFFFFF"
                 android:textSize="14sp"
                 tools:cornerRadius="10dp"
-                android:onClick="@{(view) -> registerVerificationViewModel.buttonRegisterVerificationSubmitOnClick()}"/>
+                android:onClick="@{registerVerificationViewModel.buttonRegisterVerificationSubmitOnClick}"/>
         </LinearLayout>
 
     </LinearLayout>

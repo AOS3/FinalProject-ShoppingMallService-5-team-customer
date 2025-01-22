@@ -18,6 +18,9 @@ import com.judamie_user.android.activity.FragmentName
 import com.judamie_user.android.activity.LoginActivity
 import com.judamie_user.android.databinding.FragmentRegisterStep1Binding
 import com.judamie_user.android.databinding.FragmentRegisterVerificationBinding
+import com.judamie_user.android.firebase.model.UserModel
+import com.judamie_user.android.firebase.service.UserService
+import com.judamie_user.android.util.UserState
 import com.judamie_user.android.viewmodel.fragmentviewmodel.RegisterStep1ViewModel
 import com.judamie_user.android.viewmodel.fragmentviewmodel.RegisterVerificationViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -34,6 +37,14 @@ class RegisterVerificationFragment : Fragment() {
 
     lateinit var auth: FirebaseAuth
     var verificationId: String = ""
+    // 본인 인증 했는지 확인하는 변수
+    var isVerification = false
+
+    // 번들로 전달된 데이터를 담을 변수
+    lateinit var userId:String
+    lateinit var userPw:String
+    lateinit var userName:String
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         fragmentRegisterVerificationBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_register_verification, container, false)
@@ -45,11 +56,21 @@ class RegisterVerificationFragment : Fragment() {
 
         auth = FirebaseAuth.getInstance()
 
+        // 번들에 담겨져있는 데이터를 변수에 담아주는 메서드를 호출한다.
+        gettingArguments()
+
         // 툴바 구성 메서드 호출
         settingToolbar()
 
         return fragmentRegisterVerificationBinding.root
 
+    }
+
+    // 번들에 담겨져있는 데이터를 변수에 담아준다.
+    fun gettingArguments(){
+        userId = arguments?.getString("userId")!!
+        userPw = arguments?.getString("userPw")!!
+        userName = arguments?.getString("userName")!!
     }
 
     // 인증 코드 전송 메서드
@@ -96,9 +117,10 @@ class RegisterVerificationFragment : Fragment() {
             .addOnCompleteListener(requireActivity()) { task ->
                 if (task.isSuccessful) {
                     Toast.makeText(requireContext(), "인증 성공", Toast.LENGTH_SHORT).show()
+                    isVerification = true
 
                 } else {
-                    Toast.makeText(requireContext(), "인증 실패", Toast.LENGTH_SHORT).show()
+                    fragmentRegisterVerificationBinding.textFieldRegisterVerificationFragmentVerificationNo.error = "인증코드가 일치하지 않습니다"
                 }
             }
     }
@@ -116,7 +138,37 @@ class RegisterVerificationFragment : Fragment() {
     // 가입 완료 처리 메서드
     fun proUserJoin(){
         fragmentRegisterVerificationBinding.apply {
-            loginActivity.removeFragment(FragmentName.REGISTER_STEP1_FRAGMENT)
+            if (isVerification) {
+                // 저장할 데이터를 추출한다
+                var userPhoneNumber = registerVerificationViewModel?.textFieldRegisterVerificationPhoneNoEditTextText?.value!!
+                var userTimeStamp = System.nanoTime()
+                var userState = UserState.USER_STATE_NORMAL
+
+                val userModel = UserModel().also {
+                    it.userId = userId
+                    it.userPassword = userPw
+                    it.userName = userName
+                    it.userPhoneNumber = userPhoneNumber
+                    it.userTimeStamp = userTimeStamp
+                    it.userState = userState
+                }
+
+                // 서버에 저장한다
+                CoroutineScope(Dispatchers.Main).launch {
+                    val work1 = async(Dispatchers.IO){
+                        // 서비스의 저장 메서드를 호출한다.
+                        UserService.addUserData(userModel)
+                    }
+                    work1.join()
+                    loginActivity.showMessageDialog("가입 완료", "가입이 완료되었습니다\n로그인해주세요", "확인"){
+                        loginActivity.removeFragment(FragmentName.REGISTER_STEP1_FRAGMENT)
+                    }
+                }
+            }else{
+                loginActivity.showMessageDialog("가입 실패", "인증을 완료해주세요", "확인"){
+
+                }
+            }
         }
     }
 }

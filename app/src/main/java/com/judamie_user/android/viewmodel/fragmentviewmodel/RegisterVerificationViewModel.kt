@@ -23,17 +23,18 @@ class RegisterVerificationViewModel(val registerVerificationFragment: RegisterVe
     // 인증 요청 버튼
     // buttonRegisterVerificationRequestVerification - onClick
     fun buttonRegisterVerificationRequestVerificationOnClick(){
-        val phoneNumber = textFieldRegisterVerificationPhoneNoEditTextText.value
-        if (phoneNumber != null) {
-            registerVerificationFragment.sendVerificationCode(phoneNumber)
-        } else{
+        val phoneNumber1 =textFieldRegisterVerificationPhoneNoEditTextText.value
+        if (phoneNumber1.isNullOrEmpty()) {
             registerVerificationFragment.fragmentRegisterVerificationBinding.textFieldRegisterVerificationFragmentPhoneNo.error = "전화번호를 입력해주세요"
+        } else {
+            val phoneNumber = "+82" + phoneNumber1
+            registerVerificationFragment.sendVerificationCode(phoneNumber)
         }
     }
 
     // 인증 확인 버튼
     // buttonRegisterVerificationCheckInfo - onClick
-    fun buttonRegisterVerificationCheckInfoOnClick(){
+    fun buttonRegisterVerificationCheckInfoOnClick(view: View) {
         registerVerificationFragment.verificationCheck()
     }
 
