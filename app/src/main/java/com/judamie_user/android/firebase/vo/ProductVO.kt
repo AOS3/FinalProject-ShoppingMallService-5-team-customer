@@ -31,8 +31,8 @@ class ProductVO {
         productModel.productTimeStamp = productTimeStamp
 
         when (productState){
-            ProductState.PRODUCT_STATE_NORMAL.number -> productModel.productState = ProductState.PRODUCT_STATE_NORMAL
-            ProductState.PRODUCT_STATE_DELETE.number -> productModel.productState = ProductState.PRODUCT_STATE_DELETE
+            ProductState.PRODUCT_NORMAL.number -> productModel.productState = ProductState.PRODUCT_NORMAL
+            ProductState.PRODUCT_DELETE.number -> productModel.productState = ProductState.PRODUCT_DELETE
         }
 
         productModel.productSubImage = mutableListOf()

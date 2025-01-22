@@ -15,7 +15,7 @@ class ProductModel {
     var productStock = 0
     var productMainImage = ""
     var productSubImage: List<String> = emptyList()
-    var productState = ProductState.PRODUCT_STATE_NORMAL
+    var productState = ProductState.PRODUCT_NORMAL
     var productRegisterDate= ""
     var productTimeStamp = 0L
 
