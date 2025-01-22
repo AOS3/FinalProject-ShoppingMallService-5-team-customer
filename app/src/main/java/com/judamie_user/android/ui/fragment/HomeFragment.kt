@@ -141,7 +141,7 @@ class HomeFragment(val mainFragment:MainFragment) : Fragment() {
                         iconView.setImageResource(R.drawable.rum)
                     }
                     8 -> {
-                        iconView.setImageResource(R.drawable.riquere)
+                        iconView.setImageResource(R.drawable.liqueur)
                     }
                     9 -> {
                         iconView.setImageResource(R.drawable.chinabottle)
