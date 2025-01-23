@@ -1,9 +1,11 @@
 package com.judamie_user.android.firebase.service
 
 import android.net.Uri
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.judamie_user.android.firebase.model.ReviewModel
 import com.judamie_user.android.firebase.repository.ReviewRepository
+import com.judamie_user.android.firebase.vo.ReviewVO
 import kotlinx.coroutines.tasks.await
 
 class ReviewService {
@@ -22,8 +24,23 @@ class ReviewService {
             return reviewDocumentID
         }
 
+        // 리뷰id를 제품 데이터에 넣는 메서드
         suspend fun addReviewDataInProduct(reviewDocumentID:String,productDocumentID:String){
             ReviewRepository.addReviewDataInProduct(reviewDocumentID,productDocumentID)
+        }
+
+        //리뷰 documentID로 리뷰를 가져오는 메서드
+        suspend fun gettingReviewByID(reviewDocumentID:String): ReviewModel {
+            val reviewVO = ReviewRepository.gettingReviewByID(reviewDocumentID)
+            val reviewModel = reviewVO.toReviewModel(reviewDocumentID)
+
+            return reviewModel
+        }
+
+        //리뷰 이미지 데이터를 가져온다
+        suspend fun gettingReviewImage(imageFileName:String) : Uri{
+            val imageUri = ReviewRepository.gettingReviewImage(imageFileName)
+            return imageUri
         }
     }
 }

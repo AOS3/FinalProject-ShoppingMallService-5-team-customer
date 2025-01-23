@@ -88,4 +88,7 @@ dependencies {
     //사진가져오기
     implementation("com.github.bumptech.glide:glide:4.16.0")
 
+    //스텔레톤(서버에서 받아오는중에 애니메이션)
+    implementation ("com.facebook.shimmer:shimmer:0.5.0")
+
 }

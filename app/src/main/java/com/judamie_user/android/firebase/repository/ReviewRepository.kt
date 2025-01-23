@@ -4,6 +4,7 @@ import android.net.Uri
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
+import com.judamie_user.android.firebase.vo.ProductVO
 import com.judamie_user.android.firebase.vo.ReviewVO
 import kotlinx.coroutines.tasks.await
 import java.io.File
@@ -36,7 +37,23 @@ class ReviewRepository {
                 .await()
         }
 
+        //리뷰 documentID로 리뷰를 가져오는 메서드
+        suspend fun gettingReviewByID(reviewDocumentID:String):ReviewVO{
+            val firestore = FirebaseFirestore.getInstance()
+            val collectionReference = firestore.collection("ReviewData")
+            val documentReference = collectionReference.document(reviewDocumentID)
+            val documentSnapShot = documentReference.get().await()
+            val reviewVO = documentSnapShot.toObject(ReviewVO::class.java)!!
+            return reviewVO
+        }
 
-
+        //이미지 데이터를 가져온다
+        suspend fun gettingReviewImage(imageFileName:String) : Uri{
+            val storageReference = FirebaseStorage.getInstance().reference
+            //파일명을 지정하여 이미지데이터를 가져온다
+            val childStorageReference = storageReference.child("$imageFileName")
+            val imageUri = childStorageReference.downloadUrl.await()
+            return imageUri
+        }
     }
 }

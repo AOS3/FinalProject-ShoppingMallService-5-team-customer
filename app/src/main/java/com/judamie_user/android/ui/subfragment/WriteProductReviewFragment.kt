@@ -209,6 +209,7 @@ class WriteProductReviewFragment(val mainFragment: MainFragment) : Fragment() {
         fragmentWriteProductReviewBinding.apply {
             val reviewRating = writeProductReviewViewModel?.ratingBarWriteProductReviewRate?.value
             val reviewContent = writeProductReviewViewModel?.textInputLayoutWriteProductReviewContentText?.value
+            val reviewerName = "채수범"
             val reviewTimestamp = System.currentTimeMillis()
             val reviewDate = getCurrentDate()
 
@@ -232,13 +233,13 @@ class WriteProductReviewFragment(val mainFragment: MainFragment) : Fragment() {
                                 // 사진 업로드
                                 uploadPhotosToFirebase { success ->
                                     if (success) {
-                                        saveReviewData(reviewContent, reviewRating, reviewTimestamp, reviewDate)
+                                        saveReviewData(reviewContent, reviewRating, reviewTimestamp, reviewDate,reviewerName)
                                     } else {
                                         showToast("사진 업로드 실패")
                                     }
                                 }
                             } else {
-                                saveReviewData(reviewContent, reviewRating, reviewTimestamp, reviewDate)
+                                saveReviewData(reviewContent, reviewRating, reviewTimestamp, reviewDate,reviewerName)
                             }
                         } catch (e: Exception) {
                             Log.e("test100", "리뷰 저장 중 오류 발생", e)
@@ -261,13 +262,15 @@ class WriteProductReviewFragment(val mainFragment: MainFragment) : Fragment() {
         reviewContent: String?,
         reviewRating: Float?,
         reviewTimestamp: Long,
-        reviewDate: String
+        reviewDate: String,
+        reviewerName:String
     ) {
         val reviewModel = ReviewModel().also {
             it.reviewContent = reviewContent!!
             it.reviewRating = reviewRating ?: 0f
             it.reviewTimeStamp = reviewTimestamp
             it.reviewWriteDate = reviewDate
+            it.reviewerName = reviewerName
             it.reviewPhoto = photoFileNameList // 업로드된 사진 파일명 추가 (없으면 빈 리스트)
         }
 

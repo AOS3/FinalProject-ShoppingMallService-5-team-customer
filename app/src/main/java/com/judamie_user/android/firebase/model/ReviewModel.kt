@@ -17,6 +17,10 @@ class ReviewModel {
     var reviewerUserDocumentID = ""
 
 
+    //리뷰를 쓴 유저의 이름
+    var reviewerName = ""
+
+
     //리뷰가 들어간 제품의 문서ID
     var reviewProductDocumentID = ""
 
@@ -46,6 +50,7 @@ class ReviewModel {
 
         reviewVO.reviewWriteDate = reviewWriteDate
         reviewVO.reviewerUserDocumentID = reviewerUserDocumentID
+        reviewVO.reviewerName = reviewerName
         reviewVO.reviewProductDocumentID = reviewProductDocumentID
         reviewVO.reviewPhoto = reviewPhoto
         reviewVO.reviewContent = reviewContent
