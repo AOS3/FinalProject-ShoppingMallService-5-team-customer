@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:padding="10dp"
+        android:transitionGroup="true">
+
+        <TextView
+            android:id="@+id/rowTextViewUserProductReviewProductName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@color/shimmer_placeholder"
+            android:ellipsize="end"
+            android:padding="10dp"
+            android:singleLine="true"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toStartOf="@+id/rowImageViewUserProductReviewNameArrow"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/rowImageViewUserProductReviewNameArrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            app:layout_constraintEnd_toStartOf="@+id/rowRatingBarUserProductReview"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/arrow_forward_ios_24px" />
+
+        <RatingBar
+            android:id="@+id/rowRatingBarUserProductReview"
+            style="@style/SmallRatingBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="-40dp"
+            android:numStars="5"
+            android:rating="3"
+            android:scaleX="0.5"
+            android:scaleY="0.5"
+            android:stepSize="1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/rowTextViewUserProductReviewContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:background="@color/shimmer_placeholder"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:layout_editor_absoluteY="271dp" />
+
+        <LinearLayout
+            android:id="@+id/linearLayout4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:background="@color/white"
+            android:orientation="vertical"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/rowRatingBarProductReview">
+
+            <ImageView
+                android:id="@+id/rowImageViewProductReviewAttatch"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_margin="10dp"
+                android:background="@drawable/shimmer_background_photo"
+                android:clipToOutline="true"
+                android:scaleType="fitXY"
+                tools:scaleType="centerCrop" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/rowTextViewUserProductReviewDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@color/shimmer_placeholder"
+            android:textAlignment="textEnd"
+            android:textColor="#908C8C"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.974"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/rowTextViewUserProductReviewContent" />
+
+        <TextView
+            android:id="@+id/textView12"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/shimmer_placeholder"
+            android:text="TextView"
+            android:textColor="@color/shimmer_placeholder"
+            android:textSize="35sp"
+            app:layout_constraintBottom_toBottomOf="@+id/rowRatingBarUserProductReview"
+            app:layout_constraintEnd_toEndOf="@id/rowRatingBarUserProductReview"
+            app:layout_constraintStart_toStartOf="@+id/rowRatingBarUserProductReview"
+            app:layout_constraintTop_toTopOf="@+id/rowRatingBarUserProductReview" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
