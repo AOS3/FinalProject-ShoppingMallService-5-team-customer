@@ -46,6 +46,31 @@ class UserRepository {
             return userMap
         }
 
+        // 사용자 정보 전체를 가져오는 메서드
+        suspend fun selectUserDataAll() : MutableList<MutableMap<String, *>>{
+            val firestore = FirebaseFirestore.getInstance()
+            val collectionReference = firestore.collection("UserData")
+            val result = collectionReference.get().await()
+            val userList = mutableListOf<MutableMap<String, *>>()
+            result.forEach {
+                val userMap = mutableMapOf(
+                    "user_document_id" to it.id,
+                    "user_vo" to it.toObject(UserVO::class.java)
+                )
+                userList.add(userMap)
+            }
+            return userList
+        }
+
+        // 사용자 Document Id를 통해 사용자 정보를 가져오는 메서드
+        suspend fun selectUserDataByUserDocumentIdOne(userDocumentId:String) : UserVO{
+            val firestore = FirebaseFirestore.getInstance()
+            val collectionReference = firestore.collection("UserData")
+            val result = collectionReference.document(userDocumentId).get().await()
+            val userVO = result.toObject(UserVO::class.java)!!
+            return userVO
+        }
+
         // 자동 로그인 토큰값 갱신 메서드
         suspend fun updateUserAutoLoginToken(userDocumentId:String, newToken:String){
             val firestore = FirebaseFirestore.getInstance()

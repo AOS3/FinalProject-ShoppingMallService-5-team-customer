@@ -59,6 +59,13 @@ class UserService {
             return loginUserModel
         }
 
+        // 사용자 문서 아이디를 통해 사용자 정보를 가져온다.
+        suspend fun selectUserDataByUserDocumentIdOne(userDocumentId:String) : UserModel{
+            val userVO = UserRepository.selectUserDataByUserDocumentIdOne(userDocumentId)
+            val userModel = userVO.toUserModel(userDocumentId)
+            return userModel
+        }
+
         // 자동 로그인 토큰값 갱신 메서드
         suspend fun updateUserAutoLoginToken(context: Context, userDocumentId:String){
             // 새로운 토큰 값 발행
