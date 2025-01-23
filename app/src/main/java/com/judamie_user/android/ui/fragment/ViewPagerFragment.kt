@@ -42,6 +42,9 @@ class ViewPagerFragment(val mainFragment: MainFragment) : Fragment() {
     var categoryName:String? = null
     lateinit var productCategory: ProductCategory
 
+    // 글 데이터를 담을 변수
+    lateinit var productModel: ProductModel
+
     // 메인 RecyclerView를 구성하기 위해 사용할 리스트
     var recyclerViewCategoryList = mutableListOf<ProductModel>()
 
@@ -111,6 +114,8 @@ class ViewPagerFragment(val mainFragment: MainFragment) : Fragment() {
             }
             recyclerViewCategoryList.clear()
             recyclerViewCategoryList.addAll(work1.await())
+
+
             fragmentViewPagerBinding.recyclerViewHome.adapter?.notifyDataSetChanged()
         }
     }
@@ -217,12 +222,20 @@ class ViewPagerFragment(val mainFragment: MainFragment) : Fragment() {
                 recyclerViewCategoryList[position].productName
             holder.rowSearchListBinding.rowSearchListViewModel?.textViewSearchDiscountRatingText?.value =
                 "${recyclerViewCategoryList[position].productDiscountRate}%"
-            holder.rowSearchListBinding.rowSearchListViewModel?.textViewSearchProductReviewText?.value =
+            holder.rowSearchListBinding.rowSearchListViewModel?.textViewSearchProductPriceText?.value =
                 "${recyclerViewCategoryList[position].productPrice.formatToComma()}"
+
+            val reviewSize = recyclerViewCategoryList[position].productReview.size
+            holder.rowSearchListBinding.rowSearchListViewModel?.textViewSearchProductReviewText?.value = if (reviewSize > 0) "리뷰 ($reviewSize)" else ""
+            // 가시성 업데이트 (데이터 바인딩을 사용하지 않는 경우에만 필요)
+            holder.rowSearchListBinding.textViewSearchProductReview.visibility = if (reviewSize > 0) View.VISIBLE else View.GONE
+
+            // reviewSize 값 확인
+            Log.d("test100", "상품:리뷰 $position: $reviewSize")
             // TODO
             // ProductData에 데이터 추가 예정
-//            holder.rowSearchListBinding.rowSearchListViewModel?.textViewSearchProductReviewText?.value =
-//                "${recyclerViewCategoryList[position].ProductReview}"
+
+
 //            holder.rowSearchListBinding.rowSearchListViewModel?.textViewSearchProductSellerText?.value =
 //                "${recyclerViewCategoryList[position].productSeller}%"
 

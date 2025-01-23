@@ -127,7 +127,6 @@
                 android:layout_width="360dp"
                 android:layout_height="50dp"
                 android:background="@drawable/button_round_activated"
-                android:backgroundTint="#2E3D3D"
                 android:text="가입 완료"
                 android:textColor="#FFFFFF"
                 android:textSize="14sp"

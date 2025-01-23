@@ -62,7 +62,7 @@
                             android:layout_height="match_parent"
                             android:digits="@string/digit_value"
                             android:singleLine="true"
-                            android:text="@{loginViewModel.textFieldLoginFragmentIdEditTextText}"
+                            android:text="@={loginViewModel.textFieldLoginFragmentIdEditTextText}"
                             android:textAppearance="@style/TextAppearance.AppCompat.Large"
                             android:textSize="16sp" />
                     </com.google.android.material.textfield.TextInputLayout>
@@ -84,7 +84,7 @@
                             android:digits="@string/digit_value"
                             android:inputType="text|textPassword"
                             android:singleLine="true"
-                            android:text="@{loginViewModel.textFieldLoginFragmentPwEditTextText}"
+                            android:text="@={loginViewModel.textFieldLoginFragmentPwEditTextText}"
                             android:textSize="16sp" />
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -96,7 +96,8 @@
                         android:layout_marginEnd="100dp"
                         android:text="자동 로그인"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"
+                        android:checked="@={loginViewModel.checkBoxLoginFragmentLoginAutoChecked}"/>
 
                 </LinearLayout>
 

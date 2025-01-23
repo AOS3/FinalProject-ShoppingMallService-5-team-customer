@@ -1,8 +1,10 @@
 package com.judamie_user.android.firebase.repository
 
+import android.net.Uri
 import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+import com.google.firebase.storage.FirebaseStorage
 import com.judamie_user.android.firebase.vo.ProductVO
 import com.judamie_user.android.util.ProductCategory
 import kotlinx.coroutines.tasks.await
@@ -41,6 +43,14 @@ class ProductRepository {
             return resultList
         }
 
+        // 이미지 데이터를 가져온다.
+        suspend fun gettingImage(imageFileName:String) : Uri {
+            val storageReference = FirebaseStorage.getInstance().reference
+            // 파일명을 지정하여 이미지 데이터를 가져온다.
+            val childStorageReference = storageReference.child("image/$imageFileName")
+            val imageUri = childStorageReference.downloadUrl.await()
+            return imageUri
+        }
 
     }
 

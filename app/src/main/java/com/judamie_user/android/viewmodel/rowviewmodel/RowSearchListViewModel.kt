@@ -1,5 +1,6 @@
 package com.judamie_user.android.viewmodel.rowviewmodel
 
+import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

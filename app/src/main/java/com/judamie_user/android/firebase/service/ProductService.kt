@@ -1,5 +1,6 @@
 package com.judamie_user.android.firebase.service
 
+import android.net.Uri
 import com.judamie_user.android.firebase.model.ProductModel
 import com.judamie_user.android.firebase.repository.ProductRepository
 import com.judamie_user.android.firebase.vo.ProductVO
@@ -34,6 +35,12 @@ class ProductService {
             }
 
             return productList
+        }
+
+        // 이미지 데이터를 가져온다.
+        suspend fun gettingImage(imageFileName:String) : Uri {
+            val imageUri = ProductRepository.gettingImage(imageFileName)
+            return imageUri
         }
 
     }

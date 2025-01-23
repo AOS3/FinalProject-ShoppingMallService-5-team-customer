@@ -131,7 +131,6 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:digits="@string/digit_value"
                         android:singleLine="true"
                         android:text="@={registerStep1ViewModel.textFieldRegisterStep1FragmentNameEditTextText}"
                         android:textSize="16sp"

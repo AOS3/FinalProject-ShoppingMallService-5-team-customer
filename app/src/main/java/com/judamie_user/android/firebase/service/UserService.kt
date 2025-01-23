@@ -1,7 +1,12 @@
 package com.judamie_user.android.firebase.service
 
+import android.content.Context
+import androidx.core.content.edit
 import com.judamie_user.android.firebase.model.UserModel
 import com.judamie_user.android.firebase.repository.UserRepository
+import com.judamie_user.android.firebase.vo.UserVO
+import com.judamie_user.android.util.LoginResult
+import com.judamie_user.android.util.UserState
 
 class UserService {
     companion object {
@@ -40,6 +45,68 @@ class UserService {
             else {
                 return true
             }
+        }
+
+        // 사용자 아이디를 통해 문서 id와 사용자 정보를 가져온다.
+        // 사용자 아이디와 동일한 사용자의 정보 하나를 반환하는 메서드
+        suspend fun selectUserDataByUserIdOne(userId:String) : UserModel{
+            val tempMap = UserRepository.selectUserDataByUserIdOne(userId)
+            val loginUserVo = tempMap["user_vo"] as UserVO
+            val loginUserDocumentId = tempMap["user_document_id"] as String
+
+            val loginUserModel = loginUserVo.toUserModel(loginUserDocumentId)
+
+            return loginUserModel
+        }
+
+        // 자동 로그인 토큰값 갱신 메서드
+        suspend fun updateUserAutoLoginToken(context: Context, userDocumentId:String){
+            // 새로운 토큰 값 발행
+            val newToken = "${userDocumentId}${System.nanoTime()}"
+            // SharedPreference 에 저장
+            val pref = context.getSharedPreferences("LoginToken", Context.MODE_PRIVATE)
+            pref.edit {
+                putString("token", newToken)
+            }
+            // 서버에 저장
+            UserRepository.updateUserAutoLoginToken(userDocumentId, newToken)
+        }
+
+        // 자동 로그인 토큰 값으로 사용자 정보를 가져오는 메서드
+        suspend fun selectUserDataByLoginToken(loginToken:String) : UserModel?{
+            val loginMap = UserRepository.selectUserDataByLoginToken(loginToken)
+            if(loginMap == null){
+                return null
+            } else {
+                val userDocumentId = loginMap["userDocumentId"] as String
+                val userVO = loginMap["userVO"] as UserVO
+
+                val userModel = userVO.toUserModel(userDocumentId)
+                return userModel
+            }
+        }
+
+        // 로그인 처리 메서드
+        suspend fun checkLogin(loginUserId:String, loginUserPw:String) : LoginResult {
+            // 로그인 결과
+            var result = LoginResult.LOGIN_RESULT_SUCCESS
+
+            // 입력한 아이디로 사용자 정보를 가져온다.
+            val userVoList = UserRepository.selectUserDataByUserId(loginUserId)
+            // 가져온 사용자 정보가 없다면
+            if(userVoList.isEmpty()){
+                result = LoginResult.LOGIN_RESULT_ID_NOT_EXIST
+            } else {
+                if(loginUserPw != userVoList[0].userPassword){
+                    // 비밀번호가 다르다면
+                    result = LoginResult.LOGIN_RESULT_PASSWORD_INCORRECT
+                }
+                // 탈퇴한 회원 이라면
+                if(userVoList[0].userState == UserState.USER_STATE_SIGN_OUT.number){
+                    result = LoginResult.LOGIN_RESULT_SIGN_OUT_MEMBER
+                }
+            }
+            return result
         }
     }
 }
