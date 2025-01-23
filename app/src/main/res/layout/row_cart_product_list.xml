@@ -23,7 +23,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:layout_constraintStart_toStartOf="parent"
-            android:checked="@{rowCartProductListViewModel.checkBoxCartProductChecked}"/>
+            android:checked="@{rowCartProductListViewModel.checkBoxCartProductChecked}" />
 
         <LinearLayout
             android:id="@+id/linearLayout3"
@@ -41,7 +41,8 @@
                 android:layout_height="wrap_content"
                 android:singleLine="true"
                 android:text="@{rowCartProductListViewModel.textViewCartProductNameText}"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                android:layout_marginStart="15dp"/>
 
             <LinearLayout
                 android:layout_width="194dp"
@@ -52,6 +53,7 @@
                     android:id="@+id/textViewCartProductPercent"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
                     android:text="@{rowCartProductListViewModel.textViewCartProductPercentText + '%'}"
                     android:textColor="#009688"
                     android:textSize="20sp"
@@ -61,7 +63,7 @@
                     android:id="@+id/textViewCartProductPrice"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
+                    android:layout_marginStart="15dp"
                     android:text="@{rowCartProductListViewModel.textViewCartProductPriceText + '원'}"
                     android:textSize="14sp" />
             </LinearLayout>
@@ -70,16 +72,18 @@
 
         <ImageView
             android:id="@+id/imageViewCartProduct"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
+            android:layout_width="134dp"
+            android:layout_height="134dp"
             app:layout_constraintStart_toEndOf="@+id/checkBoxCartProduct"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/liquor_24px" />
+            app:srcCompat="@drawable/liquor_24px"
+            android:layout_marginBottom="8dp" />
 
         <LinearLayout
             android:layout_width="100dp"
             android:layout_height="35dp"
             android:layout_marginTop="5dp"
+            android:layout_marginStart="15dp"
             android:background="@drawable/background_product_count"
             android:gravity="center_horizontal|center_vertical"
             android:orientation="horizontal"
@@ -105,7 +109,7 @@
                 android:id="@+id/textViewCartProductCnt"
                 android:layout_width="30dp"
                 android:layout_height="wrap_content"
-                android:text="@{rowCartProductListViewModel.textViewCartProductCntText"
+                android:text="@{rowCartProductListViewModel.textViewCartProductCntText}"
                 android:textAlignment="center" />
 
             <ImageButton

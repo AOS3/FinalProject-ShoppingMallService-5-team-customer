@@ -41,7 +41,6 @@ class ProductRepository {
                 resultList.add(map)
             }
 
-            //Log.d("test100", " ${resultList.size} 카테고리 항목: ${productCategory.str}")
 
             return resultList
         }
@@ -63,6 +62,7 @@ class ProductRepository {
                         productModel.productName = data["productName"] as? String ?: ""
                         productModel.productDiscountRate = (data["productDiscountRate"] as? Long)?.toInt() ?: 0
                         productModel.productPrice = (data["productPrice"] as? Long)?.toInt() ?: 0
+                        productModel.productMainImage = data["productMainImage"].toString()
 
                         // productState를 Long으로 가져와서 enum으로 변환
                         val productStateLong = data["productState"] as? Long ?: 1L

@@ -1,19 +1,22 @@
 package com.judamie_user.android.ui.fragment
 
+import android.net.Uri
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.transition.Visibility
 import com.google.android.material.divider.MaterialDividerItemDecoration
+import com.google.firebase.auth.FirebaseAuth
 import com.judamie_user.android.R
 import com.judamie_user.android.activity.ShopActivity
-import com.judamie_user.android.databinding.FragmentModifyUserInfoBinding
 import com.judamie_user.android.databinding.FragmentShopCartBinding
 import com.judamie_user.android.databinding.RowCartProductListBinding
 import com.judamie_user.android.firebase.model.ProductModel
@@ -26,23 +29,21 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+
 
 class ShopCartFragment(val mainFragment: MainFragment) : Fragment() {
 
     private lateinit var fragmentShopCartBinding: FragmentShopCartBinding
     private lateinit var shopActivity: ShopActivity
 
-//    // ReyclerView 구성을 위한 임시 데이터
-//    val tempList1 = Array(20) {
-//        "발베니 14년산"
-//    }
-
     // 리사이클러뷰 구성 리스트
     var recyclerViewList = mutableListOf<ProductModel>()
     // 사용자 정보를 담을 변수
     lateinit var userModel: UserModel
+    // 수량 정보
+    var productCountList = MutableLiveData<MutableList<Int>>()
 
+    var imageUris = MutableLiveData<MutableList<Uri>>()
 
     // RecyclerView CheckBox 상태 관리
     val checkBoxStates = MutableLiveData<MutableList<Boolean>>()
@@ -56,7 +57,16 @@ class ShopCartFragment(val mainFragment: MainFragment) : Fragment() {
         fragmentShopCartBinding.shopCartViewModel = ShopCartViewModel(this@ShopCartFragment)
         fragmentShopCartBinding.lifecycleOwner = this@ShopCartFragment
 
+
         shopActivity = activity as ShopActivity
+
+        val user = FirebaseAuth.getInstance().currentUser
+        if (user == null) {
+            Log.e("AuthError", "User is not logged in")
+        } else {
+            Log.d("Auth", "User is logged in: ${user.uid}")
+        }
+
 
         // RecyclerView 구성을 위한 리스트를 초기화한다.
         recyclerViewList.clear()
@@ -85,19 +95,40 @@ class ShopCartFragment(val mainFragment: MainFragment) : Fragment() {
             userModel = work1.await()
             val userCartList = userModel.userCartList
 
+
             // CartList에 해당하는 상품 정보 리스트 가져오기
             val work2 = async(Dispatchers.IO) {
                 ProductService.gettingCartList(userCartList)
             }
             var productList = work2.await()
 
+            // 장바구니가 비어있는 경우
+            if (productList.isEmpty()) {
+                fragmentShopCartBinding.textViewShopCartEmpty.visibility = View.VISIBLE
+                fragmentShopCartBinding.buttonShopCartEmpty.visibility = View.VISIBLE
+            } else{
+            recyclerViewList.clear()
+
+
             // 장바구니 리스트 데이터를 recyclerViewList에 추가
             recyclerViewList.addAll(productList)
+
+            // 서버에서 이미지 가져오기
+            val uris  = async(Dispatchers.IO) {
+                // 이미지에 접근할 수 있는 uri를 가져온다.
+                ProductService.getImageUris(productList)
+            }
+
+            imageUris.postValue(uris.await())
 
             // checkBoxStates 초기화
             checkBoxStates.value = MutableList(recyclerViewList.size) { false }
 
+            // 수량 리스트 초기화
+            productCountList.value = MutableList(recyclerViewList.size) { 1 }
+
             fragmentShopCartBinding.recyclerViewShopCart.adapter?.notifyDataSetChanged()
+            }
         }
     }
 
@@ -116,6 +147,13 @@ class ShopCartFragment(val mainFragment: MainFragment) : Fragment() {
     fun movePrevFragment(){
         mainFragment.removeFragment(ShopSubFragmentName.SHOP_CART_FRAGMENT)
     }
+
+    // 상품 목록 화면으로 이동하는 메서드
+    fun moveHomeFragment(){
+        mainFragment.removeFragment(ShopSubFragmentName.SHOP_CART_FRAGMENT)
+        mainFragment.removeFragment(ShopSubFragmentName.PRODUCT_INFO_FRAGMENT)
+    }
+
 
     // 다음 결제 화면 이동 메서드
     fun moveToPaymentProduct(){
@@ -144,40 +182,47 @@ class ShopCartFragment(val mainFragment: MainFragment) : Fragment() {
         fragmentShopCartBinding.recyclerViewShopCart.adapter?.notifyDataSetChanged()
     }
 
-    // 상품 수량 선택 메서드
-    fun selectProductCount(isIncrease:Boolean) {
-        fragmentShopCartBinding.apply {
-            val currentCount = rowCartProductListViewModel?.textViewCartProductCntText?.value?.toIntOrNull() ?: 1
+//    // 상품 수량 선택 메서드
+//    fun selectProductCount(isIncrease:Boolean ) {
+//
+//            val currentCount = rowCartProductListViewModel?.textViewCartProductCntText?.value?.toIntOrNull() ?: 1
+//
+//            if (isIncrease) {
+//                // 수량 증가
+//                rowCartProductListViewModel?.textViewCartProductCntText?.value = (currentCount + 1).toString()
+//            } else {
+//                // 수량 감소 (1 이하로는 감소하지 않음)
+//                if (currentCount > 1) {
+//                    rowCartProductListViewModel?.textViewCartProductCntText?.value = (currentCount - 1).toString()
+//                } else {
+//                    shopActivity.runOnUiThread {
+//                        Toast.makeText(
+//                            shopActivity,
+//                            "최소 수량입니다.",
+//                            Toast.LENGTH_SHORT
+//                        ).show()
+//                    }
+//                }
+//            }
+//    }
 
-            if (isIncrease) {
-                // 수량 증가
-                productInfoViewModel?.textViewProductInfoCntText?.value = (currentCount + 1).toString()
-            } else {
-                // 수량 감소 (1 이하로는 감소하지 않음)
-                if (currentCount > 1) {
-                    productInfoViewModel?.textViewProductInfoCntText?.value = (currentCount - 1).toString()
-                } else {
-                    shopActivity.runOnUiThread {
-                        Toast.makeText(
-                            shopActivity,
-                            "최소 수량입니다.",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                }
-            }
-        }
-    }
 
     // 선택 삭제 버튼 메서드
     fun selectionDelete() {
         // 선택된 항목들의 documentId를 저장할 리스트
-        val selectedIds = mutableListOf<String>()
+        var selectedIds = mutableListOf<String>()
 
         // 체크된 항목들의 ID를 selectedIds에 추가
         checkBoxStates.value?.forEachIndexed { index, isChecked ->
             if (isChecked) {
-                selectedIds.add(recyclerViewList[index].productDocumentId)
+                val productId = recyclerViewList[index].productDocumentId
+                if (productId != null) {
+                    selectedIds.add(productId)
+                    Log.d("ShopCartFragment", "Added ID: $productId, Selected IDs: $selectedIds")
+                }
+                //selectedIds.add(recyclerViewList[index].productDocumentId)
+                //Log.d("ShopCartFragment", "Selected ID: ${recyclerViewList[index].productDocumentId}")
+
             }
         }
 
@@ -185,8 +230,11 @@ class ShopCartFragment(val mainFragment: MainFragment) : Fragment() {
             // 선택된 ID를 가지고 삭제 작업을 수행
             CoroutineScope(Dispatchers.Main).launch {
                 val deleteWork = async(Dispatchers.IO) {
-                    // 유저의 cartList에서 해당 상품을 삭제
-                    UserService.deleteUserCartData(shopActivity.userDocumentID, selectedIds)
+                    // 서버에서 삭제
+                    selectedIds.forEach { selectedIds ->
+                        // 유저의 cartList에서 해당 상품을 삭제
+                        UserService.deleteUserCartData(shopActivity.userDocumentID, selectedIds)
+                    }
                 }
                 deleteWork.await()
 
@@ -232,10 +280,11 @@ class ShopCartFragment(val mainFragment: MainFragment) : Fragment() {
 
             val cartViewHolder = CartViewHolder(rowCartProductListBinding)
 
+
             rowCartProductListBinding.root.setOnClickListener {
                 // 사용자가 누른 항목의 게시글 문서 번호를 담아서 전달
                 val dataBundle = Bundle()
-//                dataBundle.putString("boardDocumentId", recyclerViewList[mainViewHolder.adapterPosition].boardDocumentId)
+                dataBundle.putString("productDocumentId", recyclerViewList[cartViewHolder.adapterPosition].productDocumentId)
                 mainFragment.replaceFragment(ShopSubFragmentName.PRODUCT_INFO_FRAGMENT, true, true, dataBundle)
             }
 
@@ -247,23 +296,62 @@ class ShopCartFragment(val mainFragment: MainFragment) : Fragment() {
         }
 
         override fun onBindViewHolder(holder: CartViewHolder, position: Int) {
+            val rowViewModel = holder.rowCartProductListBinding.rowCartProductListViewModel!!
+
             holder.rowCartProductListBinding.rowCartProductListViewModel?.textViewCartProductNameText?.value = recyclerViewList[position].productName
             holder.rowCartProductListBinding.rowCartProductListViewModel?.textViewCartProductPriceText?.value =
                 recyclerViewList[position].productPrice.toString()
             holder.rowCartProductListBinding.rowCartProductListViewModel?.textViewCartProductPercentText?.value =
                 recyclerViewList[position].productDiscountRate.toString()
 
+            // 이미지 가져오기
+            val imageUri = imageUris.value?.get(position)
+            if (imageUri != null) {
+                shopActivity.showServiceImage(imageUri, holder.rowCartProductListBinding.imageViewCartProduct)
+            }
+
+            // productCountList에서 수량을 가져오기
+            holder.rowCartProductListBinding.rowCartProductListViewModel?.textViewCartProductCntText?.value = productCountList.value?.get(position)?.toString()
+
             // 체크박스 상태 바인딩
             val isChecked = checkBoxStates.value?.get(position) ?: false
-            holder.rowCartProductListBinding.rowCartProductListViewModel?.checkBoxCartProductChecked?.value = isChecked
+            rowViewModel.checkBoxCartProductChecked.value = isChecked
+
+            // holder.rowCartProductListBinding.rowCartProductListViewModel?.checkBoxCartProductChecked?.value = isChecked
 
             holder.rowCartProductListBinding.checkBoxCartProduct.setOnCheckedChangeListener { _, newState ->
                 checkBoxStates.value?.let {
                     it[position] = newState
-                    checkBoxStates.value = it
+                    checkBoxStates.value = it // LiveData에 새 값을 설정
                 }
+                fragmentShopCartBinding.recyclerViewShopCart.adapter?.notifyDataSetChanged() // RecyclerView 갱신
             }
 
+
+            Log.d("ShopCartFragment", "CheckBox states: ${checkBoxStates.value}")
+
+
+
+            // 수량 증가 버튼 클릭 시 수량 증가
+            holder.rowCartProductListBinding.buttonCartProductCntPlus.setOnClickListener {
+                val currentCount = productCountList.value?.get(position) ?: 1
+                val newCount = currentCount + 1
+                productCountList.value?.set(position, newCount)
+                holder.rowCartProductListBinding.rowCartProductListViewModel?.updateProductCount(newCount)
+            }
+
+            // 수량 감소 버튼 클릭 시 수량 감소
+            holder.rowCartProductListBinding.buttonCartProductCntMinus.setOnClickListener {
+                val currentCount = productCountList.value?.get(position) ?: 1
+                if (currentCount > 1) {
+                    val newCount = currentCount - 1
+                    productCountList.value?.set(position, newCount)
+                    holder.rowCartProductListBinding.rowCartProductListViewModel?.updateProductCount(newCount)
+                } else {
+                    Toast.makeText(shopActivity, "최소 수량입니다.", Toast.LENGTH_SHORT).show()
+                }
+            }
+            
         }
     }
 }

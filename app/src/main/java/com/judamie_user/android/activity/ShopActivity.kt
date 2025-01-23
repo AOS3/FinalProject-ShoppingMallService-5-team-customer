@@ -1,9 +1,11 @@
 package com.judamie_user.android.activity
 
+import android.net.Uri
 import android.os.Bundle
 import android.os.SystemClock
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.ImageView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -15,6 +17,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.commit
 import androidx.lifecycle.ViewModelProvider
+import com.bumptech.glide.Glide
 import com.google.android.material.transition.MaterialSharedAxis
 import com.judamie_user.android.R
 import com.judamie_user.android.databinding.ActivityShopBinding
@@ -142,6 +145,11 @@ class ShopActivity : AppCompatActivity() {
                 inputManager.showSoftInput(view, 0)
             }
         }
+    }
+
+    // 서버에 있는 이미지를 가져와 ImageView에 보여준다.
+    fun showServiceImage(imageUri: Uri, imageView: ImageView){
+        Glide.with(this@ShopActivity).load(imageUri).into(imageView)
     }
 
     // 키보드를 내리는 메서드

@@ -24,6 +24,7 @@ data class ShopCartViewModel(val shopCartFragment: ShopCartFragment) : ViewModel
     // checkBoxCartProductAll - checkedBox
     val checkBoxCartProductAllCheckedState = MutableLiveData(false)
 
+
     // checkBoxCartProductAll - onClick
     fun checkBoxCartProductAllOnClick(){
         if (checkBoxCartProductAllCheckedState.value == false){
@@ -47,6 +48,12 @@ data class ShopCartViewModel(val shopCartFragment: ShopCartFragment) : ViewModel
     // buttonCartProductSelected - onClick
     fun buttonCartProductSelectedOnClick() {
         shopCartFragment.moveToPaymentProduct()
+    }
+
+    // 장바구니 비었을때 상품 보러가기 버튼
+    // buttonShopCartEmpty - onClick
+    fun buttonShopCartEmptyOnClick() {
+        shopCartFragment.moveHomeFragment()
     }
 
     companion object{

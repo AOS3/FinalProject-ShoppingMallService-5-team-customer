@@ -2,7 +2,6 @@ package com.judamie_user.android.firebase.service
 
 import android.content.Context
 import androidx.core.content.edit
-import com.judamie_user.android.firebase.model.ProductModel
 import com.judamie_user.android.firebase.model.UserModel
 import com.judamie_user.android.firebase.repository.UserRepository
 import com.judamie_user.android.firebase.vo.UserVO
@@ -30,7 +29,7 @@ class UserService {
         }
 
         // 장바구니 상품 삭제하기
-        suspend fun deleteUserCartData(userDocumentId: String, selectedIds: List<String>){
+        suspend fun deleteUserCartData(userDocumentId: String, selectedIds: String){
             // Firebase에서 상품 삭제
             UserRepository.deleteUserCartData(userDocumentId, selectedIds)
 

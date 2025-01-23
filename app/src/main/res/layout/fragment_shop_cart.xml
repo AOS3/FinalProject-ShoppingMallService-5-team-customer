@@ -99,7 +99,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="299dp"
-            android:text="TextView"
+            android:text="@{shopCartViewModel.textViewShopCartEmpty}"
             android:visibility="gone"
             app:layout_constraintBottom_toTopOf="@+id/linearLayout"
             app:layout_constraintEnd_toEndOf="parent"
@@ -121,7 +121,8 @@
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textViewShopCartEmpty" />
+            app:layout_constraintTop_toBottomOf="@+id/textViewShopCartEmpty"
+            android:onClick="@{(view) -> shopCartViewModel.buttonShopCartEmptyOnClick()}"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

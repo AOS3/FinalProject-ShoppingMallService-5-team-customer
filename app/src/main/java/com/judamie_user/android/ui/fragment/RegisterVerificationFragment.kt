@@ -1,11 +1,14 @@
 package com.judamie_user.android.ui.fragment
 
 import android.os.Bundle
+import android.view.Gravity
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.EditText
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import com.google.firebase.FirebaseException
@@ -28,6 +31,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
+import kotlinx.coroutines.*
 
 
 class RegisterVerificationFragment : Fragment() {
@@ -135,6 +139,7 @@ class RegisterVerificationFragment : Fragment() {
         }
     }
 
+
     // 가입 완료 처리 메서드
     fun proUserJoin(){
         fragmentRegisterVerificationBinding.apply {
@@ -161,7 +166,9 @@ class RegisterVerificationFragment : Fragment() {
                     }
                     work1.join()
                     loginActivity.showMessageDialog("가입 완료", "가입이 완료되었습니다\n로그인해주세요", "확인"){
+                        progressBar3.visibility = View.VISIBLE
                         loginActivity.removeFragment(FragmentName.REGISTER_STEP1_FRAGMENT)
+
                     }
                 }
             }else{
