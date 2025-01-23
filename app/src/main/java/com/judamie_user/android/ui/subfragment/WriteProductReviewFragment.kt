@@ -94,8 +94,14 @@ class WriteProductReviewFragment(val mainFragment: MainFragment) : Fragment() {
             // PhotoAdapter 초기화
             photoAdapter = PhotoAdapter(photoList) { position ->
                 if (position in 0 until photoList.size) {
-                    photoList.removeAt(position) // Bitmap 리스트에서 삭제
-                    Log.d("test", photoList.toString())
+                    photoList.removeAt(position)
+                    if (position < photoFileNameList.size) {
+                        photoFileNameList.removeAt(position)
+                    }
+                    Log.d("test", "Updated photoList: $photoList")
+                    Log.d("test", "Updated photoFileNameList: $photoFileNameList")
+
+
                     photoAdapter.notifyItemRemoved(position)
                     photoAdapter.notifyItemRangeChanged(position, photoList.size) // 이후 항목 위치 업데이트
                     updatePhotoCountText()
@@ -214,46 +220,29 @@ class WriteProductReviewFragment(val mainFragment: MainFragment) : Fragment() {
             val builder = MaterialAlertDialogBuilder(requireContext())
 
             val dialog = builder.setTitle("리뷰 저장")
-                .setMessage("작성한 리뷰와 사진을 저장하시겠습니까?")
+                .setMessage("작성한 리뷰를 저장하시겠습니까?")
                 .setPositiveButton("확인") { dialog, _ ->
+                    fragmentWriteProductReviewBinding.buttonWriteProductReviewSaveReview.visibility = View.GONE
                     CoroutineScope(Dispatchers.Main).launch {
+                        progressBarInWriteReview.visibility = View.VISIBLE
                         try {
-                            showToast("사진 업로드 중입니다...")
+                            if (photoList.isNotEmpty()) {
+                                showToast("사진 업로드 중입니다...")
 
-                            // 사진 업로드
-                            uploadPhotosToFirebase { success ->
-                                if (success) {
-                                    // 사진 업로드 완료 후 리뷰 생성
-                                    val reviewModel = ReviewModel().also {
-                                        it.reviewContent = reviewContent
-                                        it.reviewRating = reviewRating!!
-                                        it.reviewTimeStamp = reviewTimestamp
-                                        it.reviewWriteDate = reviewDate
-                                        it.reviewPhoto = photoFileNameList // 업로드된 사진 파일명 추가
+                                // 사진 업로드
+                                uploadPhotosToFirebase { success ->
+                                    if (success) {
+                                        saveReviewData(reviewContent, reviewRating, reviewTimestamp, reviewDate)
+                                    } else {
+                                        showToast("사진 업로드 실패")
                                     }
-
-                                    // 리뷰 업로드
-                                    CoroutineScope(Dispatchers.IO).launch {
-                                        var reviewDocumentID = ReviewService.addReviewData(reviewModel)
-
-                                        val work = async {
-                                            ReviewService.addReviewDataInProduct(reviewDocumentID,"8DynxD5PPXsWOYPXQFmF")
-                                        }
-                                        work.join()
-
-
-                                        withContext(Dispatchers.Main) {
-                                            showToast("리뷰가 저장되었습니다.")
-                                            mainFragment.removeFragment(ShopSubFragmentName.WRITE_PRODUCT_REVIEW_FRAGMENT)
-                                        }
-                                    }
-                                } else {
-                                    showToast("사진 업로드 실패")
                                 }
+                            } else {
+                                saveReviewData(reviewContent, reviewRating, reviewTimestamp, reviewDate)
                             }
                         } catch (e: Exception) {
-                            Log.e("test100", "사진 업로드 중 오류 발생", e)
-                            showToast("사진 업로드 실패: ${e.message}")
+                            Log.e("test100", "리뷰 저장 중 오류 발생", e)
+                            showToast("리뷰 저장 실패: ${e.message}")
                         } finally {
                             dialog.dismiss()
                         }
@@ -267,6 +256,38 @@ class WriteProductReviewFragment(val mainFragment: MainFragment) : Fragment() {
             dialog.show()
         }
     }
+
+    private fun saveReviewData(
+        reviewContent: String?,
+        reviewRating: Float?,
+        reviewTimestamp: Long,
+        reviewDate: String
+    ) {
+        val reviewModel = ReviewModel().also {
+            it.reviewContent = reviewContent!!
+            it.reviewRating = reviewRating ?: 0f
+            it.reviewTimeStamp = reviewTimestamp
+            it.reviewWriteDate = reviewDate
+            it.reviewPhoto = photoFileNameList // 업로드된 사진 파일명 추가 (없으면 빈 리스트)
+        }
+
+        CoroutineScope(Dispatchers.IO).launch {
+            val reviewDocumentID = ReviewService.addReviewData(reviewModel)
+
+            val work = async {
+                ReviewService.addReviewDataInProduct(reviewDocumentID, "8DynxD5PPXsWOYPXQFmF")
+            }
+            work.join()
+
+            withContext(Dispatchers.Main) {
+                showToast("리뷰가 저장되었습니다.")
+                mainFragment.removeFragment(ShopSubFragmentName.WRITE_PRODUCT_REVIEW_FRAGMENT)
+                fragmentWriteProductReviewBinding.progressBarInWriteReview.visibility = View.GONE
+            }
+        }
+    }
+
+
 
 
 

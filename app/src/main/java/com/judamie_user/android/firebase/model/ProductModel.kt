@@ -15,6 +15,7 @@ class ProductModel {
     var productStock = 0
     var productMainImage = ""
     var productSubImage: List<String> = emptyList()
+    var productReview= mutableListOf<String>()
     var productState = ProductState.PRODUCT_NORMAL
     var productRegisterDate= ""
     var productTimeStamp = 0L
@@ -33,6 +34,7 @@ class ProductModel {
         productVO.productTimeStamp = productTimeStamp
 
         productVO.productSubImage = mutableListOf()
+        productVO.productReview = productReview
 
         return productVO
     }
