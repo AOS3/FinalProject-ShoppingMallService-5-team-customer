@@ -37,6 +37,11 @@ class ProductService {
             return productList
         }
 
+        // userCartList에 포함된 상품 ID를 기반으로 상품 정보를 가져오기
+        suspend fun gettingCartList(userCartList: List<String>) : List<ProductModel>{
+            return ProductRepository.gettingCartList(userCartList)
+        }
+
         // 이미지 데이터를 가져온다.
         suspend fun gettingImage(imageFileName:String) : Uri {
             val imageUri = ProductRepository.gettingImage(imageFileName)

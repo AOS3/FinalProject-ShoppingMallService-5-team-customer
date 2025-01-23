@@ -14,6 +14,41 @@ class UserRepository {
             collectionReference.add(userVO)
         }
 
+        // 장바구이에 상품 추가하는 메서드
+        suspend fun addCartData(userVO: UserVO, userDocumentID:String){
+            val firestore = FirebaseFirestore.getInstance()
+            val collectionReference = firestore.collection("UserData")
+            val documentReference = collectionReference.document(userDocumentID)
+
+            // 수정할 데이터를 맵에 담는다
+            // 데이터의 이름을 필드의 이름으로 해준다.
+            val updateMap = mapOf(
+                "userCartList" to userVO.userCartList,
+            )
+            // 수정한다.
+            documentReference.update(updateMap).await()
+        }
+
+        // 장바구니 상품 삭제하는 메서드
+        suspend fun deleteUserCartData(userDocumentId: String, selectedIds: List<String>){
+            val firestore = FirebaseFirestore.getInstance()
+            val collectionReference = firestore.collection("UserData")
+            val documentReference = collectionReference.document(userDocumentId)
+
+            // Firebase에서 유저 문서를 가져오고, cartList에서 삭제할 상품을 제거
+            val userDoc = documentReference.get().await()
+            val userVO = userDoc.toObject(UserVO::class.java)
+
+            userVO?.let {
+                // 선택된 상품 아이디를 제거
+                it.userCartList.removeAll { productId -> selectedIds.contains(productId) }
+
+                // cartList 갱신된 데이터로 업데이트
+                documentReference.set(it).await()
+            }
+        }
+
+
         // 사용자 아이디를 통해 사용자 데이터를 가져오는 메서드
         suspend fun selectUserDataByUserId(userId:String) : MutableList<UserVO>{
             val firestore = FirebaseFirestore.getInstance()

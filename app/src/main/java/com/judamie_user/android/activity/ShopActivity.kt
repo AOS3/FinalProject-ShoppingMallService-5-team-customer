@@ -36,6 +36,12 @@ class ShopActivity : AppCompatActivity() {
     var newFragment: Fragment? = null
     var oldFragment: Fragment? = null
 
+
+    // 로그인한 사용자의 문서 id와 이름을 받을 변수
+    var userDocumentID = ""
+    var userName = ""
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // enableEdgeToEdge()
@@ -50,6 +56,11 @@ class ShopActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        // 사용자 문서 id와 닉네임을 받는다.
+        userDocumentID = intent.getStringExtra("user_document_id")!!
+        userName = intent.getStringExtra("user_name")!!
+
         replaceFragment(ShopFragmentName.MAIN_FRAGMENT, false, false, null)
     }
 

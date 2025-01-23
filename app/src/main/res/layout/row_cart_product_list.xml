@@ -40,7 +40,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:singleLine="true"
-                android:text="더 발베니 14년 캐리비안 캐스크 피"
+                android:text="@{rowCartProductListViewModel.textViewCartProductNameText}"
                 android:textSize="14sp" />
 
             <LinearLayout
@@ -52,7 +52,7 @@
                     android:id="@+id/textViewCartProductPercent"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="20%"
+                    android:text="@{rowCartProductListViewModel.textViewCartProductPercentText + '%'}"
                     android:textColor="#009688"
                     android:textSize="20sp"
                     android:textStyle="bold" />
@@ -62,7 +62,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
-                    android:text="256, 000원"
+                    android:text="@{rowCartProductListViewModel.textViewCartProductPriceText + '원'}"
                     android:textSize="14sp" />
             </LinearLayout>
 
@@ -98,13 +98,14 @@
                 android:src="@drawable/remove_24px"
                 android:text="-"
                 android:textColor="@color/black"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                android:onClick="@{()->rowCartProductListViewModel.buttonCartProductCntMinusOnClick()}"/>
 
             <TextView
                 android:id="@+id/textViewCartProductCnt"
                 android:layout_width="30dp"
                 android:layout_height="wrap_content"
-                android:text="1"
+                android:text="@{rowCartProductListViewModel.textViewCartProductCntText"
                 android:textAlignment="center" />
 
             <ImageButton
@@ -115,7 +116,8 @@
                 android:src="@drawable/add_24px"
                 android:text="-"
                 android:textColor="@color/black"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                android:onClick="@{()->rowCartProductListViewModel.buttonCartProductCntPlusOnClick()}"/>
         </LinearLayout>
 
         <ProgressBar

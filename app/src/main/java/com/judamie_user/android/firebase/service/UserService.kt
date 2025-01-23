@@ -2,6 +2,7 @@ package com.judamie_user.android.firebase.service
 
 import android.content.Context
 import androidx.core.content.edit
+import com.judamie_user.android.firebase.model.ProductModel
 import com.judamie_user.android.firebase.model.UserModel
 import com.judamie_user.android.firebase.repository.UserRepository
 import com.judamie_user.android.firebase.vo.UserVO
@@ -18,6 +19,23 @@ class UserService {
             // 저장하는 메서드를 호출한다.
             UserRepository.addUserData(userVO)
         }
+
+
+        // 장바구니에 상품 추가하기
+        suspend fun addCartData(userModel : UserModel){
+            // 데이터를 VO에 담아준다.
+            val userVO = userModel.toUserVO()
+            // 저장하는 메서드를 호출한다.
+            UserRepository.addCartData(userVO,userModel.userDocumentID)
+        }
+
+        // 장바구니 상품 삭제하기
+        suspend fun deleteUserCartData(userDocumentId: String, selectedIds: List<String>){
+            // Firebase에서 상품 삭제
+            UserRepository.deleteUserCartData(userDocumentId, selectedIds)
+
+        }
+
 
         // 가입하려는 아이디가 존재하는지 확인하는 메서드
         suspend fun checkJoinUserId(userId:String) : Boolean{

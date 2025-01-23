@@ -1,5 +1,6 @@
 package com.judamie_user.android.viewmodel.rowviewmodel
 
+import android.net.Uri
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.judamie_user.android.ui.fragment.ShopCartFragment
@@ -23,18 +24,22 @@ data class RowCartProductListViewModel(val shopCartFragment: ShopCartFragment) :
 
     // 상품 선택 체크박스
     // checkBoxCartProduct - checked
-    val checkBoxCartProductChecked = MutableLiveData(true)
+    val checkBoxCartProductChecked = MutableLiveData(false)
+
+    // 상품 이미지
+    // imageViewCartProduct - ImageUrl
+    val imageViewCartProductImageUrl : MutableLiveData<Uri> = MutableLiveData()
 
     // 수량 버튼
     // buttonCartProductCntMinus - OnClick
-    fun buttonCartProductCntMinusOnCLick(){
-
+    fun buttonCartProductCntMinusOnClick(){
+        shopCartFragment.selectProductCount(false)
     }
 
     // 수량 버튼
     // buttonCartProductCntPlus - OnClick
-    fun buttonCartProductCntPlusOnCLick(){
-
+    fun buttonCartProductCntPlusOnClick(){
+        shopCartFragment.selectProductCount(true)
     }
 
 
