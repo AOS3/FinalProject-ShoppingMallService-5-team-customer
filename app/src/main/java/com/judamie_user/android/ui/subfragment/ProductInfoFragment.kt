@@ -1,5 +1,6 @@
 package com.judamie_user.android.ui.subfragment
 
+import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -8,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.drawToBitmap
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.divider.MaterialDividerItemDecoration
@@ -15,7 +17,10 @@ import com.judamie_user.android.R
 import com.judamie_user.android.activity.ShopActivity
 import com.judamie_user.android.databinding.FragmentProductInfoBinding
 import com.judamie_user.android.databinding.RowProductIntoImgListBinding
+import com.judamie_user.android.firebase.model.ProductModel
 import com.judamie_user.android.firebase.model.UserModel
+import com.judamie_user.android.firebase.service.CouponService
+import com.judamie_user.android.firebase.service.ProductService
 import com.judamie_user.android.firebase.service.UserService
 import com.judamie_user.android.ui.fragment.MainFragment
 import com.judamie_user.android.ui.fragment.ShopSubFragmentName
@@ -34,10 +39,16 @@ class ProductInfoFragment(val mainFragment: MainFragment) : Fragment() {
     // 상품 초기 수량
     var productCount:Int = 1
 
-    // ReyclerView 구성을 위한 임시 데이터
-    val tempImgList1 = Array(5) {
-        R.drawable.sampleproductimage_gp18
-    }
+//    // ReyclerView 구성을 위한 임시 데이터
+//    val tempImgList1 = Array(5) {
+//        R.drawable.sampleproductimage_gp18
+//    }
+
+    // RecyclerView를 구성하기 위해 사용할 Uri 리스트
+    var recyclerViewList = MutableLiveData<MutableList<Uri>>()
+
+    // 서버에서 받아온 데이터를 담을 변수
+    lateinit var productModel: ProductModel
 
 
     // 번들로 전달된 데이터를 담을 변수 : 상품 문서 id
@@ -57,14 +68,19 @@ class ProductInfoFragment(val mainFragment: MainFragment) : Fragment() {
 
         shopActivity = activity as ShopActivity
 
+
         // 툴바 구성 메서드 호출
         settingToolbar()
-        // 상품 이미지 RecyclerView 구성 메서드 호출
-        settingCartRecyclerView()
-        // RatingBar 속성 설정
-        setupRatingBar()
         // arguments의 값을 변수에 담아주는 메서드 호출
         gettingArguments()
+        // 데이터를 가져와 RecyclerView를 갱신하는 메서드
+        refreshRecyclerView()
+        // 상품 이미지 RecyclerView 구성 메서드 호출
+        settingCartRecyclerView()
+        // 화면 구성 메서드 호출
+        settingData()
+        // RatingBar 속성 설정
+        setupRatingBar()
 
         return fragmentProductInfoBinding.root
     }
@@ -93,8 +109,36 @@ class ProductInfoFragment(val mainFragment: MainFragment) : Fragment() {
     }
 
     // 화면 구성 메서드
-    fun settingData(){
+    fun settingData() {
+        // 서버에서 데이터를 가져온다.
+        CoroutineScope(Dispatchers.Main).launch {
+            val work1 = async(Dispatchers.IO) {
+                ProductService.selectProductDataOneById(productDocumentId)
+            }
+            productModel = work1.await()
 
+            // 할인가격 계산하기
+            val productSalePrice = ((100 - productModel.productDiscountRate) * productModel.productPrice * 0.01).toInt()
+
+            fragmentProductInfoBinding.apply {
+                productInfoViewModel?.textViewProductInfoProductCategoryText?.value = productModel.productCategory
+                productInfoViewModel?.textViewProductInfoProductNameText?.value = productModel.productName
+                productInfoViewModel?.textViewProductInfoDiscountPercentText?.value = productModel.productDiscountRate.toString()
+                productInfoViewModel?.textViewProductInfoPriceText?.value = productSalePrice.toString()
+                productInfoViewModel?.textViewProductInfoDescriptionText?.value = productModel.productDescription
+            }
+
+            // 메인이미지 불러오기
+            val work2 = async(Dispatchers.IO) {
+                // 이미지에 접근할 수 있는 uri를 가져온다.
+                ProductService.gettingImage(productModel.productMainImage)
+            }
+
+            val imageUri = work2.await()
+            shopActivity.showServiceImage(
+                imageUri, fragmentProductInfoBinding.imageViewProductInfoThumbnail
+            )
+        }
     }
 
     // 툴바 구성 메서드
@@ -172,6 +216,19 @@ class ProductInfoFragment(val mainFragment: MainFragment) : Fragment() {
         }
     }
 
+    // 데이터를 가져와 RecyclerView를 갱신하는 메서드
+    fun refreshRecyclerView(){
+        CoroutineScope(Dispatchers.Main).launch {
+            val work1 = async(Dispatchers.IO){
+                // productDocumentId와 일치하는 데이터 상세 사진 가져오기
+                ProductService.gettingSubImage(productDocumentId)
+            }
+            recyclerViewList.postValue(work1.await().toMutableList())
+
+            fragmentProductInfoBinding.recyclerViewProductInfoImg.adapter?.notifyDataSetChanged()
+        }
+    }
+
     // 상품 상세 이미지 RecyclerView 구성 메서드
     fun settingCartRecyclerView(){
         fragmentProductInfoBinding.apply {
@@ -199,11 +256,15 @@ class ProductInfoFragment(val mainFragment: MainFragment) : Fragment() {
         }
 
         override fun getItemCount(): Int {
-            return tempImgList1.size
+            return recyclerViewList.value?.size ?: 0
         }
 
         override fun onBindViewHolder(holder: ProductImgViewHolder, position: Int) {
-            holder.rowProductInfoImgListBinding.rowImageViewProductInfoImg.setImageResource(tempImgList1[position])
+            val imageUri = recyclerViewList.value?.get(position)
+            if (imageUri != null) {
+                // URI를 ImageView에 설정
+                shopActivity.showServiceImage(imageUri, holder.rowProductInfoImgListBinding.rowImageViewProductInfoImg)
+            }
         }
     }
 }
