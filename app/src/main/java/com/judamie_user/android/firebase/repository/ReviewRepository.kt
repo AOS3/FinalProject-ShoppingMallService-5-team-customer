@@ -55,5 +55,27 @@ class ReviewRepository {
             val imageUri = childStorageReference.downloadUrl.await()
             return imageUri
         }
+
+        //유저 userDocumentID로 한 유저의 리뷰 목록을 불러오는 메서드
+        suspend fun gettingReviewListByOneUser(userDocumentID: String): MutableList<ReviewVO> {
+            val firestore = FirebaseFirestore.getInstance()
+            val collectionReference = firestore.collection("ReviewData")
+
+            // userDocumentID가 매개변수와 같은 문서를 쿼리
+            val querySnapshot = collectionReference
+                .whereEqualTo("reviewerUserDocumentID", userDocumentID) // 필드명은 정확히 데이터베이스와 맞춰야 합니다
+                .get()
+                .await()
+
+            // 결과를 ReviewVO 객체 리스트로 변환
+            val reviewList = mutableListOf<ReviewVO>()
+            for (document in querySnapshot.documents) {
+                document.toObject(ReviewVO::class.java)?.let {
+                    reviewList.add(it)
+                }
+            }
+            return reviewList
+        }
+
     }
 }

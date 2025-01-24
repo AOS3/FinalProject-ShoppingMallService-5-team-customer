@@ -51,14 +51,20 @@ class ProductReviewListFragment(val mainFragment: MainFragment) : Fragment() {
     var reviewsModelList = mutableListOf<ReviewModel>()
 
     // 이미지 파일을 리뷰별로 분류한다
-    var reviewImagesMap = mutableMapOf<String,MutableList<Uri>>()
+    var reviewImagesMap = mutableMapOf<String, MutableList<Uri>>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        fragmentProductReviewListBinding = DataBindingUtil.inflate(inflater,R.layout.fragment_product_review_list,container,false)
-        fragmentProductReviewListBinding.productReviewListViewModel = ProductReviewListViewModel(this)
+        fragmentProductReviewListBinding = DataBindingUtil.inflate(
+            inflater,
+            R.layout.fragment_product_review_list,
+            container,
+            false
+        )
+        fragmentProductReviewListBinding.productReviewListViewModel =
+            ProductReviewListViewModel(this)
         fragmentProductReviewListBinding.lifecycleOwner = this
 
         shopActivity = activity as ShopActivity
@@ -69,14 +75,24 @@ class ProductReviewListFragment(val mainFragment: MainFragment) : Fragment() {
         // 툴바 구성 메서드 호출
         settingToolbar()
 
-        // 해당상품에대한 리뷰를 가져오는 메서드
-        gettingReviewsOfProduct()
+        if (reviewsIdList.isEmpty() && reviewsModelList.isEmpty() && reviewImagesMap.isEmpty()){
+            //리스트가 바워져있을때만 데이터를 불러와 리사이클러뷰를 구성한다
+            gettingReviewsOfProduct()
+        }else{
+            //다시돌아왔을 경우에는 이미세팅된리사이클러뷰를 보여준다
+            fragmentProductReviewListBinding.apply {
+                shimmerFrameLayout.stopShimmer()
+                shimmerFrameLayout.visibility = View.GONE
+                recyclerViewProductReview.visibility = View.VISIBLE
+            }
+        }
+
 
         return fragmentProductReviewListBinding.root
     }
 
     // 툴바 구성 메서드
-    fun settingToolbar(){
+    fun settingToolbar() {
         fragmentProductReviewListBinding.productReviewListViewModel?.apply {
             // 타이틀
             toolbarProductReviewTitle.value = "상품 리뷰"
@@ -86,6 +102,7 @@ class ProductReviewListFragment(val mainFragment: MainFragment) : Fragment() {
     }
 
     fun gettingReviewsOfProduct() {
+
         fragmentProductReviewListBinding.shimmerFrameLayout.startShimmer()
         fragmentProductReviewListBinding.shimmerFrameLayout.visibility = View.VISIBLE
         fragmentProductReviewListBinding.recyclerViewProductReview.visibility = View.GONE
@@ -116,6 +133,8 @@ class ProductReviewListFragment(val mainFragment: MainFragment) : Fragment() {
                     reviewImagesMap[it.reviewDocumentID] = imagesInOneReview
                 }
 
+                Log.d("test", reviewImagesMap.toString())
+
                 fragmentProductReviewListBinding.recyclerViewProductReview.adapter?.notifyDataSetChanged()
 
             } catch (e: Exception) {
@@ -132,7 +151,6 @@ class ProductReviewListFragment(val mainFragment: MainFragment) : Fragment() {
     }
 
 
-
     // 리뷰 쓰기 화면 이동 메서드
     fun moveToWriteReview() {
         // 상품 아이디 전달
@@ -140,27 +158,41 @@ class ProductReviewListFragment(val mainFragment: MainFragment) : Fragment() {
 
     // 사용자 리뷰 화면으로 이동하는 메서드
     fun moveToUserProductReviewFragment() {
-        mainFragment.replaceFragment(ShopSubFragmentName.USER_PRODUCT_REVIEW_FRAGMENT, true, true, null)
+        mainFragment.replaceFragment(
+            ShopSubFragmentName.USER_PRODUCT_REVIEW_FRAGMENT,
+            true,
+            true,
+            null
+        )
     }
 
     // 상품 리뷰 목록 RecyclerView 구성 메서드
-    fun settingProductReviewRecyclerView(){
+    fun settingProductReviewRecyclerView() {
         fragmentProductReviewListBinding.apply {
-            recyclerViewProductReview.adapter = adapter
+            recyclerViewProductReview.adapter = ProductReviewRecyclerViewAdapter()
             recyclerViewProductReview.layoutManager = LinearLayoutManager(shopActivity)
-            val deco = MaterialDividerItemDecoration(shopActivity, MaterialDividerItemDecoration.VERTICAL)
+            val deco =
+                MaterialDividerItemDecoration(shopActivity, MaterialDividerItemDecoration.VERTICAL)
             recyclerViewProductReview.addItemDecoration(deco)
 
         }
     }
 
     // 상품 리뷰 목록 RecyclerView 어답터
-    inner class ProductReviewRecyclerViewAdapter : RecyclerView.Adapter<ProductReviewRecyclerViewAdapter.ProductReviewViewHolder>(){
-        inner class ProductReviewViewHolder(val rowProductReviewListBinding: RowProductReviewListBinding) : RecyclerView.ViewHolder(rowProductReviewListBinding.root)
+    inner class ProductReviewRecyclerViewAdapter :
+        RecyclerView.Adapter<ProductReviewRecyclerViewAdapter.ProductReviewViewHolder>() {
+        inner class ProductReviewViewHolder(val rowProductReviewListBinding: RowProductReviewListBinding) :
+            RecyclerView.ViewHolder(rowProductReviewListBinding.root)
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductReviewViewHolder {
-            val rowProductReviewListBinding = DataBindingUtil.inflate<RowProductReviewListBinding>(layoutInflater, R.layout.row_product_review_list, parent, false)
-            rowProductReviewListBinding.rowProductReviewListViewModel = RowProductReviewListViewModel(this@ProductReviewListFragment)
+            val rowProductReviewListBinding = DataBindingUtil.inflate<RowProductReviewListBinding>(
+                layoutInflater,
+                R.layout.row_product_review_list,
+                parent,
+                false
+            )
+            rowProductReviewListBinding.rowProductReviewListViewModel =
+                RowProductReviewListViewModel(this@ProductReviewListFragment)
             rowProductReviewListBinding.lifecycleOwner = this@ProductReviewListFragment
 
             val productReviewViewHolder = ProductReviewViewHolder(rowProductReviewListBinding)
@@ -178,10 +210,14 @@ class ProductReviewListFragment(val mainFragment: MainFragment) : Fragment() {
             //리뷰별로 이미지리스트를 추출한다
             val imagesForReview = reviewImagesMap[reviewModel.reviewDocumentID] ?: mutableListOf()
 
-            holder.rowProductReviewListBinding.rowProductReviewListViewModel?.rowTextViewProductReviewContentText?.value = reviewModel.reviewContent
-            holder.rowProductReviewListBinding.rowProductReviewListViewModel?.rowTextViewProductReviewNameText?.value = reviewModel.reviewerName
-            holder.rowProductReviewListBinding.rowProductReviewListViewModel?.rowRatingBarProductReviewRating?.value = reviewModel.reviewRating
-            holder.rowProductReviewListBinding.rowProductReviewListViewModel?.rowTextViewProductReviewDateText?.value = reviewModel.reviewWriteDate
+            holder.rowProductReviewListBinding.rowProductReviewListViewModel?.rowTextViewProductReviewContentText?.value =
+                reviewModel.reviewContent
+            holder.rowProductReviewListBinding.rowProductReviewListViewModel?.rowTextViewProductReviewNameText?.value =
+                reviewModel.reviewerName
+            holder.rowProductReviewListBinding.rowProductReviewListViewModel?.rowRatingBarProductReviewRating?.value =
+                reviewModel.reviewRating
+            holder.rowProductReviewListBinding.rowProductReviewListViewModel?.rowTextViewProductReviewDateText?.value =
+                reviewModel.reviewWriteDate
 
             // 중첩 RecyclerView에 이미지 리스트 설정
             holder.rowProductReviewListBinding.rowRecyclerViewProductReviewAttach.apply {
@@ -202,9 +238,13 @@ class ProductReviewListFragment(val mainFragment: MainFragment) : Fragment() {
         private val imageUris: List<Uri> // 이미지 리스트를 전달받음
     ) : RecyclerView.Adapter<ProductReviewAttachRecyclerViewAdapter.ProductReviewAttachViewHolder>() {
 
-        inner class ProductReviewAttachViewHolder(val rowProductReviewAttachBinding: RowProductReviewAttachBinding) : RecyclerView.ViewHolder(rowProductReviewAttachBinding.root)
+        inner class ProductReviewAttachViewHolder(val rowProductReviewAttachBinding: RowProductReviewAttachBinding) :
+            RecyclerView.ViewHolder(rowProductReviewAttachBinding.root)
 
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductReviewAttachViewHolder {
+        override fun onCreateViewHolder(
+            parent: ViewGroup,
+            viewType: Int
+        ): ProductReviewAttachViewHolder {
             val binding = DataBindingUtil.inflate<RowProductReviewAttachBinding>(
                 LayoutInflater.from(parent.context),
                 R.layout.row_product_review_attach,

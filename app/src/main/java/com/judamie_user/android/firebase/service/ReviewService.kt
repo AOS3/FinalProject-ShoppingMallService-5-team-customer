@@ -42,5 +42,16 @@ class ReviewService {
             val imageUri = ReviewRepository.gettingReviewImage(imageFileName)
             return imageUri
         }
+
+        //유저 userDocumentID로 한 유저의 리뷰 목록을 불러오는 메서드
+        suspend fun gettingReviewListByOneUser(userDocumentID: String): MutableList<ReviewModel> {
+            val reviewList = ReviewRepository.gettingReviewListByOneUser(userDocumentID)
+
+            val reviewModelList = mutableListOf<ReviewModel>()
+            reviewList.forEach {
+                reviewModelList.add(it.toReviewModel(userDocumentID))
+            }
+            return reviewModelList
+        }
     }
 }

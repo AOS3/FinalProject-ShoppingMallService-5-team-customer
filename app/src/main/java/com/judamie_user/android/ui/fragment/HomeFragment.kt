@@ -2,6 +2,7 @@ package com.judamie_user.android.ui.fragment
 
 import android.content.DialogInterface
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -22,8 +23,13 @@ import com.judamie_user.android.R
 import com.judamie_user.android.activity.LoginActivity
 import com.judamie_user.android.activity.ShopActivity
 import com.judamie_user.android.databinding.FragmentHomeBinding
+import com.judamie_user.android.firebase.service.ReviewService
 import com.judamie_user.android.viewmodel.fragmentviewmodel.HomeViewModel
 import com.judamie_user.android.viewmodel.fragmentviewmodel.RegisterVerificationViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 
 
 class HomeFragment(val mainFragment:MainFragment) : Fragment() {

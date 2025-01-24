@@ -52,5 +52,11 @@ class ProductService {
             return productModel
         }
 
+        // 제품 하나의 정보를 가져오는 메서드 (특정 필드만 가져오기)
+        suspend fun gettingProductName(documentID: String): String? {
+            val productName = ProductRepository.gettingProductName(documentID)
+            return productName
+        }
+
     }
 }

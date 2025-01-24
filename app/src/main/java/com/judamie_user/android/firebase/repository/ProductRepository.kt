@@ -61,6 +61,17 @@ class ProductRepository {
             return productVO
         }
 
+        // 제품 하나의 정보를 가져오는 메서드 (특정 필드만 가져오기)
+        suspend fun gettingProductName(documentID: String): String? {
+            val firestore = FirebaseFirestore.getInstance()
+            val collectionReference = firestore.collection("productData")
+            val documentReference = collectionReference.document(documentID)
+
+            val documentSnapShot = documentReference.get().await()
+
+            return documentSnapShot.getString("productName")
+        }
+
     }
 
 
