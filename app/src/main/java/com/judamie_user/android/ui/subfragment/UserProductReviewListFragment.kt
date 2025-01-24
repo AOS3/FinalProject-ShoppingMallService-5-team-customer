@@ -54,7 +54,7 @@ class UserProductReviewListFragment(val mainFragment: MainFragment) : Fragment()
     var reviewProductNameMap = mutableMapOf<String, String>()
 
     // 이미지 파일을 리뷰별로 분류한다
-    var reviewImagesMap = mutableMapOf<String,MutableList<Uri>>()
+    var reviewImagesMap = mutableMapOf<String, MutableList<Uri>>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -77,10 +77,10 @@ class UserProductReviewListFragment(val mainFragment: MainFragment) : Fragment()
         // 상품 리뷰 RecyclerView 구성 메서드 호출
         settingProductReviewRecyclerView()
 
-        if(reviewModelList.isEmpty() && reviewProductNameMap.isEmpty() && reviewImagesMap.isEmpty()){
+        if (reviewModelList.isEmpty() && reviewProductNameMap.isEmpty() && reviewImagesMap.isEmpty()) {
             //리스트가 바워져있을때만 데이터를 불러와 리사이클러뷰를 구성한다
             gettingReviewsOfUser()
-        }else{
+        } else {
             //다시돌아왔을 경우에는 이미세팅된리사이클러뷰를 보여준다
             fragmentUserProductReviewListBinding.apply {
                 shimmerFrameLayout.stopShimmer()
@@ -118,60 +118,62 @@ class UserProductReviewListFragment(val mainFragment: MainFragment) : Fragment()
 //        reviewProductNameMap.clear()
 //        reviewImagesMap.clear()
 
-
-        fragmentUserProductReviewListBinding.shimmerFrameLayout.startShimmer()
-        fragmentUserProductReviewListBinding.shimmerFrameLayout.visibility = View.VISIBLE
-        fragmentUserProductReviewListBinding.recyclerViewUserProductReview.visibility = View.GONE
-
-
-        CoroutineScope(Dispatchers.Main).launch {
-            try {
-                val work1 = async(Dispatchers.IO) {
-                    ReviewService.gettingReviewListByOneUser("채수범123")
-                }
-                reviewModelList = work1.await()
-
-                reviewModelList.forEach {
-                    Log.d("test",it.reviewDocumentID)
-                }
+        fragmentUserProductReviewListBinding.apply {
+            shimmerFrameLayout.startShimmer()
+            shimmerFrameLayout.visibility = View.VISIBLE
+            recyclerViewUserProductReview.visibility = View.GONE
 
 
-                //리뷰에 있는 제품id를 통해 제품 이름을 가져온다
-                reviewModelList.forEach {
-                    val work2 = async(Dispatchers.IO) {
-                        ProductService.gettingProductName(it.reviewProductDocumentID)
+
+
+            CoroutineScope(Dispatchers.Main).launch {
+                try {
+                    val work1 = async(Dispatchers.IO) {
+                        ReviewService.gettingReviewListByOneUser("채수범123")
                     }
-                    val productName = work2.await()
-                    if (productName != null) {
-                        reviewProductNameMap.put(it.reviewProductDocumentID, productName)
-                    }
-                }
+                    reviewModelList = work1.await()
 
-                //리뷰에있는 사진을 가져온다
-                reviewModelList.forEach { it->
-                    val imagesInOneReview = mutableListOf<Uri>()
-                    it.reviewPhoto.forEach { fileName->
-                        val work3 = async (Dispatchers.IO){
-                            ReviewService.gettingReviewImage(fileName)
+                    reviewModelList.forEach {
+                        Log.d("test", it.reviewDocumentID)
+                    }
+
+
+                    //리뷰에 있는 제품id를 통해 제품 이름을 가져온다
+                    reviewModelList.forEach {
+                        val work2 = async(Dispatchers.IO) {
+                            ProductService.gettingProductName(it.reviewProductDocumentID)
                         }
-                        imagesInOneReview.add(work3.await())
+                        val productName = work2.await()
+                        if (productName != null) {
+                            reviewProductNameMap.put(it.reviewProductDocumentID, productName)
+                        }
                     }
-                    reviewImagesMap[it.reviewProductDocumentID] = imagesInOneReview
+
+                    //리뷰에있는 사진을 가져온다
+                    reviewModelList.forEach { it ->
+                        val imagesInOneReview = mutableListOf<Uri>()
+                        it.reviewPhoto.forEach { fileName ->
+                            val work3 = async(Dispatchers.IO) {
+                                ReviewService.gettingReviewImage(fileName)
+                            }
+                            imagesInOneReview.add(work3.await())
+                        }
+                        reviewImagesMap[it.reviewProductDocumentID] = imagesInOneReview
+                    }
+                    //Log.d("test",reviewImagesMap.toString())
+
+
+                    fragmentUserProductReviewListBinding.recyclerViewUserProductReview.adapter?.notifyDataSetChanged()
+
+                } catch (e: Exception) {
+                    Log.e("ProductReview", "Error fetching reviews", e)
+                } finally {
+                    // Shimmer 중지 및 RecyclerView 상태 업데이트
+                    fragmentUserProductReviewListBinding.shimmerFrameLayout.stopShimmer()
+                    fragmentUserProductReviewListBinding.shimmerFrameLayout.visibility = View.GONE
+                    fragmentUserProductReviewListBinding.recyclerViewUserProductReview.visibility =
+                        View.VISIBLE
                 }
-                //Log.d("test",reviewImagesMap.toString())
-
-
-
-                fragmentUserProductReviewListBinding.recyclerViewUserProductReview.adapter?.notifyDataSetChanged()
-
-            } catch (e: Exception) {
-                Log.e("ProductReview", "Error fetching reviews", e)
-            } finally {
-                // Shimmer 중지 및 RecyclerView 상태 업데이트
-                fragmentUserProductReviewListBinding.shimmerFrameLayout.stopShimmer()
-                fragmentUserProductReviewListBinding.shimmerFrameLayout.visibility = View.GONE
-                fragmentUserProductReviewListBinding.recyclerViewUserProductReview.visibility =
-                    View.VISIBLE
             }
         }
     }
@@ -219,7 +221,8 @@ class UserProductReviewListFragment(val mainFragment: MainFragment) : Fragment()
             val reviewModel = reviewModelList[position]
 
             //리뷰별로 이미지리스트를 추출한다
-            val imagesForReview = reviewImagesMap[reviewModel.reviewProductDocumentID] ?: mutableListOf()
+            val imagesForReview =
+                reviewImagesMap[reviewModel.reviewProductDocumentID] ?: mutableListOf()
 
             for (j in reviewProductNameMap) {
                 if (reviewModelList[position].reviewProductDocumentID == j.key) {
