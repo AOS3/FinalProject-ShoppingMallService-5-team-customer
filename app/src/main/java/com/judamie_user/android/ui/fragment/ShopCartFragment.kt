@@ -455,10 +455,11 @@ class ShopCartFragment(val mainFragment: MainFragment) : Fragment() {
 
             val rowViewModel = holder.rowCartProductListBinding.rowCartProductListViewModel!!
 
+            val productSalePrice = ((100 - recyclerViewList[position].productDiscountRate) * recyclerViewList[position].productPrice * 0.01).toInt()
 
             holder.rowCartProductListBinding.rowCartProductListViewModel?.textViewCartProductNameText?.value = recyclerViewList[position].productName
             holder.rowCartProductListBinding.rowCartProductListViewModel?.textViewCartProductPriceText?.value =
-                recyclerViewList[position].productPrice.toString()
+                productSalePrice.toString()
             holder.rowCartProductListBinding.rowCartProductListViewModel?.textViewCartProductPercentText?.value =
                 recyclerViewList[position].productDiscountRate.toString()
 

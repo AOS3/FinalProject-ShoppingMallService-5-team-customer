@@ -1,6 +1,7 @@
 package com.judamie_user.android.ui.fragment
 
 import android.os.Bundle
+import android.os.Handler
 import android.view.Gravity
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -11,6 +12,7 @@ import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
+import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.PhoneAuthCredential
@@ -104,6 +106,13 @@ class RegisterVerificationFragment : Fragment() {
         PhoneAuthProvider.verifyPhoneNumber(options)
     }
 
+    // 에러 메시지 제거 메서드
+    fun clearErrorAfterDelay(textField: TextInputLayout, delayMillis: Long) {
+        Handler().postDelayed({
+            textField.error = null
+        }, delayMillis)
+    }
+
     // 인증 코드 확인 버튼
     fun verificationCheck() {
         val authCode = fragmentRegisterVerificationBinding.registerVerificationViewModel?.textFieldRegisterVerificationVerificationNoEditTextText?.value!!
@@ -112,6 +121,10 @@ class RegisterVerificationFragment : Fragment() {
             signInWithPhoneAuthCredential(credential)
         } else {
             fragmentRegisterVerificationBinding.textFieldRegisterVerificationFragmentVerificationNo.error = "인증코드를 입력해주세요"
+            // 소프트 키보드 표시
+            loginActivity.showSoftInput(fragmentRegisterVerificationBinding.textFieldRegisterVerificationFragmentVerificationNo)
+            // 2초 뒤에 에러 메시지 제거
+            clearErrorAfterDelay(fragmentRegisterVerificationBinding.textFieldRegisterVerificationFragmentVerificationNo, 2000)
         }
     }
 
@@ -125,6 +138,10 @@ class RegisterVerificationFragment : Fragment() {
 
                 } else {
                     fragmentRegisterVerificationBinding.textFieldRegisterVerificationFragmentVerificationNo.error = "인증코드가 일치하지 않습니다"
+                    // 소프트 키보드 표시
+                    loginActivity.showSoftInput(fragmentRegisterVerificationBinding.textFieldRegisterVerificationFragmentVerificationNo)
+                    // 2초 뒤에 에러 메시지 제거
+                    clearErrorAfterDelay(fragmentRegisterVerificationBinding.textFieldRegisterVerificationFragmentVerificationNo, 2000)
                 }
             }
     }
@@ -160,13 +177,18 @@ class RegisterVerificationFragment : Fragment() {
 
                 // 서버에 저장한다
                 CoroutineScope(Dispatchers.Main).launch {
+                    // 프로그래스바를 보이게 한다
+                    progressBar3.visibility = View.VISIBLE
+
                     val work1 = async(Dispatchers.IO){
                         // 서비스의 저장 메서드를 호출한다.
                         UserService.addUserData(userModel)
                     }
-                    work1.join()
+                    work1.await()
+                    // 프로그래스바 숨기기
+                    progressBar3.visibility = View.GONE
+
                     loginActivity.showMessageDialog("가입 완료", "가입이 완료되었습니다\n로그인해주세요", "확인"){
-                        progressBar3.visibility = View.VISIBLE
                         loginActivity.removeFragment(FragmentName.REGISTER_STEP1_FRAGMENT)
 
                     }
