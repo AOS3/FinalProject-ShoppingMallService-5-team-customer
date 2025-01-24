@@ -64,7 +64,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="300dp"
                                 android:layout_gravity="center_horizontal"
-                                android:src="@drawable/sampleproductimage_gp18" />
+                                />
 
                             <ImageView
                                 android:id="@+id/imageButtonProductInfoSetWishList"
@@ -85,15 +85,16 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
-                            android:text="TextView"
+                            android:text="@{productInfoViewModel.textViewProductInfoProductCategoryText}"
                             android:textColor="#8A8787"
-                            android:textSize="16sp" />
+                            android:textSize="16sp"
+                            />
 
                         <TextView
                             android:id="@+id/textViewProductInfoProductName"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="TextView" />
+                            android:text="@{productInfoViewModel.textViewProductInfoProductNameText}" />
 
                         <LinearLayout
                             android:layout_width="194dp"
@@ -104,7 +105,7 @@
                                 android:id="@+id/textViewProductInfoDiscountPercent"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="20%"
+                                android:text="@{productInfoViewModel.textViewProductInfoDiscountPercentText + '%'}"
                                 android:textColor="#009688"
                                 android:textSize="20sp"
                                 android:textStyle="bold" />
@@ -114,7 +115,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="10dp"
-                                android:text="256, 000원"
+                                android:text="@{productInfoViewModel.textViewProductInfoPriceText + '원'}"
                                 android:textSize="14sp" />
                         </LinearLayout>
 
@@ -236,7 +237,7 @@
                                 android:id="@+id/textViewProductInfoDescription"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="제품에 대한 상세 내용 설명입니다 주르륵 주르륵 어떤 술 좋아하세요?" />
+                                android:text="@{productInfoViewModel.textViewProductInfoDescriptionText}" />
 
                             <androidx.recyclerview.widget.RecyclerView
                                 android:id="@+id/recyclerViewProductInfoImg"

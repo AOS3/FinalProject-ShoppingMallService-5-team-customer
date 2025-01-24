@@ -2,6 +2,7 @@ package com.judamie_user.android.firebase.repository
 
 import android.net.Uri
 import android.util.Log
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.storage.FirebaseStorage
@@ -9,7 +10,9 @@ import com.judamie_user.android.firebase.model.ProductModel
 import com.judamie_user.android.firebase.vo.ProductVO
 import com.judamie_user.android.util.ProductCategory
 import com.judamie_user.android.util.ProductState
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 
 class ProductRepository {
 
@@ -116,6 +119,16 @@ class ProductRepository {
         }
 
 
+        // 상품 문서 id를 통해 글 데이터를 가져온다.
+        suspend fun selectProductDataOneById(documentId:String) : ProductVO{
+            val firestore = FirebaseFirestore.getInstance()
+            val collectionReference = firestore.collection("productData")
+            val documentReference = collectionReference.document(documentId)
+            val documentSnapShot = documentReference.get().await()
+            val productVO = documentSnapShot.toObject(ProductVO::class.java)!!
+            return productVO
+        }
+
 
         // 이미지 데이터를 가져온다.
         suspend fun gettingImage(imageFileName: String): Uri {
@@ -124,6 +137,28 @@ class ProductRepository {
             val childStorageReference = storageReference.child("image/$imageFileName")
             val imageUri = childStorageReference.downloadUrl.await()
             return imageUri
+        }
+
+
+        // 상품 id 받아서 서브이미지 리스트 가져오기 gettingSubImage
+        suspend fun gettingSubImage(productDocumentId: String): DocumentSnapshot? {
+            return withContext(Dispatchers.IO) {
+                val db = FirebaseFirestore.getInstance()
+
+                // Firestore에서 productDocumentId에 해당하는 문서를 가져옴
+                val documentSnapshot = db.collection("productData")
+                    .document(productDocumentId)  // productDocumentId에 해당하는 문서
+                    .get()
+                    .await()  // 비동기적으로 기다림
+
+                // 문서가 존재하면 반환
+                if (documentSnapshot.exists()) {
+                    documentSnapshot
+                } else {
+                    // 문서가 없으면 null 반환
+                    null
+                }
+            }
         }
     }
 }

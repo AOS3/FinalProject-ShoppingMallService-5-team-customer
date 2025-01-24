@@ -7,6 +7,9 @@ import com.google.android.material.appbar.MaterialToolbar
 import com.judamie_user.android.activity.FragmentName
 import com.judamie_user.android.ui.fragment.LoginFragment
 import com.judamie_user.android.ui.fragment.RegisterStep1Fragment
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 data class RegisterStep1ViewModel(val registerStep1Fragment: RegisterStep1Fragment) : ViewModel() {
 
@@ -33,6 +36,8 @@ data class RegisterStep1ViewModel(val registerStep1Fragment: RegisterStep1Fragme
                 // 아이디 입력란에 에러 메시지 표시
                 fragmentRegisterStep1Binding.textFieldRegisterStep1Id.error = "아이디를 입력해주세요"
                 loginActivity.showSoftInput(fragmentRegisterStep1Binding.textFieldRegisterStep1Id.editText!!)
+                // 2초 뒤에 에러 메시지 제거
+                clearErrorAfterDelay(fragmentRegisterStep1Binding.textFieldRegisterStep1Id, 2000)
                 return
             }
 
@@ -40,6 +45,8 @@ data class RegisterStep1ViewModel(val registerStep1Fragment: RegisterStep1Fragme
                 // 아이디 입력란에 에러 메시지 표시
                 fragmentRegisterStep1Binding.textFieldRegisterStep1Id.error = "아이디는 15자 이내로 입력해주세요"
                 loginActivity.showSoftInput(fragmentRegisterStep1Binding.textFieldRegisterStep1Id.editText!!)
+                // 2초 뒤에 에러 메시지 제거
+                clearErrorAfterDelay(fragmentRegisterStep1Binding.textFieldRegisterStep1Id, 2000)
                 return
             }
 
@@ -47,6 +54,8 @@ data class RegisterStep1ViewModel(val registerStep1Fragment: RegisterStep1Fragme
                 // 비밀번호 입력란에 에러 메시지 표시
                 fragmentRegisterStep1Binding.textFieldRegisterStep1Pw1.error = "비밀번호를 입력해주세요"
                 loginActivity.showSoftInput(fragmentRegisterStep1Binding.textFieldRegisterStep1Pw1.editText!!)
+                // 2초 뒤에 에러 메시지 제거
+                clearErrorAfterDelay(fragmentRegisterStep1Binding.textFieldRegisterStep1Pw1, 2000)
                 return
             }
 
@@ -54,6 +63,8 @@ data class RegisterStep1ViewModel(val registerStep1Fragment: RegisterStep1Fragme
                 // 비밀번호 확인 입력란에 에러 메시지 표시
                 fragmentRegisterStep1Binding.textFieldRegisterStep1Pw2.error = "비밀번호를 입력해주세요"
                 loginActivity.showSoftInput(fragmentRegisterStep1Binding.textFieldRegisterStep1Pw2.editText!!)
+                // 2초 뒤에 에러 메시지 제거
+                clearErrorAfterDelay(fragmentRegisterStep1Binding.textFieldRegisterStep1Pw2, 2000)
                 return
             }
 
@@ -64,6 +75,10 @@ data class RegisterStep1ViewModel(val registerStep1Fragment: RegisterStep1Fragme
                 fragmentRegisterStep1Binding.registerStep1ViewModel?.textFieldRegisterStep1Pw1EditTextText?.value = ""
                 fragmentRegisterStep1Binding.registerStep1ViewModel?.textFieldRegisterStep1Pw2EditTextText?.value = ""
                 loginActivity.showSoftInput(fragmentRegisterStep1Binding.textFieldRegisterStep1Pw1.editText!!)
+                // 2초 뒤에 에러 메시지 제거
+                clearErrorAfterDelay(fragmentRegisterStep1Binding.textFieldRegisterStep1Pw1, 2000)
+                // 2초 뒤에 에러 메시지 제거
+                clearErrorAfterDelay(fragmentRegisterStep1Binding.textFieldRegisterStep1Pw2, 2000)
                 return
             }
 
@@ -72,6 +87,8 @@ data class RegisterStep1ViewModel(val registerStep1Fragment: RegisterStep1Fragme
                 // 아이디 입력란에 에러 메시지 표시
                 fragmentRegisterStep1Binding.textFieldRegisterStep1FragmentName.error = "이름을 입력해주세요"
                 loginActivity.showSoftInput(fragmentRegisterStep1Binding.textFieldRegisterStep1FragmentName.editText!!)
+                // 2초 뒤에 에러 메시지 제거
+                clearErrorAfterDelay(fragmentRegisterStep1Binding.textFieldRegisterStep1FragmentName, 2000)
                 return
             }
 
@@ -79,13 +96,18 @@ data class RegisterStep1ViewModel(val registerStep1Fragment: RegisterStep1Fragme
                 // 이름 길이 초과 에러 메시지 표시
                 fragmentRegisterStep1Binding.textFieldRegisterStep1FragmentName.error = "이름은 15자 이내로 입력해주세요"
                 loginActivity.showSoftInput(fragmentRegisterStep1Binding.textFieldRegisterStep1FragmentName.editText!!)
+                // 2초 뒤에 에러 메시지 제거
+                clearErrorAfterDelay(fragmentRegisterStep1Binding.textFieldRegisterStep1FragmentName, 2000)
                 return
             }
 
+
             // 중복 확인
             checkRegisterIdName()
+
+
             // 다음 화면으로 이동
-            moveToUserVerification()
+            // moveToUserVerification()
         }
     }
 
