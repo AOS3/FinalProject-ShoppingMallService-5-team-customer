@@ -2,6 +2,8 @@ package com.judamie_user.android.ui.fragment
 
 import android.net.Uri
 import android.os.Bundle
+import android.os.Parcel
+import android.os.Parcelable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -23,6 +25,7 @@ import com.judamie_user.android.firebase.model.ProductModel
 import com.judamie_user.android.firebase.model.UserModel
 import com.judamie_user.android.firebase.service.ProductService
 import com.judamie_user.android.firebase.service.UserService
+import com.judamie_user.android.ui.component.CartDialogFragment
 import com.judamie_user.android.viewmodel.fragmentviewmodel.ShopCartViewModel
 import com.judamie_user.android.viewmodel.rowviewmodel.RowCartProductListViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -77,6 +80,7 @@ class ShopCartFragment(val mainFragment: MainFragment) : Fragment() {
         settingCartRecyclerView()
         // 데이터를 가져와 RecyclerView를 갱신하는 메서드를 호출한다.
         loadCartProducts()
+        calculateSelectedTotalPrice()
 
         // 장바구니가 비었을 때 텍스트와 버튼을 안보이는 상태로 설정
         // fragmentShopCartBinding.textViewEmptyCart.isVisible = false
@@ -84,6 +88,45 @@ class ShopCartFragment(val mainFragment: MainFragment) : Fragment() {
 
         return fragmentShopCartBinding.root
     }
+
+//    // 총합 계산 메서드
+//    fun calculateSelectedTotalPrice() {
+//        val selectedTotalPrice = checkBoxStates.value?.mapIndexedNotNull { index, isChecked ->
+//            if (isChecked) {
+//                val price = recyclerViewList[index].productPrice
+//                val quantity = productCountList.value?.get(index) ?: 1
+//                price * quantity
+//            } else {
+//                fragmentShopCartBinding.shopCartViewModel?.buttonCartProductSelectedText?.value =
+//                    "0원 방문 픽업 구매하기"
+//            }
+//        }
+//
+//        fragmentShopCartBinding.shopCartViewModel?.buttonCartProductSelectedText?.value =
+//            "{$selectedTotalPrice}원 방문 픽업 구매하기"
+//    }
+
+    // 총합 계산 메서드
+    fun calculateSelectedTotalPrice() {
+        val selectedTotalPrice = checkBoxStates.value?.mapIndexedNotNull { index, isChecked ->
+            if (isChecked) {
+                val price = recyclerViewList[index].productPrice
+                val quantity = productCountList.value?.get(index) ?: 1
+                price * quantity
+            } else {
+                null // 체크되지 않은 항목은 제외
+            }
+        }?.sum() ?: 0 // 선택된 항목이 없으면 기본값 0
+
+        // 선택된 상품이 없을 경우 기본값 "0원"
+        fragmentShopCartBinding.shopCartViewModel?.buttonCartProductSelectedText?.value =
+            if (selectedTotalPrice > 0) {
+                "${selectedTotalPrice}원 방문 픽업 구매하기"
+            } else {
+                "0원 방문 픽업 구매하기"
+            }
+    }
+
 
     // 로그인한 유저의 장바구니 상품 리스트 가져오기(리사이클러뷰 갱신)
     fun loadCartProducts() {
@@ -101,6 +144,13 @@ class ShopCartFragment(val mainFragment: MainFragment) : Fragment() {
                 ProductService.gettingCartList(userCartList)
             }
             var productList = work2.await()
+
+            // userCartList 값 확인
+            Log.d("ShopCartFragment", "User Cart List: $userCartList")
+
+            // productList 값 확인
+            Log.d("ShopCartFragment", "Product List: $productList")
+
 
             // 장바구니가 비어있는 경우
             if (productList.isEmpty()) {
@@ -158,13 +208,80 @@ class ShopCartFragment(val mainFragment: MainFragment) : Fragment() {
     // 다음 결제 화면 이동 메서드
     fun moveToPaymentProduct(){
         fragmentShopCartBinding.apply {
-            // 사용자가 체크한 목록을 가져온다.
+            // 체크된 상품 정보를 담을 리스트
+            val selectedProducts = mutableListOf<CartItem>()
+            var isStockSufficient = true
+
+            // 체크된 항목 확인 및 데이터 추출
+            checkBoxStates.value?.forEachIndexed { index, isChecked ->
+                if (isChecked) {
+                    val productId = recyclerViewList[index].productDocumentId
+                    val productCount = productCountList.value?.get(index) ?: 1
+                    val productStock = recyclerViewList[index].productStock
+                    val productName = recyclerViewList[index].productName
+
+                    // 선택한 수량이 실제 수량보다 많으면 다이얼로그 띄우기
+                    if (productCount > productStock) {
+                        // showInsufficientStockDialog(productStock,productName)
+                        val context = "${productName}의 수량이 재고 수량보다 많습니다"
+                        val dialog = CartDialogFragment("구매하기", context)
+                        dialog.isCancelable = false
+                        activity?.let { dialog.show(it.supportFragmentManager, "CartDialog")}
+                        isStockSufficient = false
+                        return@forEachIndexed // 더 이상 진행하지 않도록
+                    }
+
+                    selectedProducts.add(CartItem(productId, productCount))
+                }
+            }
+            if (isStockSufficient) {
+                if (selectedProducts.isEmpty()) {
+                    // 선택된 상품이 없을 경우
+                    // 다이얼로그 생성 및 표시
+                    val dialog = CartDialogFragment("구매하기", "선택된 항목이 없습니다")
+                    dialog.isCancelable = false
+                    activity?.let { dialog.show(it.supportFragmentManager, "CartDialog")}
+                    // showNoSelectionBuyDialog()
+                } else {
+                    // 선택된 상품 정보를 담아 다음 화면으로 이동
+                    val dataBundle = Bundle()
+                    dataBundle.putParcelableArrayList(
+                        "selectedProducts",
+                        ArrayList(selectedProducts)
+                    )
+                    selectedProducts.forEach { product ->
+                        Log.d(
+                            "SelectedProduct",
+                            "Product ID: ${product.productId}, Count: ${product.count}"
+                        )
+                    }
+
+                    mainFragment.replaceFragment(
+                        ShopSubFragmentName.PAYMENT_PRODUCT_FRAGMENT,
+                        true,
+                        true,
+                        dataBundle
+                    )
+                }
+            }
+
 
             // 데이터를 담는다.
             // val dataBundle = Bundle()
             // dataBundle.putString("", )
-            mainFragment.replaceFragment(ShopSubFragmentName.PAYMENT_PRODUCT_FRAGMENT, true, true, null)
+            //mainFragment.replaceFragment(ShopSubFragmentName.PAYMENT_PRODUCT_FRAGMENT, true, true, null)
         }
+    }
+
+    // 상품 수량 부족 다이얼로그 띄우는 메서드
+    fun showInsufficientStockDialog(availableStock: Int, productName : String) {
+        val builder = android.app.AlertDialog.Builder(shopActivity)
+        builder.setTitle("구매하기")
+        builder.setMessage("${productName} 의 수량이 재고 수량보다 많습니다. 재고 수량: $availableStock")
+        builder.setPositiveButton("확인") { dialog, _ ->
+            dialog.dismiss()
+        }
+        builder.show()
     }
 
     // 전체 선택 시 모든 체크박스를 업데이트하는 메서드
@@ -182,30 +299,6 @@ class ShopCartFragment(val mainFragment: MainFragment) : Fragment() {
         fragmentShopCartBinding.recyclerViewShopCart.adapter?.notifyDataSetChanged()
     }
 
-//    // 상품 수량 선택 메서드
-//    fun selectProductCount(isIncrease:Boolean ) {
-//
-//            val currentCount = rowCartProductListViewModel?.textViewCartProductCntText?.value?.toIntOrNull() ?: 1
-//
-//            if (isIncrease) {
-//                // 수량 증가
-//                rowCartProductListViewModel?.textViewCartProductCntText?.value = (currentCount + 1).toString()
-//            } else {
-//                // 수량 감소 (1 이하로는 감소하지 않음)
-//                if (currentCount > 1) {
-//                    rowCartProductListViewModel?.textViewCartProductCntText?.value = (currentCount - 1).toString()
-//                } else {
-//                    shopActivity.runOnUiThread {
-//                        Toast.makeText(
-//                            shopActivity,
-//                            "최소 수량입니다.",
-//                            Toast.LENGTH_SHORT
-//                        ).show()
-//                    }
-//                }
-//            }
-//    }
-
 
     // 선택 삭제 버튼 메서드
     fun selectionDelete() {
@@ -215,13 +308,12 @@ class ShopCartFragment(val mainFragment: MainFragment) : Fragment() {
         // 체크된 항목들의 ID를 selectedIds에 추가
         checkBoxStates.value?.forEachIndexed { index, isChecked ->
             if (isChecked) {
-                val productId = recyclerViewList[index].productDocumentId
+                val productId = recyclerViewList.getOrNull(index)?.productDocumentId
+                // val productId = recyclerViewList[index].productDocumentId
                 if (productId != null) {
                     selectedIds.add(productId)
                     Log.d("ShopCartFragment", "Added ID: $productId, Selected IDs: $selectedIds")
                 }
-                //selectedIds.add(recyclerViewList[index].productDocumentId)
-                //Log.d("ShopCartFragment", "Selected ID: ${recyclerViewList[index].productDocumentId}")
 
             }
         }
@@ -238,12 +330,47 @@ class ShopCartFragment(val mainFragment: MainFragment) : Fragment() {
                 }
                 deleteWork.await()
 
+                // 삭제 후 RecyclerView 갱신을 위한 데이터 업데이트
+                //removeSelectedItems(selectedIds)
+                // RecyclerView 구성을 위한 리스트를 초기화한다.
+                // recyclerViewList.clear()
+                // fragmentShopCartBinding.recyclerViewShopCart.adapter?.notifyDataSetChanged()
                 // 삭제 후 RecyclerView 업데이트
+                if(recyclerViewList.size == 1 ){
+
+                    recyclerViewList.clear()
+                    fragmentShopCartBinding.recyclerViewShopCart.adapter?.notifyDataSetChanged()
+
+
+                }
                 loadCartProducts()
+
             }
         }else{
             // 아무것도 체크 안되어있으면 다이얼로그 띄움
-            showNoSelectionDialog()
+            // showNoSelectionDialog()
+            // 다이얼로그 생성 및 표시
+            val dialog = CartDialogFragment("선택 삭제하기", "선택된 항목이 없습니다")
+            dialog.isCancelable = false
+            activity?.let { dialog.show(it.supportFragmentManager, "CartDialog")}
+        }
+    }
+
+    // 선택된 항목을 삭제한 후 데이터 업데이트
+    fun removeSelectedItems(selectedIds: List<String>) {
+        // 선택된 항목들 제거
+        recyclerViewList.removeAll { product ->
+            selectedIds.contains(product.productDocumentId)
+        }
+        checkBoxStates.value?.let {
+            it.removeAll { isChecked ->
+                isChecked
+            }
+        }
+        productCountList.value?.let {
+            it.removeAll { count ->
+                count == 1 // 필요에 따라 조건을 수정
+            }
         }
     }
 
@@ -257,6 +384,19 @@ class ShopCartFragment(val mainFragment: MainFragment) : Fragment() {
         }
         builder.show()
     }
+
+    // 선택된 항목이 없을 경우 다이얼로그 띄우는 메서드
+    fun showNoSelectionBuyDialog() {
+        val builder = android.app.AlertDialog.Builder(shopActivity)
+        builder.setTitle("구매하기")
+        builder.setMessage("구매할 상품을 선택해 주세요.")
+        builder.setPositiveButton("확인") { dialog, _ ->
+            dialog.dismiss()
+        }
+        builder.show()
+    }
+
+
 
 
     // 장바구니 RecyclerView 구성 메서드
@@ -296,7 +436,11 @@ class ShopCartFragment(val mainFragment: MainFragment) : Fragment() {
         }
 
         override fun onBindViewHolder(holder: CartViewHolder, position: Int) {
+
+            calculateSelectedTotalPrice()
+
             val rowViewModel = holder.rowCartProductListBinding.rowCartProductListViewModel!!
+
 
             holder.rowCartProductListBinding.rowCartProductListViewModel?.textViewCartProductNameText?.value = recyclerViewList[position].productName
             holder.rowCartProductListBinding.rowCartProductListViewModel?.textViewCartProductPriceText?.value =
@@ -322,22 +466,35 @@ class ShopCartFragment(val mainFragment: MainFragment) : Fragment() {
             holder.rowCartProductListBinding.checkBoxCartProduct.setOnCheckedChangeListener { _, newState ->
                 checkBoxStates.value?.let {
                     it[position] = newState
-                    checkBoxStates.value = it // LiveData에 새 값을 설정
+                    checkBoxStates.value = it
                 }
-                fragmentShopCartBinding.recyclerViewShopCart.adapter?.notifyDataSetChanged() // RecyclerView 갱신
+
+                // 총합 계산하기
+                calculateSelectedTotalPrice()
+
+                // RecyclerView 갱신
+                fragmentShopCartBinding.recyclerViewShopCart.adapter?.notifyDataSetChanged()
             }
 
 
             Log.d("ShopCartFragment", "CheckBox states: ${checkBoxStates.value}")
 
 
-
             // 수량 증가 버튼 클릭 시 수량 증가
             holder.rowCartProductListBinding.buttonCartProductCntPlus.setOnClickListener {
                 val currentCount = productCountList.value?.get(position) ?: 1
+                // 상품의 재고 수량
+                val productStock = recyclerViewList[position].productStock
+
                 val newCount = currentCount + 1
                 productCountList.value?.set(position, newCount)
-                holder.rowCartProductListBinding.rowCartProductListViewModel?.updateProductCount(newCount)
+                holder.rowCartProductListBinding.rowCartProductListViewModel?.updateProductCount(
+                    newCount
+                    )
+
+                // 총합 계산하기
+                calculateSelectedTotalPrice()
+
             }
 
             // 수량 감소 버튼 클릭 시 수량 감소
@@ -347,11 +504,40 @@ class ShopCartFragment(val mainFragment: MainFragment) : Fragment() {
                     val newCount = currentCount - 1
                     productCountList.value?.set(position, newCount)
                     holder.rowCartProductListBinding.rowCartProductListViewModel?.updateProductCount(newCount)
+
+                    // 총합 계산하기
+                    calculateSelectedTotalPrice()
                 } else {
                     Toast.makeText(shopActivity, "최소 수량입니다.", Toast.LENGTH_SHORT).show()
                 }
             }
+
             
+        }
+    }
+}
+data class CartItem(val productId: String, val count: Int) : Parcelable {
+    constructor(parcel: Parcel) : this(
+        parcel.readString()!!,
+        parcel.readInt()
+    )
+
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeString(productId)
+        parcel.writeInt(count)
+    }
+
+    override fun describeContents(): Int {
+        return 0
+    }
+
+    companion object CREATOR : Parcelable.Creator<CartItem> {
+        override fun createFromParcel(parcel: Parcel): CartItem {
+            return CartItem(parcel)
+        }
+
+        override fun newArray(size: Int): Array<CartItem?> {
+            return arrayOfNulls(size)
         }
     }
 }

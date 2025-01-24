@@ -24,6 +24,10 @@ data class ShopCartViewModel(val shopCartFragment: ShopCartFragment) : ViewModel
     // checkBoxCartProductAll - checkedBox
     val checkBoxCartProductAllCheckedState = MutableLiveData(false)
 
+    // 구매 버튼 텍스트
+    // buttonCartProductSelected - Text
+    val buttonCartProductSelectedText = MutableLiveData<String>()
+
 
     // checkBoxCartProductAll - onClick
     fun checkBoxCartProductAllOnClick(){

@@ -22,7 +22,7 @@ data class RowCartProductListViewModel(val shopCartFragment: ShopCartFragment) :
     val textViewCartProductPriceText = MutableLiveData("")
 
     // textViewCartProductCnt - Text
-    val textViewCartProductCntText = MutableLiveData("1")
+    val textViewCartProductCntText = MutableLiveData("")
 
     // 상품 선택 체크박스
     // checkBoxCartProduct - checked

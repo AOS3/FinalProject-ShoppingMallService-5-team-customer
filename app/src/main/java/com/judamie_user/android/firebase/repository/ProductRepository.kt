@@ -45,7 +45,38 @@ class ProductRepository {
             return resultList
         }
 
-        // userCartList에 포함된 상품 ID를 기반으로 상품 정보를 가져오기
+//        // userCartList에 포함된 상품 ID를 기반으로 상품 정보를 가져오기
+//        suspend fun gettingCartList(productIds: List<String>): List<ProductModel> {
+//            val productList = mutableListOf<ProductModel>()
+//            val productRef = FirebaseFirestore.getInstance().collection("productData")
+//
+//            productIds.forEach { id ->
+//                val document = productRef.document(id).get().await()
+//                if (document.exists()) {
+//                    // DocumentSnapshot에서 직접 데이터 추출
+//                    val data = document.data
+//                    if (data != null) {
+//                        val productModel = ProductModel()
+//
+//                        productModel.productDocumentId = data["productDocumentId"] as? String ?: ""
+//                        productModel.productName = data["productName"] as? String ?: ""
+//                        productModel.productDiscountRate = (data["productDiscountRate"] as? Long)?.toInt() ?: 0
+//                        productModel.productPrice = (data["productPrice"] as? Long)?.toInt() ?: 0
+//                        productModel.productMainImage = data["productMainImage"].toString()
+//
+//                        // productState를 Long으로 가져와서 enum으로 변환
+//                        val productStateLong = data["productState"] as? Long ?: 1L
+//                        productModel.productState =
+//                            ProductState.fromNumber(productStateLong.toInt())
+//
+//                        productList.add(productModel)
+//                    }
+//                }
+//
+//            }
+//            return productList
+//        }
+
         suspend fun gettingCartList(productIds: List<String>): List<ProductModel> {
             val productList = mutableListOf<ProductModel>()
             val productRef = FirebaseFirestore.getInstance().collection("productData")
@@ -53,29 +84,38 @@ class ProductRepository {
             productIds.forEach { id ->
                 val document = productRef.document(id).get().await()
                 if (document.exists()) {
-                    // DocumentSnapshot에서 직접 데이터 추출
+                    // DocumentSnapshot에서 데이터 추출
                     val data = document.data
                     if (data != null) {
                         val productModel = ProductModel()
 
-                        productModel.productDocumentId = data["productDocumentId"] as? String ?: ""
+                        // Firestore 문서 ID를 productDocumentId로 설정
+                        productModel.productDocumentId = document.id
+
                         productModel.productName = data["productName"] as? String ?: ""
                         productModel.productDiscountRate = (data["productDiscountRate"] as? Long)?.toInt() ?: 0
                         productModel.productPrice = (data["productPrice"] as? Long)?.toInt() ?: 0
                         productModel.productMainImage = data["productMainImage"].toString()
+                        productModel.productStock = (data["productStock"] as? Long)?.toInt() ?: 0
 
                         // productState를 Long으로 가져와서 enum으로 변환
                         val productStateLong = data["productState"] as? Long ?: 1L
-                        productModel.productState =
-                            ProductState.fromNumber(productStateLong.toInt())
+                        productModel.productState = ProductState.fromNumber(productStateLong.toInt())
+
+                        // 로그로 각 필드 출력 (toString()을 사용하지 않음)
+                        Log.d("ShopCartFragment", "Product: ProductDocumentId=${productModel.productDocumentId}, " +
+                                "ProductName=${productModel.productName}, ProductDiscountRate=${productModel.productDiscountRate}, " +
+                                "ProductPrice=${productModel.productPrice}, ProductMainImage=${productModel.productMainImage}, " +
+                                "ProductState=${productModel.productState}")
 
                         productList.add(productModel)
                     }
                 }
-
             }
             return productList
         }
+
+
 
         // 이미지 데이터를 가져온다.
         suspend fun gettingImage(imageFileName: String): Uri {
