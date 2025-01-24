@@ -3,6 +3,7 @@ package com.judamie_user.android.firebase.service
 import android.net.Uri
 import com.judamie_user.android.firebase.model.ProductModel
 import com.judamie_user.android.firebase.repository.ProductRepository
+import com.judamie_user.android.firebase.repository.UserRepository
 import com.judamie_user.android.firebase.vo.ProductVO
 import com.judamie_user.android.firebase.vo.UserVO
 import com.judamie_user.android.util.ProductCategory
@@ -16,16 +17,16 @@ class ProductService {
             // 상품 정보를 가져온다.
             val productList = mutableListOf<ProductModel>()
             val resultList = ProductRepository.gettingProductList(productCategory)
+
             // 사용자 정보를 가져온다.
-            // TODO
-//            val userList = UserRepository.selectUserDataAll()
-//            // 사용자 정보를 맵에 담는다.
-//            val userMap = mutableMapOf<String, String>()
-//            userList.forEach {
-//                val userDocumentId = it["user_document_id"] as String
-//                val userVO = it["user_vo"] as UserVO
-//                userMap[userDocumentId] = userVO.userName
-//            }
+            val userList = UserRepository.selectUserDataAll()
+            // 사용자 정보를 맵에 담는다.
+            val userMap = mutableMapOf<String, String>()
+            userList.forEach {
+                val userDocumentId = it["user_document_id"] as String
+                val userVO = it["user_vo"] as UserVO
+                userMap[userDocumentId] = userVO.userName
+            }
 
             resultList.forEach {
                 val productVO = it["productVO"] as ProductVO

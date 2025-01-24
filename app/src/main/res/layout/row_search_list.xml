@@ -29,10 +29,10 @@
             <ImageView
                 android:id="@+id/imageViewSearchProduct"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
+                android:layout_height="match_parent"
                 android:scaleType="centerCrop"
-                app:srcCompat="@{rowSearchListViewModel.imageButtonSearchSetWishListSrcCompact}" />
+                android:src="@drawable/liquor_24px"
+                app:srcCompat="@{rowSearchListViewModel.imageViewSearchProductBitmap}" />
 
             <ImageView
                 android:id="@+id/imageButtonSearchSetWishList"
@@ -91,7 +91,7 @@
 
         <TextView
             android:id="@+id/textViewSearchDiscountRating"
-            android:layout_width="60dp"
+            android:layout_width="40dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:layout_weight="0.2"
@@ -106,7 +106,6 @@
             android:id="@+id/textViewSearchProductPrice"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
             android:layout_marginTop="5dp"
             android:layout_weight="1"
             android:singleLine="true"
@@ -144,7 +143,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/textViewSearchProductReview" />
-
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
