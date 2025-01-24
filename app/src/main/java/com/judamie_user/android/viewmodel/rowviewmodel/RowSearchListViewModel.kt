@@ -8,8 +8,8 @@ import androidx.lifecycle.ViewModel
 data class RowSearchListViewModel(val fragment: Fragment) : ViewModel() {
 
     // 상품 이미지
-    // imageViewSearchProduct - srcCompact
-    val imageViewSearchProductSrcCompact = MutableLiveData("")
+    // imageViewSearchProduct
+    val imageViewSearchProductBitmap = MutableLiveData("")
 
     // 상품 이름
     // textViewSearchProductName - text

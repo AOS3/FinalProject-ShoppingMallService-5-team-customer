@@ -12,7 +12,7 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.divider.MaterialDividerItemDecoration
+import com.bumptech.glide.Glide
 import com.judamie_user.android.R
 import com.judamie_user.android.activity.ShopActivity
 import com.judamie_user.android.databinding.FragmentViewPagerBinding
@@ -27,11 +27,12 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class ViewPagerFragment(val mainFragment: MainFragment) : Fragment() {
 
-    lateinit var fragmentViewPagerBinding: FragmentViewPagerBinding
-    lateinit var shopActivity: ShopActivity
+    private lateinit var fragmentViewPagerBinding: FragmentViewPagerBinding
+    private lateinit var shopActivity: ShopActivity
 
 //    // ReyclerView 구성을 위한 임시 데이터
 //    val tempList1 = Array(32) {
@@ -39,14 +40,15 @@ class ViewPagerFragment(val mainFragment: MainFragment) : Fragment() {
 //    }
 
     // 제품 카테고리 값을 담을 변수
-    var categoryName:String? = null
-    lateinit var productCategory: ProductCategory
+    private var categoryName:String? = null
+    private lateinit var productCategory: ProductCategory
 
-    // 글 데이터를 담을 변수
-    lateinit var productModel: ProductModel
+    // 상품 데이터를 담을 변수
+    private lateinit var productModel: ProductModel
 
     // 메인 RecyclerView를 구성하기 위해 사용할 리스트
-    var recyclerViewCategoryList = mutableListOf<ProductModel>()
+    private var recyclerViewCategoryList = mutableListOf<ProductModel>()
+
 
     companion object {
         private const val ARG_CATEGORY_NAME = "categoryName"
@@ -84,9 +86,10 @@ class ViewPagerFragment(val mainFragment: MainFragment) : Fragment() {
         // RecyclerView 구성을 위한 리스트를 초기화
         recyclerViewCategoryList.clear()
 
+        // RecyclerView 초기 visibility 설정
+        fragmentViewPagerBinding.textViewHomeEmptyProduct.visibility = View.GONE
+
         categoryName = arguments?.getString(ARG_CATEGORY_NAME)
-
-
 
         // 검색 recyclerView 구성 메서드 호출
         settingSearchRecyclerView()
@@ -99,15 +102,38 @@ class ViewPagerFragment(val mainFragment: MainFragment) : Fragment() {
     }
 
     // Dropdown ArrayAdapter 연결 메서드
-    fun dropMenuAdapter() {
+    private fun dropMenuAdapter() {
         val viewArray = resources.getStringArray(R.array.select_view)
         val arrayAdapter = ArrayAdapter(requireContext(), R.layout.dropdown_item_home, viewArray)
         fragmentViewPagerBinding.autoCompleteTextView.setAdapter(arrayAdapter)
+
+        fragmentViewPagerBinding.autoCompleteTextView.setOnItemClickListener { _, _, position, _ ->
+            when(position) {
+                // 최신순
+                0 -> {
+                    refreshMainRecyclerView()
+                    Log.d("test100", "최신순 (refreshMainRecyclerView)")
+
+                }
+                // 가격 낮은 순
+                1 -> {
+                    recyclerViewCategoryList.sortBy { it.productPrice }
+                    fragmentViewPagerBinding.recyclerViewHome.adapter?.notifyDataSetChanged()
+                }
+
+                // 가격 높은순
+                2 -> {
+                    recyclerViewCategoryList.sortByDescending { it.productPrice }
+                    fragmentViewPagerBinding.recyclerViewHome.adapter?.notifyDataSetChanged()
+                }
+            }
+        }
     }
 
 
+
     // RecyclerView를 갱신하는 메서드
-    fun refreshMainRecyclerView(){
+    private fun refreshMainRecyclerView(){
         CoroutineScope(Dispatchers.Main).launch {
             val work1 = async(Dispatchers.IO){
                 ProductService.gettingProductList(productCategory)
@@ -115,29 +141,31 @@ class ViewPagerFragment(val mainFragment: MainFragment) : Fragment() {
             recyclerViewCategoryList.clear()
             recyclerViewCategoryList.addAll(work1.await())
 
-
             fragmentViewPagerBinding.recyclerViewHome.adapter?.notifyDataSetChanged()
+
+            // 검색에 결과가 없으면
+            if (recyclerViewCategoryList.isEmpty()) {
+                // 메시지를 표시
+                fragmentViewPagerBinding.textViewHomeEmptyProduct.visibility = View.VISIBLE
+            } else {
+                // 결과가 있으면 리사이클러뷰 표시
+                fragmentViewPagerBinding.textViewHomeEmptyProduct.visibility = View.GONE
+            }
+
+            // product 개수 업데이트
+            fragmentViewPagerBinding.viewPagerViewModel?.textViewHomeProductCountText?.value = "총 ${recyclerViewCategoryList.size} 개"
         }
     }
 
     // 홈 RecyclerView 구성 메서드
-    fun settingSearchRecyclerView() {
+    private fun settingSearchRecyclerView() {
         fragmentViewPagerBinding.apply {
             recyclerViewHome.layoutManager = GridLayoutManager(requireContext(), 2)
             recyclerViewHome.adapter = HomeRecyclerViewAdapter()
-//            val horizontalDivider = MaterialDividerItemDecoration(
-//                requireContext(),
-//                MaterialDividerItemDecoration.HORIZONTAL
-//            )
-//            recyclerViewHome.addItemDecoration(horizontalDivider)
-//
-//            val verticalDivider = MaterialDividerItemDecoration(
-//                requireContext(),
-//                MaterialDividerItemDecoration.VERTICAL
-//            )
-//            recyclerViewHome.addItemDecoration(verticalDivider)
         }
     }
+
+
 
     // 홈 RecyclerView 어뎁터
     inner class HomeRecyclerViewAdapter :
@@ -190,56 +218,81 @@ class ViewPagerFragment(val mainFragment: MainFragment) : Fragment() {
                 RowSearchListViewModel(this@ViewPagerFragment)
             rowSearchListBinding.lifecycleOwner = this@ViewPagerFragment
 
+            // 리사이클러뷰 항목 클릭시 상세 거래 완료 내역 보기 화면으로 이동
+            rowSearchListBinding.root.setOnClickListener {
+                mainFragment.replaceFragment(ShopSubFragmentName.PRODUCT_INFO_FRAGMENT, true, true, null)
+            }
+
             val homeViewHolder = HomeViewHolder(rowSearchListBinding)
 
-            // 사용자가 누른 항목의 제품 DocumentId를 담아 전달
+            // 리사이클러뷰 항목 클릭시 상세 거래 완료 내역 보기 화면으로 이동
             rowSearchListBinding.root.setOnClickListener {
+                // 사용자가 누른 항목의 게시글 문서 번호를 담아서 전달
                 val dataBundle = Bundle()
-                dataBundle.putString(
-                    "productDocumentId",
-                    recyclerViewCategoryList[homeViewHolder.adapterPosition].productDocumentId
-                )
-                mainFragment.replaceFragment(
-                    ShopSubFragmentName.PRODUCT_INFO_FRAGMENT,
-                    true,
-                    true,
-                    dataBundle
-                )
+//                dataBundle.putString("boardDocumentId", recyclerViewList[mainViewHolder.adapterPosition].boardDocumentId)
+//
+                mainFragment.replaceFragment(ShopSubFragmentName.PRODUCT_INFO_FRAGMENT, true, true, dataBundle)
             }
+
 
             return homeViewHolder
         }
 
         override fun getItemCount(): Int {
+            if (recyclerViewCategoryList.isEmpty()) {
+                fragmentViewPagerBinding.apply {
+                    textViewHomeEmptyProduct?.text = "조건에 맞는 상품이 없습니다.\uD83D\uDE22"
+                }
+            }
             return recyclerViewCategoryList.size
-
-            //return 0
         }
 
         override fun onBindViewHolder(holder: HomeViewHolder, position: Int) {
-            holder.rowSearchListBinding.rowSearchListViewModel?.imageViewSearchProductSrcCompact?.value = recyclerViewCategoryList[position].productMainImage
+
             holder.rowSearchListBinding.rowSearchListViewModel?.textViewSearchProductNameText?.value =
                 recyclerViewCategoryList[position].productName
-            holder.rowSearchListBinding.rowSearchListViewModel?.textViewSearchDiscountRatingText?.value =
-                "${recyclerViewCategoryList[position].productDiscountRate}%"
             holder.rowSearchListBinding.rowSearchListViewModel?.textViewSearchProductPriceText?.value =
                 "${recyclerViewCategoryList[position].productPrice.formatToComma()}"
 
+            // 할인률
+            val discount = recyclerViewCategoryList[position].productDiscountRate
+            holder.rowSearchListBinding.rowSearchListViewModel?.textViewSearchDiscountRatingText?.value =
+                if (discount > 0) "${discount}%" else ""
+            holder.rowSearchListBinding.textViewSearchDiscountRating.visibility =
+                if (discount > 0) View.VISIBLE else View.GONE
+
+            // 리뷰 개수
             val reviewSize = recyclerViewCategoryList[position].productReview.size
             holder.rowSearchListBinding.rowSearchListViewModel?.textViewSearchProductReviewText?.value = if (reviewSize > 0) "리뷰 ($reviewSize)" else ""
-            // 가시성 업데이트 (데이터 바인딩을 사용하지 않는 경우에만 필요)
             holder.rowSearchListBinding.textViewSearchProductReview.visibility = if (reviewSize > 0) View.VISIBLE else View.GONE
 
-            // reviewSize 값 확인
-            Log.d("test100", "상품:리뷰 $position: $reviewSize")
+            // 썸네일 이미지
+            val imageUrl = recyclerViewCategoryList[position].productMainImage // 현재 항목의 이미지 URL
+
+            CoroutineScope(Dispatchers.Main).launch {
+                try {
+                    val imageUrl = withContext(Dispatchers.IO) {
+                        ProductService.gettingImage(imageUrl)
+                    }
+
+                    // Glide로 이미지 로드
+                    Glide.with(holder.rowSearchListBinding.root.context)
+                        .load(imageUrl)
+                        .placeholder(R.drawable.liquor_24px)
+                        .error(R.drawable.liquor_24px)
+                        .into(holder.rowSearchListBinding.imageViewSearchProduct)
+
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
             // TODO
-            // ProductData에 데이터 추가 예정
-
-
+            // 판매자
 //            holder.rowSearchListBinding.rowSearchListViewModel?.textViewSearchProductSellerText?.value =
 //                "${recyclerViewCategoryList[position].productSeller}%"
 
 
         }
     }
+
 }

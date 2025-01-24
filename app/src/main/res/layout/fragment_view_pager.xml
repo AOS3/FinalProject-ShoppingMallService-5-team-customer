@@ -42,7 +42,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:layout_marginTop="10dp"
-                        android:text="총 32 개"
+                        android:text="@{viewPagerViewModel.textViewHomeProductCountText}"
                         android:textSize="14sp" />
 
                     <View
@@ -70,7 +70,6 @@
                             android:padding="5dp"
                             android:paddingStart="30dp"
                             android:text="최신순"
-                            android:textAlignment="viewStart"
                             android:textSize="14sp" />
 
                     </com.google.android.material.textfield.TextInputLayout>
@@ -90,7 +89,6 @@
             android:id="@+id/textViewHomeEmptyProduct"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="조건에 맞는 상품이 없습니다."
             android:textAlignment="center"
             android:textSize="14sp"
             android:visibility="gone"
