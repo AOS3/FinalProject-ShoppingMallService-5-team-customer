@@ -30,8 +30,9 @@
                 android:id="@+id/imageViewSearchProduct"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scaleType="centerCrop"
-                android:src="@drawable/liquor_24px"
+                android:background="@drawable/picture_rounded_corners"
+                android:clipToOutline="true"
+                android:scaleType="fitXY"
                 app:srcCompat="@{rowSearchListViewModel.imageViewSearchProductBitmap}" />
 
             <ImageView
