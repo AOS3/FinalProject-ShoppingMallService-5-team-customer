@@ -5,7 +5,6 @@ import com.judamie_user.android.util.ProductState
 
 
 class ProductModel {
-    var productDocumentIdD = ""
     var productDocumentId = ""
     var productName= ""
     var productCategory = ""

@@ -36,6 +36,13 @@ data class RegisterStep1ViewModel(val registerStep1Fragment: RegisterStep1Fragme
                 return
             }
 
+            if (textFieldRegisterStep1IdEditTextText.value!!.length > 15) {
+                // 아이디 입력란에 에러 메시지 표시
+                fragmentRegisterStep1Binding.textFieldRegisterStep1Id.error = "아이디는 15자 이내로 입력해주세요"
+                loginActivity.showSoftInput(fragmentRegisterStep1Binding.textFieldRegisterStep1Id.editText!!)
+                return
+            }
+
             if (textFieldRegisterStep1Pw1EditTextText.value?.isEmpty()!!) {
                 // 비밀번호 입력란에 에러 메시지 표시
                 fragmentRegisterStep1Binding.textFieldRegisterStep1Pw1.error = "비밀번호를 입력해주세요"
@@ -64,6 +71,13 @@ data class RegisterStep1ViewModel(val registerStep1Fragment: RegisterStep1Fragme
             if (textFieldRegisterStep1FragmentNameEditTextText.value?.isEmpty()!!) {
                 // 아이디 입력란에 에러 메시지 표시
                 fragmentRegisterStep1Binding.textFieldRegisterStep1FragmentName.error = "이름을 입력해주세요"
+                loginActivity.showSoftInput(fragmentRegisterStep1Binding.textFieldRegisterStep1FragmentName.editText!!)
+                return
+            }
+
+            if (textFieldRegisterStep1FragmentNameEditTextText.value!!.length > 15) {
+                // 이름 길이 초과 에러 메시지 표시
+                fragmentRegisterStep1Binding.textFieldRegisterStep1FragmentName.error = "이름은 15자 이내로 입력해주세요"
                 loginActivity.showSoftInput(fragmentRegisterStep1Binding.textFieldRegisterStep1FragmentName.editText!!)
                 return
             }

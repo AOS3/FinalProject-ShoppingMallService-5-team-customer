@@ -35,7 +35,16 @@ enum class ProductState(val number:Int,val str:String){
     // 상품 팔고있음
     PRODUCT_NORMAL(1,"팔고있음"),
     // 상품 팔지않음
-    PRODUCT_DELETE(2,"팔지않음")
+    PRODUCT_DELETE(2,"팔지않음");
+
+    companion object {
+        // 숫자를 받아서 ProductState로 변환
+        fun fromNumber(number: Int): ProductState {
+            return values().find { it.number == number }
+                ?: PRODUCT_NORMAL // 기본값 설정
+        }
+    }
+
 }
 
 // 픽업지 상태를 나타내는 값
