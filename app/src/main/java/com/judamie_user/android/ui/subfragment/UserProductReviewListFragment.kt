@@ -63,6 +63,18 @@ class UserProductReviewListFragment(val mainFragment: MainFragment) : Fragment()
         }
     }
 
+    //유저별 리뷰를 가져오는 메서드
+    fun gettingReviewsOfUser() {
+        fragmentUserProductReviewListBinding.shimmerFrameLayout.startShimmer()
+        fragmentUserProductReviewListBinding.shimmerFrameLayout.visibility = View.VISIBLE
+        fragmentUserProductReviewListBinding.recyclerViewUserProductReview.visibility = View.GONE
+
+
+
+
+
+    }
+
     // 상품 리뷰 목록 RecyclerView 구성 메서드
     fun settingProductReviewRecyclerView(){
         fragmentUserProductReviewListBinding.apply {
