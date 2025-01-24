@@ -105,6 +105,20 @@ class UserProductReviewListFragment(val mainFragment: MainFragment) : Fragment()
 
     //유저별 리뷰를 가져오는 메서드
     private fun gettingReviewsOfUser() {
+
+//       //해당 유저의 리뷰 모델을 가져온다
+//    var reviewModelList = mutableListOf<ReviewModel>()
+//
+//    //리뷰에있는 제품아이디로 제품이름을 가져와서 매핑한다
+//    var reviewProductNameMap = mutableMapOf<String, String>()
+//
+//    // 이미지 파일을 리뷰별로 분류한다
+//    var reviewImagesMap = mutableMapOf<String,MutableList<Uri>>()
+//        reviewModelList.clear()
+//        reviewProductNameMap.clear()
+//        reviewImagesMap.clear()
+
+
         fragmentUserProductReviewListBinding.shimmerFrameLayout.startShimmer()
         fragmentUserProductReviewListBinding.shimmerFrameLayout.visibility = View.VISIBLE
         fragmentUserProductReviewListBinding.recyclerViewUserProductReview.visibility = View.GONE
@@ -144,7 +158,7 @@ class UserProductReviewListFragment(val mainFragment: MainFragment) : Fragment()
                     }
                     reviewImagesMap[it.reviewProductDocumentID] = imagesInOneReview
                 }
-                Log.d("test",reviewImagesMap.toString())
+                //Log.d("test",reviewImagesMap.toString())
 
 
 
