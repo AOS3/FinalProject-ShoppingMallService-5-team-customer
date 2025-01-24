@@ -79,3 +79,9 @@ enum class LoginResult(val number: Int, val str: String) {
     LOGIN_RESULT_SIGN_OUT_MEMBER(4, "탈퇴한 회원"),
 }
 
+// 정렬 기준 Enum
+enum class SortType(val number: Int, val str: String) {
+    VIEW_LATEST(1, "최신순"),
+    VIEW_LOWEST_PRICE(2, "가격 낮은순"),
+    VIEW_HIGHEST_PRICE(3, "가격 높은순")
+}
