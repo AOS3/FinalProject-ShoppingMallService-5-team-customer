@@ -29,7 +29,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:singleLine="true"
-                android:text="더 발베니 14년 캐리비안 캐스크 피"
+                android:text="@{rowPaymentProductListViewModel.textViewCartProductNameText}"
                 android:textSize="14sp" />
 
             <LinearLayout
@@ -41,7 +41,7 @@
                     android:id="@+id/rowTextViewPaymentProductPercent"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="20%"
+                    android:text="@{rowPaymentProductListViewModel.rowTextViewPaymentProductPercentText}"
                     android:textColor="#009688"
                     android:textSize="20sp"
                     android:textStyle="bold" />
@@ -52,7 +52,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:singleLine="true"
-                    android:text="256,000원"
+                    android:text="@{rowPaymentProductListViewModel.rowTextViewPaymentProductPriceText}"
                     android:textSize="14sp" />
 
                 <TextView
@@ -67,7 +67,7 @@
                     android:id="@+id/rowTextViewPaymentProductCount"
                     android:layout_width="77dp"
                     android:layout_height="wrap_content"
-                    android:text="2개"
+                    android:text="@{rowPaymentProductListViewModel.rowTextViewPaymentProductCountText}"
                     android:textColor="#6F7979" />
             </LinearLayout>
 
@@ -79,7 +79,7 @@
             android:layout_height="150dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/liquor_24px" />
+            app:srcCompat="@{rowPaymentProductListViewModel.imageViewCartProductSrc}" />
 
 
         <ProgressBar
@@ -128,7 +128,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.5"
-                android:text="주담이 와인상점" />
+                android:text="@{rowPaymentProductListViewModel.rowTextViewPaymentStoreNameText}" />
 
         </LinearLayout>
 

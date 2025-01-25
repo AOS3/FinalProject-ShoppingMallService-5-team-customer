@@ -125,5 +125,16 @@ class ProductRepository {
             val imageUri = childStorageReference.downloadUrl.await()
             return imageUri
         }
+
+        // 글의 문서 id를 통해 글 데이터를 가져온다.
+        suspend fun selectShopDataOneById(documentId:String) : ProductVO{
+            val firestore = FirebaseFirestore.getInstance()
+            val collectionReference = firestore.collection("productData")
+            val productReference = collectionReference.document(documentId)
+            val productSnapShot = productReference.get().await()
+            val productVO = productSnapShot.toObject(ProductVO::class.java)!!
+            return productVO
+        }
+
     }
 }

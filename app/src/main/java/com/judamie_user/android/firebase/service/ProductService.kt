@@ -71,5 +71,15 @@ class ProductService {
         suspend fun gettingImage(imageFileName: String): Uri {
             return ProductRepository.gettingImage(imageFileName)
         }
+
+        // 글의 문서 id를 통해 글 데이터를 가져온다.
+        suspend fun selectProductDataOneById(documentId:String) : ProductModel{
+            // 글 데이터를 가져온다.
+            val productVO = ProductRepository.selectShopDataOneById(documentId)
+            // BoardModel객체를 생성한다.
+            val productModel = productVO.toProductModel(documentId)
+
+            return productModel
+        }
     }
 }
