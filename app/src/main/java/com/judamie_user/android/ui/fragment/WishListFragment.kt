@@ -14,6 +14,7 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.google.android.material.divider.MaterialDividerItemDecoration
 import com.judamie_user.android.R
 import com.judamie_user.android.activity.ShopActivity
@@ -265,7 +266,7 @@ class WishListFragment(val mainFragment: MainFragment) : Fragment() {
             if (list[position].first.productDiscountRate != 0){
                 holder.rowProductListBinding.viewModel?.textViewSearchDiscountRatingText?.value = "${list[position].first.productDiscountRate}%"
             }else{
-                holder.rowProductListBinding.viewModel?.textViewSearchDiscountRatingVisibility = View.INVISIBLE
+                holder.rowProductListBinding.viewModel?.textViewSearchDiscountRatingVisibility = View.GONE
             }
 
             val finalPrice = holder.rowProductListBinding.viewModel?.calculateProductPrice(list[position].first.productDiscountRate,list[position].first.productPrice)
@@ -276,6 +277,22 @@ class WishListFragment(val mainFragment: MainFragment) : Fragment() {
             holder.rowProductListBinding.viewModel?.textViewSearchProductSellerText?.value =
                 list[position].first.productSeller
 
+            //val imageUri = imageUris[position]
+            //
+            //            // Glide를 사용하여 이미지 로드
+            //            Glide.with(holder.rowProductReviewAttachBinding.root.context)
+            //                .load(imageUri) // Firebase Storage URL
+            //                .placeholder(R.drawable.img) // 로드 중 기본 이미지
+            //                .error(R.drawable.img) // 로드 실패 시 기본 이미지
+            //                .into(holder.rowProductReviewAttachBinding.rowImageViewProductReviewAttatch)
+
+            val imageUri = list[position].second
+
+            Glide.with(holder.rowProductListBinding.root.context)
+                .load(imageUri)
+                .placeholder(R.drawable.img) // 로드 중 기본 이미지
+                .error(R.drawable.img)
+                .into(holder.rowProductListBinding.imageViewSearchProduct)
         }
     }
 
