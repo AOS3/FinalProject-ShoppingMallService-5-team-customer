@@ -35,7 +35,8 @@ class ViewPagerFragment(val mainFragment: MainFragment) : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        fragmentViewPagerBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_view_pager, container, false)
+        fragmentViewPagerBinding =
+            DataBindingUtil.inflate(inflater, R.layout.fragment_view_pager, container, false)
         fragmentViewPagerBinding.viewPagerViewModel =
             ViewPagerViewModel(this@ViewPagerFragment)
         fragmentViewPagerBinding.lifecycleOwner = this@ViewPagerFragment
@@ -103,8 +104,9 @@ class ViewPagerFragment(val mainFragment: MainFragment) : Fragment() {
                 }
 
                 // 클릭 이벤트 설정
-                rowSearchListBinding.imageButtonSearchSetWishList.setOnClickListener {
-                    rowSearchListBinding.apply {
+                rowSearchListBinding.apply {
+                    imageButtonSearchSetWishList.setOnClickListener {
+
                         val isFilled = imageButtonSearchSetWishList.tag == "filled"
 
                         if (isFilled) {
@@ -138,11 +140,6 @@ class ViewPagerFragment(val mainFragment: MainFragment) : Fragment() {
                 RowSearchListViewModel(this@ViewPagerFragment)
             rowSearchListBinding.lifecycleOwner = this@ViewPagerFragment
 
-            // 리사이클러뷰 항목 클릭시 상세 거래 완료 내역 보기 화면으로 이동
-            rowSearchListBinding.root.setOnClickListener {
-                mainFragment.replaceFragment(ShopSubFragmentName.PRODUCT_INFO_FRAGMENT, true, true, null)
-            }
-
             val homeViewHolder = HomeViewHolder(rowSearchListBinding)
 
             // 리사이클러뷰 항목 클릭시 상세 거래 완료 내역 보기 화면으로 이동
@@ -151,7 +148,12 @@ class ViewPagerFragment(val mainFragment: MainFragment) : Fragment() {
                 val dataBundle = Bundle()
 //                dataBundle.putString("boardDocumentId", recyclerViewList[mainViewHolder.adapterPosition].boardDocumentId)
 //
-                mainFragment.replaceFragment(ShopSubFragmentName.PRODUCT_INFO_FRAGMENT, true, true, dataBundle)
+                mainFragment.replaceFragment(
+                    ShopSubFragmentName.PRODUCT_INFO_FRAGMENT,
+                    true,
+                    true,
+                    dataBundle
+                )
             }
 
 

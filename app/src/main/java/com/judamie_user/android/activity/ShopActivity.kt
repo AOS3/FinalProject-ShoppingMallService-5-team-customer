@@ -36,6 +36,8 @@ class ShopActivity : AppCompatActivity() {
     var newFragment: Fragment? = null
     var oldFragment: Fragment? = null
 
+    val userDocumentID = "iElD58FO0PGqugxA8NpS"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // enableEdgeToEdge()

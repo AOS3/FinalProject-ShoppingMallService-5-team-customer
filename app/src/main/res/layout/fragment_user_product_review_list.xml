@@ -18,6 +18,7 @@
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbarUserProductReview"
+            onNavigationClickUserProductReviewList="@{userProductReviewViewModel.userProductReviewListFragment}"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="@color/white"
@@ -26,10 +27,9 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:navigationIcon="@{userProductReviewViewModel.toolbarUserProductReviewNavigationIcon}"
+            app:navigationIcon="@drawable/arrow_back_ios_24px"
             app:title="@{userProductReviewViewModel.toolbarUserProductReviewTitle}"
-            app:titleCentered="true"
-            onNavigationClickUserProductReviewList="@{userProductReviewViewModel.userProductReviewListFragment}" />
+            app:titleCentered="true" />
 
         <TextView
             android:id="@+id/textViewUserProductReviewCnt"

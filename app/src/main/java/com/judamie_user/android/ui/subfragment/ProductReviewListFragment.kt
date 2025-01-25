@@ -53,6 +53,12 @@ class ProductReviewListFragment(val mainFragment: MainFragment) : Fragment() {
     // 이미지 파일을 리뷰별로 분류한다
     var reviewImagesMap = mutableMapOf<String, MutableList<Uri>>()
 
+    //제품 ID
+    var productDocumentID = "8DynxD5PPXsWOYPXQFmF"
+
+    //툴바 타이틀을 전역으로사용한다
+    var toolbarTitle = ""
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -69,16 +75,25 @@ class ProductReviewListFragment(val mainFragment: MainFragment) : Fragment() {
 
         shopActivity = activity as ShopActivity
 
+        // 리뷰 쓰기 화면 이동 메서드
+        moveToWriteReview()
+
 
         // 상품 리뷰 RecyclerView 구성 메서드 호출
         settingProductReviewRecyclerView()
-        // 툴바 구성 메서드 호출
-        settingToolbar()
 
-        if (reviewsIdList.isEmpty() && reviewsModelList.isEmpty() && reviewImagesMap.isEmpty()){
+        if (toolbarTitle == ""){
+            // 툴바 구성 메서드 호출
+            settingToolbar()
+            Log.d("test","툴바구성 호출됨")
+        }else{
+            fragmentProductReviewListBinding.productReviewListViewModel?.toolbarProductReviewTitle?.value = toolbarTitle
+        }
+
+        if (reviewsIdList.isEmpty() && reviewsModelList.isEmpty() && reviewImagesMap.isEmpty()) {
             //리스트가 바워져있을때만 데이터를 불러와 리사이클러뷰를 구성한다
             gettingReviewsOfProduct()
-        }else{
+        } else {
             //다시돌아왔을 경우에는 이미세팅된리사이클러뷰를 보여준다
             fragmentProductReviewListBinding.apply {
                 shimmerFrameLayout.stopShimmer()
@@ -94,58 +109,70 @@ class ProductReviewListFragment(val mainFragment: MainFragment) : Fragment() {
     // 툴바 구성 메서드
     fun settingToolbar() {
         fragmentProductReviewListBinding.productReviewListViewModel?.apply {
-            // 타이틀
-            toolbarProductReviewTitle.value = "상품 리뷰"
-            // 네비게이션 아이콘
-            toolbarProductReviewNavigationIcon.value = R.drawable.arrow_back_ios_24px
+            CoroutineScope(Dispatchers.Main).launch {
+                val work1 = async(Dispatchers.IO) {
+                    ProductService.gettingProductOne(productDocumentID)
+                }
+                val productModel = work1.await()
+
+                toolbarTitle = "${productModel.productName}의 리뷰"
+                toolbarProductReviewTitle.value = toolbarTitle
+            }
         }
     }
 
     fun gettingReviewsOfProduct() {
+        fragmentProductReviewListBinding.apply {
+            shimmerFrameLayout.startShimmer()
+            shimmerFrameLayout.visibility = View.VISIBLE
+            recyclerViewProductReview.visibility = View.GONE
 
-        fragmentProductReviewListBinding.shimmerFrameLayout.startShimmer()
-        fragmentProductReviewListBinding.shimmerFrameLayout.visibility = View.VISIBLE
-        fragmentProductReviewListBinding.recyclerViewProductReview.visibility = View.GONE
 
-        CoroutineScope(Dispatchers.Main).launch {
-            try {
-                val work1 = async(Dispatchers.IO) {
-                    ProductService.gettingProductOne("8DynxD5PPXsWOYPXQFmF")
-                }
-                val productModel = work1.await()
-                reviewsIdList = productModel.productReview
 
-                reviewsIdList.forEach {
-                    val work2 = async(Dispatchers.IO) {
-                        ReviewService.gettingReviewByID(it)
+            CoroutineScope(Dispatchers.Main).launch {
+                try {
+                    val work1 = async(Dispatchers.IO) {
+                        ProductService.gettingProductOne(productDocumentID)
                     }
-                    reviewsModelList.add(work2.await())
-                }
+                    val productModel = work1.await()
+                    reviewsIdList = productModel.productReview
 
-                reviewsModelList.forEach {
-                    val imagesInOneReview = mutableListOf<Uri>()
-                    it.reviewPhoto.forEach { fileName ->
-                        val work3 = async(Dispatchers.IO) {
-                            ReviewService.gettingReviewImage(fileName)
+                    toolbarTitle = "${productModel.productName}의 리뷰"
+
+                    reviewsIdList.forEach {
+                        val work2 = async(Dispatchers.IO) {
+                            ReviewService.gettingReviewByID(it)
                         }
-                        imagesInOneReview.add(work3.await())
+                        reviewsModelList.add(work2.await())
                     }
-                    reviewImagesMap[it.reviewDocumentID] = imagesInOneReview
+
+                    reviewsModelList.forEach {
+                        val imagesInOneReview = mutableListOf<Uri>()
+                        it.reviewPhoto.forEach { fileName ->
+                            val work3 = async(Dispatchers.IO) {
+                                ReviewService.gettingReviewImage(fileName)
+                            }
+                            imagesInOneReview.add(work3.await())
+                        }
+                        reviewImagesMap[it.reviewDocumentID] = imagesInOneReview
+                    }
+
+                    Log.d("test", reviewImagesMap.toString())
+
+                    fragmentProductReviewListBinding.recyclerViewProductReview.adapter?.notifyDataSetChanged()
+
+                } catch (e: Exception) {
+                    Log.e("ProductReview", "Error fetching reviews", e)
+                    // 데이터 로드 실패 시 메시지 표시
+                    fragmentProductReviewListBinding.textViewProductReviewCnt.text =
+                        "리뷰를 불러올 수 없습니다."
+                } finally {
+                    // Shimmer 중지 및 RecyclerView 상태 업데이트
+                    fragmentProductReviewListBinding.shimmerFrameLayout.stopShimmer()
+                    fragmentProductReviewListBinding.shimmerFrameLayout.visibility = View.GONE
+                    fragmentProductReviewListBinding.recyclerViewProductReview.visibility =
+                        View.VISIBLE
                 }
-
-                Log.d("test", reviewImagesMap.toString())
-
-                fragmentProductReviewListBinding.recyclerViewProductReview.adapter?.notifyDataSetChanged()
-
-            } catch (e: Exception) {
-                Log.e("ProductReview", "Error fetching reviews", e)
-                // 데이터 로드 실패 시 메시지 표시
-                fragmentProductReviewListBinding.textViewProductReviewCnt.text = "리뷰를 불러올 수 없습니다."
-            } finally {
-                // Shimmer 중지 및 RecyclerView 상태 업데이트
-                fragmentProductReviewListBinding.shimmerFrameLayout.stopShimmer()
-                fragmentProductReviewListBinding.shimmerFrameLayout.visibility = View.GONE
-                fragmentProductReviewListBinding.recyclerViewProductReview.visibility = View.VISIBLE
             }
         }
     }
@@ -154,6 +181,18 @@ class ProductReviewListFragment(val mainFragment: MainFragment) : Fragment() {
     // 리뷰 쓰기 화면 이동 메서드
     fun moveToWriteReview() {
         // 상품 아이디 전달
+        fragmentProductReviewListBinding.apply {
+            toolbarProductReview.setOnMenuItemClickListener{
+                when(it.itemId){
+                    R.id.menuItemWriteReviewProductReviewListToolbar->{
+                        val bundle = Bundle()
+                        bundle.putString("productDocumentID",productDocumentID)
+                        mainFragment.replaceFragment(ShopSubFragmentName.WRITE_PRODUCT_REVIEW_FRAGMENT,true,true,bundle)
+                    }
+                }
+                true
+            }
+        }
     }
 
     // 사용자 리뷰 화면으로 이동하는 메서드

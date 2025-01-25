@@ -12,10 +12,7 @@ class WishListViewModel(val wishListFragment: WishListFragment):ViewModel() {
     val textViewWishListCountText = MutableLiveData("총 n개")
 
     //textViewEmptyWishList1
-    val textViewEmptyWishListText1 = MutableLiveData("상품페이지의 찜 아이콘을 눌러")
-
-    //textViewEmptyWishList2
-    val textViewEmptyWishListText2 = MutableLiveData("찜 목록을 추가해보세요.")
+    val textViewEmptyWishListText = MutableLiveData("상품페이지의 찜 아이콘을 눌러\n찜 목록을 추가해보세요.")
 
 
 }

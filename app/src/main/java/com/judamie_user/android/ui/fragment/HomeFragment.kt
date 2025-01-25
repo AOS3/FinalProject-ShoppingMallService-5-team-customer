@@ -24,6 +24,7 @@ import com.judamie_user.android.activity.LoginActivity
 import com.judamie_user.android.activity.ShopActivity
 import com.judamie_user.android.databinding.FragmentHomeBinding
 import com.judamie_user.android.firebase.service.ReviewService
+import com.judamie_user.android.firebase.service.UserService
 import com.judamie_user.android.viewmodel.fragmentviewmodel.HomeViewModel
 import com.judamie_user.android.viewmodel.fragmentviewmodel.RegisterVerificationViewModel
 import kotlinx.coroutines.CoroutineScope

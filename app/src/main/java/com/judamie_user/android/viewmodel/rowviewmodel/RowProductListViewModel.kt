@@ -1,5 +1,7 @@
 package com.judamie_user.android.viewmodel.rowviewmodel
 
+import android.util.Log
+import android.view.View
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import androidx.fragment.app.Fragment
@@ -7,61 +9,54 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.judamie_user.android.ui.fragment.MainFragment
 import com.judamie_user.android.ui.fragment.WishListFragment
+import java.text.DecimalFormat
 
 class RowProductListViewModel(val wishListFragment: WishListFragment): ViewModel(){
 
-    //imageViewProductImage 이미지뷰
+    // 상품 이름
+    // textViewSearchProductName - text
+    val textViewSearchProductNameText = MutableLiveData("")
 
-    //progressBarProductImage 이미지로딩바
+    // 상품 할인율
+    // textViewSearchDiscountRating - text
+    val textViewSearchDiscountRatingText = MutableLiveData("")
 
-    //textViewSoldOut 품절표시
+    // 상품 할인율 표시
+    // textViewSearchDiscountRating - visibility
+    var textViewSearchDiscountRatingVisibility = View.VISIBLE
 
-    //textViewProductName 상품명
-    val textViewProductNameText = MutableLiveData("상품명")
+    // 상품 가격 (할인된 가격)
+    // textViewSearchProductPrice - text
+    val textViewSearchProductPriceText = MutableLiveData("")
 
-    //textViewDiscountRating 할인률
-    val textViewDiscountRatingText = MutableLiveData("할인률")
-
-    //textViewProductPrice 상품가격
-    val textViewProductPriceText = MutableLiveData("상품가격")
-
-    // textViewProductReview
-    val textViewProductReviewText = MutableLiveData("리뷰")
-
-    //textViewProductReviewCount 리뷰갯수
-    val textViewProductReviewCountText = MutableLiveData("(n)")
-
-    //imageButtonSetWishList 이미지버튼(찜추가/삭제)
-    fun imageViewSetWishListOnCLick(){
-
+    // 할인된 가격을 계산하는 메서드
+    fun calculateProductPrice(discountRate:Int,price:Int):String{
+        //할인된 가격계산
+        var result = (price - (price*(discountRate.toFloat()/100)))
+        Log.d("test",result.toString())
+        // 가격 포맷변경
+        val decimal = DecimalFormat("#,###")
+        var finalPrice = decimal.format(result)
+        Log.d("test",finalPrice)
+        return finalPrice
     }
 
-    // 찜 상태 관리 LiveData
-    val isWishListed = MutableLiveData(true)
+    // 리뷰 유무 (텍스트)
+    // textViewSearchProductReview - text
+    val textViewSearchProductReviewText = MutableLiveData("")
 
-    // 찜 상태 변경 메서드
-    fun toggleWishList() {
-        val currentState = isWishListed.value ?: false
-        isWishListed.value = !currentState
-        // LiveData 강제 트리거
-        isWishListed.value = isWishListed.value
+    // 리뷰 수
+    // textViewSearchProductReviewCount - text
+    val textViewSearchProductReviewCountText = MutableLiveData("")
+
+    // 판매자
+    // textViewSearchProductSeller - text
+    val textViewSearchProductSellerText = MutableLiveData("")
+
+    // 찜 목록 추가/제거 버튼
+    // imageButtonSearchSetWishList - onClick
+    fun imageButtonSearchSetWishListOnClick() {
+
     }
-
-    object BindingAdapters {
-
-        @JvmStatic
-        @BindingAdapter("app:srcCompat")
-        fun setImageViewResource(imageView: ImageView, resource: Any?) {
-            when (resource) {
-                is Int -> imageView.setImageResource(resource) // 리소스 ID인 경우
-                is android.graphics.drawable.Drawable -> imageView.setImageDrawable(resource) // Drawable인 경우
-                else -> imageView.setImageDrawable(null) // 기본 처리
-            }
-        }
-    }
-
-
-    //textViewProductSeller 상품판매자
-    val textViewProductSellerText = MutableLiveData("상품판매자")
 
 }

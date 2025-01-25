@@ -24,6 +24,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.judamie_user.android.R
+import com.judamie_user.android.activity.ShopActivity
 import com.judamie_user.android.databinding.FragmentWriteProductReviewBinding
 import com.judamie_user.android.databinding.ItemPhotoBinding
 import com.judamie_user.android.firebase.model.ReviewModel
@@ -44,6 +45,7 @@ import java.util.Locale
 
 class WriteProductReviewFragment(val mainFragment: MainFragment) : Fragment() {
     private lateinit var fragmentWriteProductReviewBinding: FragmentWriteProductReviewBinding
+    private lateinit var shopActivity: ShopActivity
     //private val photoList = mutableListOf<String>() // 사진 경로 리스트
 
     private val photoList = mutableListOf<Uri>() // 사진 파일 리스트
@@ -63,6 +65,9 @@ class WriteProductReviewFragment(val mainFragment: MainFragment) : Fragment() {
     private lateinit var tempPhotoUri: Uri
     private lateinit var photoFilePath: String
 
+    //제품 ID
+    var productDocumentID = "8DynxD5PPXsWOYPXQFmF"
+
     // PictureHandler 인스턴스
     private lateinit var pictureHandler: PictureHandler
 
@@ -79,6 +84,7 @@ class WriteProductReviewFragment(val mainFragment: MainFragment) : Fragment() {
         fragmentWriteProductReviewBinding.writeProductReviewViewModel =
             WriteProductReviewViewModel(this@WriteProductReviewFragment)
         fragmentWriteProductReviewBinding.lifecycleOwner = viewLifecycleOwner
+        shopActivity = activity as ShopActivity
 
         // PictureHandler 초기화
         pictureHandler = PictureHandler(requireContext().contentResolver)
@@ -86,7 +92,15 @@ class WriteProductReviewFragment(val mainFragment: MainFragment) : Fragment() {
         setupRecyclerView()
         initializeLaunchers()
 
+        //제품 아이디를 받는다
+        gettingProductDocumentID()
+
         return fragmentWriteProductReviewBinding.root
+    }
+
+    //제품 아이디를 받는다
+    fun gettingProductDocumentID() {
+        productDocumentID = arguments?.getString("productDocumentID").toString()
     }
 
     private fun setupRecyclerView() {
@@ -208,10 +222,14 @@ class WriteProductReviewFragment(val mainFragment: MainFragment) : Fragment() {
     fun saveReview() {
         fragmentWriteProductReviewBinding.apply {
             val reviewRating = writeProductReviewViewModel?.ratingBarWriteProductReviewRate?.value
-            val reviewContent = writeProductReviewViewModel?.textInputLayoutWriteProductReviewContentText?.value
+            val reviewContent =
+                writeProductReviewViewModel?.textInputLayoutWriteProductReviewContentText?.value
             val reviewerName = "채수범"
             val reviewTimestamp = System.currentTimeMillis()
             val reviewDate = getCurrentDate()
+            val productDocumentID = productDocumentID
+            //val userDocumentID = shopActivity.userDocumentID
+            val userDocumentID = "iElD58FO0PGqugxA8NpS"
 
             if (reviewContent.isNullOrEmpty() || reviewContent.length < 10) {
                 showToast("리뷰를 최소 10자 이상 작성해주세요")
@@ -223,7 +241,8 @@ class WriteProductReviewFragment(val mainFragment: MainFragment) : Fragment() {
             val dialog = builder.setTitle("리뷰 저장")
                 .setMessage("작성한 리뷰를 저장하시겠습니까?")
                 .setPositiveButton("확인") { dialog, _ ->
-                    fragmentWriteProductReviewBinding.buttonWriteProductReviewSaveReview.visibility = View.GONE
+                    fragmentWriteProductReviewBinding.buttonWriteProductReviewSaveReview.visibility =
+                        View.GONE
                     CoroutineScope(Dispatchers.Main).launch {
                         progressBarInWriteReview.visibility = View.VISIBLE
                         try {
@@ -233,13 +252,29 @@ class WriteProductReviewFragment(val mainFragment: MainFragment) : Fragment() {
                                 // 사진 업로드
                                 uploadPhotosToFirebase { success ->
                                     if (success) {
-                                        saveReviewData(reviewContent, reviewRating, reviewTimestamp, reviewDate,reviewerName)
+                                        saveReviewData(
+                                            reviewContent,
+                                            reviewRating,
+                                            reviewTimestamp,
+                                            reviewDate,
+                                            reviewerName,
+                                            productDocumentID,
+                                            userDocumentID
+                                        )
                                     } else {
                                         showToast("사진 업로드 실패")
                                     }
                                 }
                             } else {
-                                saveReviewData(reviewContent, reviewRating, reviewTimestamp, reviewDate,reviewerName)
+                                saveReviewData(
+                                    reviewContent,
+                                    reviewRating,
+                                    reviewTimestamp,
+                                    reviewDate,
+                                    reviewerName,
+                                    productDocumentID,
+                                    userDocumentID
+                                )
                             }
                         } catch (e: Exception) {
                             Log.e("test100", "리뷰 저장 중 오류 발생", e)
@@ -263,7 +298,9 @@ class WriteProductReviewFragment(val mainFragment: MainFragment) : Fragment() {
         reviewRating: Float?,
         reviewTimestamp: Long,
         reviewDate: String,
-        reviewerName:String
+        reviewerName: String,
+        productDocumentID: String,
+        userDocumentID: String
     ) {
         val reviewModel = ReviewModel().also {
             it.reviewContent = reviewContent!!
@@ -271,14 +308,17 @@ class WriteProductReviewFragment(val mainFragment: MainFragment) : Fragment() {
             it.reviewTimeStamp = reviewTimestamp
             it.reviewWriteDate = reviewDate
             it.reviewerName = reviewerName
-            it.reviewPhoto = photoFileNameList // 업로드된 사진 파일명 추가 (없으면 빈 리스트)
+            it.reviewPhoto = photoFileNameList
+            it.reviewerUserDocumentID = userDocumentID
+            it.reviewProductDocumentID  = productDocumentID
+        // 업로드된 사진 파일명 추가 (없으면 빈 리스트)
         }
 
         CoroutineScope(Dispatchers.IO).launch {
             val reviewDocumentID = ReviewService.addReviewData(reviewModel)
 
             val work = async {
-                ReviewService.addReviewDataInProduct(reviewDocumentID, "8DynxD5PPXsWOYPXQFmF")
+                ReviewService.addReviewDataInProduct(reviewDocumentID, productDocumentID)
             }
             work.join()
 
@@ -289,9 +329,6 @@ class WriteProductReviewFragment(val mainFragment: MainFragment) : Fragment() {
             }
         }
     }
-
-
-
 
 
     // 현재 날짜를 반환하는 함수
@@ -306,7 +343,8 @@ class WriteProductReviewFragment(val mainFragment: MainFragment) : Fragment() {
         withContext(Dispatchers.IO) {
             try {
                 photoList.forEachIndexed { index, uri ->
-                    val serverFilePath = "review_photos/photo_${System.currentTimeMillis()}_$index.jpg"
+                    val serverFilePath =
+                        "review_photos/photo_${System.currentTimeMillis()}_$index.jpg"
                     photoFileNameList.add(serverFilePath) // 파일명을 리스트에 추가
 
                     // URI를 직접 Firebase Storage에 업로드

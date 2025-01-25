@@ -26,21 +26,10 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:navigationIcon="@{productReviewListViewModel.toolbarProductReviewNavigationIcon}"
+            app:menu="@menu/menu_write_review"
+            app:navigationIcon="@drawable/arrow_back_ios_24px"
             app:title="@{productReviewListViewModel.toolbarProductReviewTitle}"
             app:titleCentered="true" />
-
-        <Button
-            android:id="@+id/buttonProductReviewWrite"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            android:text="리뷰쓰기"
-            android:textColor="@color/mainColor"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="@+id/toolbarProductReview"
-            app:layout_constraintTop_toTopOf="@id/toolbarProductReview" />
 
         <TextView
             android:id="@+id/textViewProductReviewCnt"

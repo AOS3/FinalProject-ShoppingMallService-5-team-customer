@@ -13,6 +13,7 @@ class ProductVO {
     var productMainImage = ""
     var productSubImage: List<String> = emptyList()
     var productReview= mutableListOf<String>()
+    var productSeller = ""
     var productState = 0
     var productRegisterDate	= ""
     var productTimeStamp = 0L
@@ -39,6 +40,8 @@ class ProductVO {
         productModel.productSubImage = mutableListOf()
 
         productModel.productReview = productReview
+
+        productModel.productSeller = productSeller
 
         return productModel
     }

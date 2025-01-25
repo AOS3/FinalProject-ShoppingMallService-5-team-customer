@@ -5,7 +5,6 @@ import com.judamie_user.android.util.ProductState
 
 
 class ProductModel {
-    var productDocumentIdD = ""
     var productDocumentId = ""
     var productName= ""
     var productCategory = ""
@@ -16,6 +15,7 @@ class ProductModel {
     var productMainImage = ""
     var productSubImage: List<String> = emptyList()
     var productReview= mutableListOf<String>()
+    var productSeller = ""
     var productState = ProductState.PRODUCT_NORMAL
     var productRegisterDate= ""
     var productTimeStamp = 0L
@@ -35,6 +35,7 @@ class ProductModel {
 
         productVO.productSubImage = mutableListOf()
         productVO.productReview = productReview
+        productVO.productSeller = productSeller
 
         return productVO
     }

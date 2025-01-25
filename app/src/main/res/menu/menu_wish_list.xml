@@ -2,9 +2,16 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+
     <item
-        android:id="@+id/menuItemCartInWishListToolbar"
-        android:icon="@drawable/shopping_cart_24px"
+        android:id="@+id/menuItemWishListNotification"
+        android:icon="@drawable/notifications_24px"
+        android:title="알림"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/menuItemWishListShoppingCart"
+        android:icon="@drawable/shopcart"
         android:title="장바구니"
-        app:showAsAction="always"/>
+        app:showAsAction="always" />
 </menu>
