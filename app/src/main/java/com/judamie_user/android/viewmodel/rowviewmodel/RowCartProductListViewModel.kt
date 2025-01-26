@@ -1,6 +1,7 @@
 package com.judamie_user.android.viewmodel.rowviewmodel
 
 import android.net.Uri
+import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -48,11 +49,15 @@ data class RowCartProductListViewModel(val shopCartFragment: ShopCartFragment) :
         textViewCartProductCntText.value = newCount.toString()
         // ShopCartFragment에서 수량을 반영하기
         val position = shopCartFragment.recyclerViewList.indexOfFirst { it.productName == textViewCartProductNameText.value }
-        if (position >= 0) {
+        // position이 유효한 경우
+        if (position >= 0 && position < shopCartFragment.productCountList.value?.size ?: 0) {
             // 해당 위치의 수량을 productCountList에 반영
             val currentList = shopCartFragment.productCountList.value?.toMutableList() ?: mutableListOf()
             currentList[position] = newCount
             shopCartFragment.productCountList.value = currentList
+        } else {
+            // position이 유효하지 않으면 에러 로그 출력
+            Log.e("ShopCartFragment", "Invalid position: $position for product ${textViewCartProductNameText.value}")
         }
     }
 

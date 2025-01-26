@@ -2,6 +2,7 @@ package com.judamie_user.android.ui.subfragment
 
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +11,7 @@ import android.widget.Toast
 import androidx.core.view.drawToBitmap
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.divider.MaterialDividerItemDecoration
@@ -23,7 +25,10 @@ import com.judamie_user.android.firebase.service.CouponService
 import com.judamie_user.android.firebase.service.ProductService
 import com.judamie_user.android.firebase.service.UserService
 import com.judamie_user.android.ui.fragment.MainFragment
+import com.judamie_user.android.ui.fragment.ShopCartFragment
 import com.judamie_user.android.ui.fragment.ShopSubFragmentName
+import com.judamie_user.android.viewmodel.componentviewmodel.CartIdCountViewModel
+import com.judamie_user.android.viewmodel.componentviewmodel.CartViewModel
 import com.judamie_user.android.viewmodel.fragmentviewmodel.ProductInfoViewModel
 import com.judamie_user.android.viewmodel.rowviewmodel.RowProductInfoImgListViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -56,6 +61,10 @@ class ProductInfoFragment(val mainFragment: MainFragment) : Fragment() {
     // 사용자 정보를 담을 변수
     lateinit var userModel: UserModel
 
+
+
+    private lateinit var cartIdCountViewModel: CartIdCountViewModel
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -68,6 +77,9 @@ class ProductInfoFragment(val mainFragment: MainFragment) : Fragment() {
 
         shopActivity = activity as ShopActivity
 
+
+        // ViewModel 가져오기
+        cartIdCountViewModel = ViewModelProvider(requireActivity()).get(CartIdCountViewModel::class.java)
 
         // 툴바 구성 메서드 호출
         settingToolbar()
@@ -185,6 +197,8 @@ class ProductInfoFragment(val mainFragment: MainFragment) : Fragment() {
     fun buyProduct() {
         // Intent 전달 (상품정보, 수량)
         val bundle = Bundle()
+        bundle.putString("productCount", fragmentProductInfoBinding. productInfoViewModel?.textViewProductInfoCntText?.value)
+        bundle.putString("productDocumentId", productDocumentId)
 
         // 결제 화면으로 이동
         mainFragment.replaceFragment(ShopSubFragmentName.PAYMENT_PRODUCT_FRAGMENT, true, true, bundle)
@@ -211,6 +225,22 @@ class ProductInfoFragment(val mainFragment: MainFragment) : Fragment() {
                     userModel.userCartList.add(productDocumentId)
                     UserService.addCartData(userModel)
                     Toast.makeText(shopActivity, "장바구니에 상품이 추가되었습니다", Toast.LENGTH_SHORT).show()
+
+
+//                    // 장바구니에 담을 상품과 수량 맵 생성
+//                    val cartMap = HashMap<String, Int>()
+//                    cartMap[productDocumentId] = fragmentProductInfoBinding. productInfoViewModel?.textViewProductInfoCntText?.value!!.toInt()
+//
+//                    // 기존 ShopCartFragment 인스턴스를 찾아 데이터 전달
+//                    val shopCartFragment = parentFragmentManager.findFragmentByTag("ShopCartFragment") as? ShopCartFragment
+//                    shopCartFragment?.updateCart(cartMap)
+
+                    val quantity = fragmentProductInfoBinding. productInfoViewModel?.textViewProductInfoCntText?.value!!.toInt()
+                    cartIdCountViewModel.addToCart(productDocumentId, quantity)
+
+
+                    // cartMap 값 확인
+                    // Log.d("cartMap", ": $cartMap")
                 }
             }
         }
