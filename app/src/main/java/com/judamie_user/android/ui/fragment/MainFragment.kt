@@ -20,6 +20,7 @@ import com.judamie_user.android.ui.subfragment.ModifyUserInfoFragment
 import com.judamie_user.android.ui.subfragment.PaymentProductFragment
 import com.judamie_user.android.ui.subfragment.ProductInfoFragment
 import com.judamie_user.android.ui.subfragment.ProductReviewListFragment
+import com.judamie_user.android.ui.subfragment.ReviewImageFragment
 import com.judamie_user.android.ui.subfragment.SetPickUpLocationFragment
 import com.judamie_user.android.ui.subfragment.SettingUserNotificationFragment
 import com.judamie_user.android.ui.subfragment.ShowAppInfoFragment
@@ -151,6 +152,7 @@ class MainFragment() : Fragment() {
             ShopSubFragmentName.SHOW_REVIEW_PHOTO_FRAGMENT -> ShowReviewPhotoFragment(this)
             ShopSubFragmentName.VIEW_PAGER_FRAGMENT -> ViewPagerFragment(this)
             ShopSubFragmentName.USER_PRODUCT_REVIEW_FRAGMENT -> UserProductReviewListFragment(this)
+            ShopSubFragmentName.REVIEW_IMAGE_FRAGMENT -> ReviewImageFragment(this)
         }
 
         // bundle 객체가 null이 아니라면
@@ -255,7 +257,9 @@ enum class ShopSubFragmentName(var number: Int, var str: String) {
     // Home 화면 상품 목록 (ViewPager)
     VIEW_PAGER_FRAGMENT(23, "ViewPagerFragment"),
     // 사용자 리뷰 목록 화면
-    USER_PRODUCT_REVIEW_FRAGMENT(24, "UserProductReviewFragment")
+    USER_PRODUCT_REVIEW_FRAGMENT(24, "UserProductReviewFragment"),
+    // 리뷰 이미지 크게보기
+    REVIEW_IMAGE_FRAGMENT(25,"ReviewImageFragment")
 
 
 }

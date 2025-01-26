@@ -33,8 +33,7 @@
                 android:layout_height="match_parent"
                 android:background="@drawable/picture_rounded_corners"
                 android:clipToOutline="true"
-                android:scaleType="fitXY"
-                app:srcCompat="@{rowSearchListViewModel.imageViewSearchProductBitmap}" />
+                android:scaleType="fitXY" />
 
             <ImageView
                 android:id="@+id/imageButtonSearchSetWishList"
@@ -45,7 +44,6 @@
                 android:layout_marginBottom="10dp"
                 android:layout_weight="0.5"
                 android:onClick="@{()->rowSearchListViewModel.imageButtonSearchSetWishListOnClick()}"
-                app:srcCompat="@{rowSearchListViewModel.imageButtonSearchSetWishListSrcCompact? @drawable/bookmark_outline_24px : @drawable/bookmark_filled_24px}"
                 app:tint="@color/mainColor" />
         </FrameLayout>
 

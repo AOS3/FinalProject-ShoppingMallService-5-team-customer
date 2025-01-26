@@ -12,10 +12,10 @@ class ProductVO {
     var productDescription = ""
     var productMainImage = ""
     var productSubImage: List<String> = emptyList()
+    var productReview= mutableListOf<String>()
+    var productSeller = ""
     var productState = 0
     var productRegisterDate	= ""
-    var productReview : List<String> = emptyList()
-    var productSeller = ""
     var productTimeStamp = 0L
 
     fun toProductModel(productDocumentId:String) : ProductModel {
@@ -30,7 +30,6 @@ class ProductVO {
         productModel.productStock = productStock
         productModel.productMainImage = productMainImage
         productModel.productRegisterDate = productRegisterDate
-        productModel.productSeller = productSeller
         productModel.productTimeStamp = productTimeStamp
 
         when (productState){
@@ -38,8 +37,11 @@ class ProductVO {
             ProductState.PRODUCT_DELETE.number -> productModel.productState = ProductState.PRODUCT_DELETE
         }
 
-        productModel.productSubImage = productSubImage.toMutableList()
-        productModel.productReview = productReview.toMutableList()
+        productModel.productSubImage = mutableListOf()
+
+        productModel.productReview = productReview
+
+        productModel.productSeller = productSeller
 
         return productModel
     }

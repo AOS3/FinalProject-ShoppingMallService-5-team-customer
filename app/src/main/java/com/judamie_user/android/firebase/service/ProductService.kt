@@ -77,9 +77,46 @@ class ProductService {
             }
         }
 
-        // 이미지 가져오는 함수
-        suspend fun gettingImage(imageFileName: String): Uri {
-            return ProductRepository.gettingImage(imageFileName)
+
+
+        // 이미지 데이터를 가져온다.
+        suspend fun gettingImage(imageFileName:String) : Uri {
+            val imageUri = ProductRepository.gettingImage(imageFileName)
+            return imageUri
+        }
+
+        // 제품 하나의 정보를 가져오는 메서드
+        suspend fun gettingProductOne(documentID:String) : ProductModel{
+            val productVO = ProductRepository.gettingProductOne(documentID)
+            val productModel = productVO.toProductModel(documentID)
+
+            return productModel
+        }
+
+        // 제품 하나의 정보를 가져오는 메서드 (특정 필드만 가져오기)
+        suspend fun gettingProductName(documentID: String): String? {
+            val productName = ProductRepository.gettingProductName(documentID)
+            return productName
+        }
+        // 상품 id받아서 서브 이미지리스트 받아오기
+        suspend fun gettingSubImage(productDocumentId: String): List<Uri> {
+            val documentSnapshot = ProductRepository.gettingSubImage(productDocumentId)
+
+            // Firestore에서 받은 문서가 null이 아니면 productSubImage 필드를 가져오기
+            return if (documentSnapshot != null) {
+                // val subImages = documentSnapshot.get("productSubImage") as? List<String> ?: emptyList()
+
+                val subImageFileNames = documentSnapshot.get("productSubImage") as? List<String> ?: emptyList()
+
+                // 각 이미지 파일명에 대해 Firebase Storage에서 실제 이미지 URI를 가져오기
+                subImageFileNames.map { fileName ->
+                    // Firebase Storage에서 이미지 URI를 가져오는 함수 호출
+                    gettingImage(fileName)
+                }// 이미지 URI를 가져오는 함수 호출
+            } else {
+                // 문서가 없으면 빈 리스트 반환
+                emptyList()
+            }
         }
 
         // 상품 id받아서 서브 이미지리스트 받아오기

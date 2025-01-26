@@ -85,3 +85,9 @@ enum class SortType(val number: Int, val str: String) {
     VIEW_LOWEST_PRICE(2, "가격 낮은순"),
     VIEW_HIGHEST_PRICE(3, "가격 높은순")
 }
+
+// 리뷰 상태값
+enum class ReviewState(val num:Int,var str:String){
+    REVIEW_STATE_NORMAL(1,"정상"),
+    REVIEW_STATE_DELETE(2,"삭제")
+}

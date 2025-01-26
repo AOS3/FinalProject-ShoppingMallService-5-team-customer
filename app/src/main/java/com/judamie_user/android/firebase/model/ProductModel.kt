@@ -14,10 +14,10 @@ class ProductModel {
     var productStock = 0
     var productMainImage = ""
     var productSubImage: List<String> = emptyList()
+    var productReview= mutableListOf<String>()
+    var productSeller = ""
     var productState = ProductState.PRODUCT_NORMAL
     var productRegisterDate= ""
-    var productReview: List<String> = mutableListOf()
-    var productSeller = ""
     var productTimeStamp = 0L
 
     fun toProductVO() : ProductVO {
@@ -31,11 +31,11 @@ class ProductModel {
         productVO.productMainImage = productMainImage
         productVO.productState = productState.number
         productVO.productRegisterDate = productRegisterDate
-        productVO.productSeller = productSeller
         productVO.productTimeStamp = productTimeStamp
 
-        productVO.productSubImage = productSubImage.toMutableList()
-        productVO.productReview = productReview.toMutableList()
+        productVO.productSubImage = mutableListOf()
+        productVO.productReview = productReview
+        productVO.productSeller = productSeller
 
         return productVO
     }

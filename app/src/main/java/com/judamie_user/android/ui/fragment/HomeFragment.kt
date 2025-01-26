@@ -50,6 +50,10 @@ class HomeFragment(val mainFragment:MainFragment) : Fragment() {
 
         return fragmentHomeBinding.root
     }
+    // 픽업지를 고르러갈 버튼을 구성한다
+    fun settingButtonHomePickupLoc(){
+
+    }
 
 
 

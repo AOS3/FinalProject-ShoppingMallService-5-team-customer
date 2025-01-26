@@ -1,17 +1,16 @@
 package com.judamie_user.android.viewmodel.fragmentviewmodel
 
-import android.util.Log
+import android.widget.RatingBar
 import androidx.databinding.BindingAdapter
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.android.material.appbar.MaterialToolbar
 import com.judamie_user.android.ui.subfragment.WriteProductReviewFragment
 
-class WriteProductReviewViewModel(val writeProductReviewFragment: WriteProductReviewFragment):ViewModel() {
+class WriteProductReviewViewModel(val writeProductReviewFragment: WriteProductReviewFragment) : ViewModel() {
 
-    // materialToolbarWriteProductReview
     companion object {
-        // materialToolbarWriteProductReview - onNavigationClickWriteProductReview
+        // BindingAdapter for MaterialToolbar navigation click
         @JvmStatic
         @BindingAdapter("onNavigationClickWriteProductReview")
         fun onNavigationClickWriteProductReview(
@@ -22,32 +21,39 @@ class WriteProductReviewViewModel(val writeProductReviewFragment: WriteProductRe
                 writeProductReviewFragment.movePrevFragment()
             }
         }
+
+        // BindingAdapter for RatingBar
+        @JvmStatic
+        @BindingAdapter("onRatingChanged")
+        fun setOnRatingBarChangeListener(ratingBar: RatingBar, viewModel: WriteProductReviewViewModel) {
+            ratingBar.setOnRatingBarChangeListener { _, rating, _ ->
+                viewModel.ratingBarWriteProductReviewRate.value = rating
+            }
+        }
     }
 
-
-
-    //textViewWriteProductReviewProductName
+    // LiveData for product name
     val textViewWriteProductReviewProductNameText = MutableLiveData("textViewWriteProductReviewProductName")
 
-    //textViewWriteProductReviewProductSeller
+    // LiveData for product seller
     val textViewWriteProductReviewProductSellerText = MutableLiveData("textViewWriteProductReviewProductSeller")
 
-    //ratingBarWriteProductReviewRate
+    // LiveData for rating bar value
+    val ratingBarWriteProductReviewRate = MutableLiveData<Float>()
 
-    //textInputLayoutWriteProductReviewContent
+    // LiveData for review content
     val textInputLayoutWriteProductReviewContentText = MutableLiveData("textInputLayoutWriteProductReviewContent")
 
-    //buttonWriteProductReviewAddPhoto(Text)
+    // LiveData for add photo button text
     val buttonWriteProductReviewAddPhotoText = MutableLiveData("")
 
-    //buttonWriteProductReviewAddPhoto
-    fun buttonWriteProductReviewAddPhotoOnclick(){
+    // Add photo button click handler
+    fun buttonWriteProductReviewAddPhotoOnclick() {
         writeProductReviewFragment.buttonWriteProductReviewAddPhotoOnclick()
     }
 
-
-    //buttonWriteProductReviewSaveReview
-    fun buttonWriteProductReviewSaveReviewOnclick(){
+    // Save review button click handler
+    fun buttonWriteProductReviewSaveReviewOnclick() {
         writeProductReviewFragment.saveReview()
     }
 }

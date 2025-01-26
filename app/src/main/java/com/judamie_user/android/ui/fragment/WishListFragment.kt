@@ -1,6 +1,7 @@
 package com.judamie_user.android.ui.fragment
 
 import android.content.res.ColorStateList
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -9,26 +10,52 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.google.android.material.divider.MaterialDividerItemDecoration
 import com.judamie_user.android.R
 import com.judamie_user.android.activity.ShopActivity
 import com.judamie_user.android.databinding.FragmentWishListBinding
 import com.judamie_user.android.databinding.RowProductListBinding
+import com.judamie_user.android.firebase.model.ProductModel
+import com.judamie_user.android.firebase.repository.UserRepository
+import com.judamie_user.android.firebase.service.ProductService
+import com.judamie_user.android.firebase.service.UserService
 import com.judamie_user.android.viewmodel.fragmentviewmodel.WishListViewModel
 import com.judamie_user.android.viewmodel.rowviewmodel.RowProductListViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import okhttp3.internal.wait
 
 class WishListFragment(val mainFragment: MainFragment) : Fragment() {
 
     lateinit var fragmentWishListBinding: FragmentWishListBinding
+    lateinit var shopActivity: ShopActivity
 
     //  찜목록RecyclerView를 구성하기 위해 사용할 리스트
     var recyclerViewWishList = Array(50, {
         "항목 ${it + 1}"
     })
+
+    //유저의 wishlist(제품id)
+    var userWishListProductID = mutableListOf<String>()
+
+    //유저의 wishlist(제품Model)
+    var userWishListProductModel = mutableListOf<ProductModel>()
+
+    //제품 모델과 이미지 uri 맵
+    var productModelImageMap = mutableMapOf<ProductModel, Uri>()
+
+    //제품 모델과 이미지 uri 맵을 리스트로 바꾸기위한 리스트
+    var productModelImageList = mutableListOf<Pair<ProductModel, Uri>>()
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,15 +65,25 @@ class WishListFragment(val mainFragment: MainFragment) : Fragment() {
             DataBindingUtil.inflate(inflater, R.layout.fragment_wish_list, container, false)
         fragmentWishListBinding.wishListViewModel = WishListViewModel(this)
         fragmentWishListBinding.lifecycleOwner = this
+        shopActivity = activity as ShopActivity
 
-        //리사이클러뷰 세팅
-        settingRecyclerViewWishList()
 
         //스크롤 위에서 아래로잡아당겨서 업데이트
         refreshData()
 
         //툴바설정
         settingMaterialToolbarWishList()
+
+        //리사이클러뷰 세팅
+        settingRecyclerViewWishList()
+
+        if (userWishListProductID.isEmpty()) {
+            //유저의 찜목록을 가져온다
+            CoroutineScope(Dispatchers.Main).launch {
+                gettingUserWishList()
+            }
+        }
+
 
 
 
@@ -59,9 +96,22 @@ class WishListFragment(val mainFragment: MainFragment) : Fragment() {
             //메뉴의 항목을 눌렀을때
             materialToolbarWishList.setOnMenuItemClickListener {
                 when (it.itemId) {
-                    R.id.menuItemCartInWishListToolbar -> {
-                        Log.d("test", "장바구니로 가는 함수")
-                        // 장바구니로 가는 함수
+                    R.id.menuItemWishListNotification -> {
+                        mainFragment.replaceFragment(
+                            ShopSubFragmentName.USER_NOTIFICATION_LIST_FRAGMENT,
+                            true,
+                            true,
+                            null
+                        )
+                    }
+
+                    R.id.menuItemWishListShoppingCart -> {
+                        mainFragment.replaceFragment(
+                            ShopSubFragmentName.SHOP_CART_FRAGMENT,
+                            true,
+                            true,
+                            null
+                        )
                     }
                 }
                 true
@@ -69,43 +119,95 @@ class WishListFragment(val mainFragment: MainFragment) : Fragment() {
         }
     }
 
-    //스크롤 위에서 아래로잡아당겨서 업데이트
+
     private fun refreshData() {
-        //찜 목록이 비어있다면 스와이프 비활성화
-        if (recyclerViewWishList.size == 0) {
+        // 찜 목록이 비어있다면 스와이프 비활성화
+        if (recyclerViewWishList.isEmpty()) {
             fragmentWishListBinding.swipeRefreshLayout.isEnabled = false
-        }
-        if (recyclerViewWishList.size > 0) {
+        } else {
             fragmentWishListBinding.apply {
                 swipeRefreshLayout.setOnRefreshListener {
-                    // 예: 데이터를 다시 로드하거나 UI 업데이트
-                    // 업데이트 로직 수행
-                    Handler(Looper.getMainLooper()).postDelayed({
-                        // 새로 고침 완료 시 로딩 애니메이션 종료
-                        fragmentWishListBinding.swipeRefreshLayout.isRefreshing = false
-                    }, 500) // 0.5초 지연 후 종료
+                    CoroutineScope(Dispatchers.Main).launch {
+                        swipeRefreshLayout.isRefreshing = true // 로딩 애니메이션 시작
+                        recyclerViewWishList.visibility = View.INVISIBLE
+                        progressBarWishList.visibility = View.VISIBLE
+                        try {
+                            // 찜 목록 가져오기 (suspend 함수 호출)
+                            userWishListProductID.clear()
+                            userWishListProductModel.clear()
+                            productModelImageMap.clear()
+                            productModelImageList.clear()
+                            gettingUserWishList()
+                        } catch (e: Exception) {
+                            e.printStackTrace() // 예외 처리
+                        } finally {
+                            swipeRefreshLayout.isRefreshing = false // 작업 완료 후 애니메이션 종료
+                            recyclerViewWishList.visibility = View.VISIBLE
+                        }
+                    }
                 }
             }
         }
     }
+
+    // 유저의 찜목록을 가져오는 suspend 함수
+    private suspend fun gettingUserWishList() {
+        fragmentWishListBinding.apply {
+            // 1. 유저 컬렉션에서 유저의 제품 ID가 담긴 리스트를 가져온다
+            userWishListProductID = withContext(Dispatchers.IO) {
+                UserService.gettingWishListByUserID(shopActivity.userDocumentID)
+            }
+
+            // 2. 제품 ID 리스트를 기반으로 제품 모델 리스트를 가져온다
+            userWishListProductID.forEach {
+                val product = withContext(Dispatchers.IO) {
+                    ProductService.gettingProductOne(it)
+                }
+                userWishListProductModel.add(product)
+            }
+
+            // 3. 제품 모델 리스트를 기반으로 이미지 리스트를 가져와 매핑한다
+            userWishListProductModel.forEach {
+                val image = withContext(Dispatchers.IO) {
+                    ProductService.gettingImage(it.productMainImage)
+                }
+                productModelImageMap[it] = image
+            }
+
+            productModelImageList = productModelImageMap.toList().toMutableList()
+
+            productModelImageList.forEach {
+                Log.d("test", it.first.productDocumentId)
+                Log.d("test", it.second.toString())
+                Log.d("test", it.first.productName)
+            }
+
+            // 찜 목록이 비어 있을 경우 UI 업데이트
+            withContext(Dispatchers.Main) {
+                if (productModelImageList.isEmpty()) {
+                    fragmentWishListBinding.apply {
+                        textViewEmptyWishList1.visibility = View.VISIBLE
+                    }
+                }else{
+                    fragmentWishListBinding.apply {
+                        textViewEmptyWishList1.visibility = View.GONE
+                    }
+                }
+
+                // RecyclerView 업데이트
+                fragmentWishListBinding.recyclerViewWishList.adapter?.notifyDataSetChanged()
+                progressBarWishList.visibility = View.GONE
+            }
+        }
+
+    }
+
 
     //찜 목록 리사이클러뷰를 세팅한다
     fun settingRecyclerViewWishList() {
         fragmentWishListBinding.apply {
             recyclerViewWishList.layoutManager = GridLayoutManager(requireContext(), 2) // 2열
             recyclerViewWishList.adapter = RecyclerViewAdapter()
-            val horizontalDivider = MaterialDividerItemDecoration(
-                requireContext(),
-                MaterialDividerItemDecoration.HORIZONTAL
-            )
-            recyclerViewWishList.addItemDecoration(horizontalDivider)
-
-            val verticalDivider = MaterialDividerItemDecoration(
-                requireContext(),
-                MaterialDividerItemDecoration.VERTICAL
-            )
-            recyclerViewWishList.addItemDecoration(verticalDivider)
-
         }
     }
 
@@ -114,25 +216,73 @@ class WishListFragment(val mainFragment: MainFragment) : Fragment() {
 
         inner class RecyclerViewHolder(val rowProductListBinding: RowProductListBinding) :
             RecyclerView.ViewHolder(rowProductListBinding.root) {
-
             init {
-                rowProductListBinding.apply {
-                    // root 클릭 이벤트 설정
-                    root.setOnClickListener {
-                        val dataBundle = Bundle()
-                        val position = adapterPosition.takeIf { it != RecyclerView.NO_POSITION }
-                            ?: return@setOnClickListener
-                        dataBundle.putString("productDocumentId", recyclerViewWishList[position])
-                        mainFragment.replaceFragment(
-                            ShopSubFragmentName.PRODUCT_INFO_FRAGMENT,
-                            true,
-                            true,
-                            null
-                        )
+                // 초기 상태 설정
+                rowProductListBinding.imageButtonSearchSetWishList.apply {
+                    setImageResource(R.drawable.bookmark_filled_24px) // 초기 아이콘
+                    imageTintList = ColorStateList.valueOf(
+                        ContextCompat.getColor(itemView.context, R.color.mainColor)
+                    )
+                    tag = "filled" // 초기 태그
+                }
+
+                // 클릭 이벤트 설정
+                rowProductListBinding.imageButtonSearchSetWishList.setOnClickListener {
+                    rowProductListBinding.apply {
+                        val isFilled = imageButtonSearchSetWishList.tag == "filled"
+                        val productId = productModelImageList[adapterPosition].first.productDocumentId
+
+                        // UI를 즉시 업데이트
+                        if (isFilled) {
+                            // Outline으로 변경
+                            imageButtonSearchSetWishList.setImageResource(R.drawable.bookmark_outline_24px)
+                            imageButtonSearchSetWishList.imageTintList = ColorStateList.valueOf(
+                                ContextCompat.getColor(itemView.context, R.color.mainColor)
+                            )
+                            imageButtonSearchSetWishList.tag = "outline" // 태그 업데이트
+                            Toast.makeText(requireContext(), "즐겨찾기에서 삭제되었습니다", Toast.LENGTH_SHORT).show()
+
+                            // DB에서 삭제 작업 (백그라운드 처리)
+                            CoroutineScope(Dispatchers.IO).launch {
+                                try {
+                                    UserService.deleteUserWishList(shopActivity.userDocumentID, productId)
+                                } catch (e: Exception) {
+                                    e.printStackTrace()
+                                    // 오류가 발생하면 UI 상태를 복구
+                                    withContext(Dispatchers.Main) {
+                                        imageButtonSearchSetWishList.setImageResource(R.drawable.bookmark_filled_24px)
+                                        imageButtonSearchSetWishList.tag = "filled"
+                                    }
+                                }
+                            }
+                        } else {
+                            // Filled로 변경
+                            imageButtonSearchSetWishList.setImageResource(R.drawable.bookmark_filled_24px)
+                            imageButtonSearchSetWishList.imageTintList = ColorStateList.valueOf(
+                                ContextCompat.getColor(itemView.context, R.color.mainColor)
+                            )
+                            imageButtonSearchSetWishList.tag = "filled" // 태그 업데이트
+                            Toast.makeText(requireContext(), "즐겨찾기에 추가되었습니다", Toast.LENGTH_SHORT).show()
+                            // DB에 추가 작업 (백그라운드 처리)
+                            CoroutineScope(Dispatchers.IO).launch {
+                                try {
+                                    UserService.addUserWishList(shopActivity.userDocumentID, productId)
+                                } catch (e: Exception) {
+                                    e.printStackTrace()
+                                    // 오류가 발생하면 UI 상태를 복구
+                                    withContext(Dispatchers.Main) {
+                                        imageButtonSearchSetWishList.setImageResource(R.drawable.bookmark_outline_24px)
+                                        imageButtonSearchSetWishList.tag = "outline"
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
         }
+
+
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerViewHolder {
             val rowProductListBinding = DataBindingUtil.inflate<RowProductListBinding>(
@@ -141,32 +291,72 @@ class WishListFragment(val mainFragment: MainFragment) : Fragment() {
                 parent,
                 false
             )
-
+            rowProductListBinding.rowProductListViewModel =
+                RowProductListViewModel(this@WishListFragment)
             rowProductListBinding.lifecycleOwner = viewLifecycleOwner
+
+            // 리사이클러뷰 항목 클릭시 상세 거래 완료 내역 보기 화면으로 이동
+            rowProductListBinding.root.setOnClickListener {
+                // 사용자가 누른 항목의 게시글 문서 번호를 담아서 전달
+                val dataBundle = Bundle()
+//                dataBundle.putString("boardDocumentId", recyclerViewList[mainViewHolder.adapterPosition].boardDocumentId)
+//
+                mainFragment.replaceFragment(
+                    ShopSubFragmentName.PRODUCT_INFO_FRAGMENT,
+                    true,
+                    true,
+                    dataBundle
+                )
+            }
 
             return RecyclerViewHolder(rowProductListBinding)
         }
 
         override fun getItemCount(): Int {
-            if (recyclerViewWishList.isNotEmpty()) {
-                fragmentWishListBinding.apply {
-                    wishListViewModel?.textViewEmptyWishListText1?.value = ""
-                    wishListViewModel?.textViewEmptyWishListText2?.value = ""
-                }
-            }
-            return recyclerViewWishList.size
+            return productModelImageList.size
         }
 
         override fun onBindViewHolder(holder: RecyclerViewHolder, position: Int) {
-            val viewModel = RowProductListViewModel(this@WishListFragment)
-            holder.rowProductListBinding.rowProductListViewModel = viewModel
+            holder.rowProductListBinding.apply {
+                rowProductListViewModel?.textViewSearchProductNameText?.value =
+                    productModelImageList[position].first.productName
 
-            // LiveData 상태 초기화
-            val isWishListed = /* recyclerViewWishList[position].isWishListed */ true // 실제 데이터로 설정
-            viewModel.isWishListed.value = isWishListed
+                val discount = productModelImageList[position].first.productDiscountRate
+                rowProductListViewModel?.textViewSearchDiscountRatingText?.value =
+                    if (discount > 0) "${discount}%" else ""
+                textViewSearchDiscountRating.visibility =
+                    if (discount > 0) View.VISIBLE else View.GONE
+
+                rowProductListViewModel?.textViewSearchProductPriceText?.value =
+                    productModelImageList[position].first.productPrice.toString()
+
+                val reviewSize = productModelImageList[position].first.productReview.size
+                rowProductListViewModel?.textViewSearchProductReviewText?.value = if (reviewSize > 0) "리뷰 ($reviewSize)" else ""
+                textViewSearchProductReview.visibility = if (reviewSize > 0) View.VISIBLE else View.GONE
+
+                rowProductListViewModel?.textViewSearchProductSellerText?.value =
+                    productModelImageList[position].first.productSeller
+            }
+
+
+            //val imageUri = imageUris[position]
+            //
+            //            // Glide를 사용하여 이미지 로드
+            //            Glide.with(holder.rowProductReviewAttachBinding.root.context)
+            //                .load(imageUri) // Firebase Storage URL
+            //                .placeholder(R.drawable.img) // 로드 중 기본 이미지
+            //                .error(R.drawable.img) // 로드 실패 시 기본 이미지
+            //                .into(holder.rowProductReviewAttachBinding.rowImageViewProductReviewAttatch)
+
+            val imageUri = productModelImageList[position].second
+
+            Glide.with(holder.rowProductListBinding.root.context)
+                .load(imageUri)
+                .placeholder(R.drawable.img)
+                .error(R.drawable.img)
+                .into(holder.rowProductListBinding.imageViewSearchProduct)
         }
     }
-
 
 
 }
