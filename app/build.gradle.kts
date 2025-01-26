@@ -81,8 +81,8 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics")
 
     //파이어베이스 storage
-    implementation("com.google.firebase:firebase-firestore-ktx:25.1.1")
-    implementation("com.google.firebase:firebase-storage:21.0.1")
+    implementation(libs.firebase.firestore.ktx)
+    implementation(libs.firebase.storage)
 
     //glide
     //사진가져오기
@@ -90,5 +90,6 @@ dependencies {
 
     //스텔레톤(서버에서 받아오는중에 애니메이션)
     implementation ("com.facebook.shimmer:shimmer:0.5.0")
+    implementation(kotlin("script-runtime"))
 
 }

@@ -33,6 +33,57 @@ class UserRepository {
             return wishList
         }
 
+        //해당 유저의 위시리스트에서 매개변수로들어온 제품을 추가하는메서드
+        suspend fun addUserWishList(userDocumentID: String, productDocumentID: String) {
+            val db = FirebaseFirestore.getInstance()
+
+            // Step 1: User's wish list 가져오기
+            val document = db.collection("UserData")
+                .document(userDocumentID)
+                .get()
+                .await()
+
+            // Step 2: userWishList 필드 가져오기 (기존 값)
+            val currentWishList = document.get("userWishList") as? MutableList<String> ?: mutableListOf()
+
+            // Step 3: 제품 ID를 리스트에 추가 (중복 방지)
+            if (!currentWishList.contains(productDocumentID)) {
+                currentWishList.add(productDocumentID)
+
+                // Step 4: 업데이트된 wish list를 Firestore에 저장
+                db.collection("UserData")
+                    .document(userDocumentID)
+                    .update("userWishList", currentWishList)
+                    .await()
+            }
+        }
+
+        //해당 유저의 위시리스트에서 매개변수로들어온 제품을 삭제하는메서드
+        suspend fun deleteUserWishList(userDocumentID: String, productDocumentID: String) {
+            val db = FirebaseFirestore.getInstance()
+
+            // Step 1: User's wish list 가져오기
+            val document = db.collection("UserData")
+                .document(userDocumentID)
+                .get()
+                .await()
+
+            // Step 2: userWishList 필드 가져오기 (기존 값)
+            val currentWishList = document.get("userWishList") as? MutableList<String> ?: mutableListOf()
+
+            // Step 3: 제품 ID 삭제
+            if (currentWishList.contains(productDocumentID)) {
+                currentWishList.remove(productDocumentID)
+
+                // Step 4: 업데이트된 wish list를 Firestore에 저장
+                db.collection("UserData")
+                    .document(userDocumentID)
+                    .update("userWishList", currentWishList)
+                    .await()
+            }
+        }
+
+
 //        suspend fun getProductsFromWishList(userDocumentID: String): List<ProductVO> {
 //            val db = FirebaseFirestore.getInstance()
 //

@@ -18,5 +18,16 @@ class UserService {
             return userWishList.toMutableList()
         }
 
+        //해당 유저의 위시리스트에서 매개변수로들어온 제품을 추가하는메서드
+        suspend fun addUserWishList(userDocumentID: String, productDocumentID: String) {
+            UserRepository.addUserWishList(userDocumentID,productDocumentID)
+        }
+
+        //해당 유저의 위시리스트에서 매개변수로들어온 제품을 삭제하는메서드
+        suspend fun deleteUserWishList(userDocumentID: String, productDocumentID: String) {
+            UserRepository.deleteUserWishList(userDocumentID,productDocumentID)
+        }
+
+
     }
 }
