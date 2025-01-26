@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:padding="10dp">
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -48,7 +47,7 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="10dp"
+                            android:layout_marginStart="5dp"
                             android:text="구매자 정보"
                             android:textSize="20sp"
                             android:textStyle="bold" />
@@ -72,7 +71,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="0.5"
-                                android:text="젠슨 황" />
+                                android:text="@{paymentProductViewModel.textViewPaymentUserNameText}" />
 
                         </LinearLayout>
 
@@ -96,7 +95,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="0.5"
-                                android:text="01012340000" />
+                                android:text="@{paymentProductViewModel.textViewPaymentUserNoText}" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -107,7 +106,7 @@
                             <TextView
                                 android:layout_width="231dp"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="10dp"
+                                android:layout_marginStart="5dp"
                                 android:text="픽업 상품"
                                 android:textSize="20sp"
                                 android:textStyle="bold" />
@@ -135,10 +134,19 @@
 
                         </androidx.recyclerview.widget.RecyclerView>
 
+
+                        <View
+                            android:id="@+id/divider5"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginTop="10dp"
+                            android:background="?android:attr/listDivider" />
+
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="10dp"
+                            android:layout_marginStart="5dp"
+                            android:layout_marginTop="10dp"
                             android:layout_weight="0.5"
                             android:text="픽업 매장"
                             android:textSize="20sp"
@@ -173,7 +181,8 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="10dp"
+                            android:layout_marginStart="5dp"
+                            android:layout_marginTop="10dp"
                             android:layout_weight="0.5"
                             android:text="쿠폰 선택"
                             android:textSize="20sp"
@@ -181,9 +190,11 @@
 
                         <androidx.appcompat.widget.AppCompatButton
                             android:id="@+id/buttonPaymentSelectCoupon"
-                            android:layout_width="360dp"
+                            android:layout_width="match_parent"
                             android:layout_height="40dp"
                             android:layout_marginTop="10dp"
+                            android:layout_marginStart="5dp"
+                            android:layout_marginEnd="5dp"
                             android:background="@drawable/background_shape_round_button"
                             android:backgroundTint="@color/white"
                             android:drawableStart="@drawable/coupon"
@@ -201,7 +212,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
-                            android:layout_marginTop="10dp"
+                            android:layout_marginTop="15dp"
                             android:text="결제정보"
                             android:textSize="20sp"
                             android:textStyle="bold" />
@@ -249,6 +260,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_marginStart="10dp"
+                                    android:layout_marginTop="5dp"
                                     android:orientation="horizontal">
 
                                     <TextView
@@ -271,7 +283,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_marginStart="10dp"
-                                    android:layout_marginTop="10dp"
+                                    android:layout_marginTop="15dp"
                                     android:orientation="horizontal">
 
                                     <TextView
@@ -319,6 +331,8 @@
             android:id="@+id/buttonPaymentPay"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
             android:layout_marginBottom="10dp"
             android:background="@drawable/button_round_activated"
             android:text="243,000원 결제하기"

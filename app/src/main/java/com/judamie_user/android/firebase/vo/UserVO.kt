@@ -41,6 +41,7 @@ class UserVO {
         userModel.userName = userName
         userModel.userTimeStamp = userTimeStamp
         userModel.userNotificationAllow = userNotificationAllow
+        userModel.userPhoneNumber = userPhoneNumber
 
         when(userState){
             UserState.USER_STATE_NORMAL.number -> userModel.userState = UserState.USER_STATE_NORMAL

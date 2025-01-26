@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:padding="10dp"
+        android:transitionGroup="true">
+
+        <!-- 드라이브에 아이콘-->
+
+        <FrameLayout
+            android:id="@+id/frameLayoutHomeShimmer"
+            android:layout_width="0dp"
+            android:layout_height="200dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/imageViewSearchProductShimmer"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="12dp"
+                android:layout_marginEnd="12dp"
+                android:background="@color/shimmer_placeholder" />
+
+            <ImageView
+                android:id="@+id/imageButtonSearchSetWishListShimmer"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="bottom|right"
+                android:layout_marginEnd="15dp"
+                android:layout_marginBottom="10dp"
+                android:layout_weight="0.5"
+                android:background="@color/shimmer_placeholder" />
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/textViewSearchProductNameShimmer"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/frameLayoutHomeShimmer"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="10dp"
+            tools:ellipsize="end"
+            tools:singleLine="true"
+            android:background="@color/shimmer_placeholder"/>
+
+        <TextView
+            android:id="@+id/textViewSearchDiscountRatingShimmer"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_weight="0.2"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@id/textViewSearchProductNameShimmer"
+            app:layout_constraintTop_toBottomOf="@id/textViewSearchProductNameShimmer"
+            android:background="@color/shimmer_placeholder"/>
+
+        <TextView
+            android:id="@+id/textViewSearchProductPriceShimmer"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_weight="1"
+            android:singleLine="true"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="@id/textViewSearchProductNameShimmer"
+            app:layout_constraintStart_toEndOf="@+id/textViewSearchDiscountRatingShimmer"
+            app:layout_constraintTop_toBottomOf="@+id/textViewSearchProductNameShimmer"
+            app:layout_constraintBottom_toBottomOf="@id/textViewSearchDiscountRatingShimmer"
+            android:background="@color/shimmer_placeholder"/>
+
+        <TextView
+            android:id="@+id/textViewSearchProductReviewShimmer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_weight="0.1"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textSize="14sp"
+            android:visibility="visible"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="12dp"
+            app:layout_constraintStart_toStartOf="@id/textViewSearchDiscountRatingShimmer"
+            app:layout_constraintTop_toBottomOf="@+id/textViewSearchDiscountRatingShimmer"
+            app:layout_constraintEnd_toEndOf="@id/textViewSearchProductPriceShimmer"
+            android:background="@color/shimmer_placeholder"/>
+
+        <TextView
+            android:id="@+id/textViewSearchProductSellerShimmer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="#876F7979"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="12dp"
+            app:layout_constraintEnd_toEndOf="@id/textViewSearchProductReviewShimmer"
+            app:layout_constraintStart_toStartOf="@id/textViewSearchProductSellerShimmer"
+            app:layout_constraintTop_toBottomOf="@id/textViewSearchProductReviewShimmer"
+            android:background="@color/shimmer_placeholder"/>
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
