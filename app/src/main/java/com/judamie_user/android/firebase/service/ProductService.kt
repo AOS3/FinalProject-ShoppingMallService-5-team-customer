@@ -45,6 +45,16 @@ class ProductService {
             return productList
         }
 
+        // 상품 문서 id를 통해 글 데이터를 가져온다.
+        suspend fun selectProductDataOneById(documentId:String) : ProductModel{
+            // 글 데이터를 가져온다.
+            val productVO = ProductRepository.selectProductDataOneById(documentId)
+            // BoardModel객체를 생성한다.
+            val productModel = productVO.toProductModel(documentId)
+
+            return productModel
+        }
+
         // userCartList에 포함된 상품 ID를 기반으로 상품 정보를 가져오기
         suspend fun gettingCartList(userCartList: List<String>) : List<ProductModel>{
             return ProductRepository.gettingCartList(userCartList)
@@ -88,6 +98,27 @@ class ProductService {
             val productName = ProductRepository.gettingProductName(documentID)
             return productName
         }
+        // 상품 id받아서 서브 이미지리스트 받아오기
+        suspend fun gettingSubImage(productDocumentId: String): List<Uri> {
+            val documentSnapshot = ProductRepository.gettingSubImage(productDocumentId)
+
+            // Firestore에서 받은 문서가 null이 아니면 productSubImage 필드를 가져오기
+            return if (documentSnapshot != null) {
+                // val subImages = documentSnapshot.get("productSubImage") as? List<String> ?: emptyList()
+
+                val subImageFileNames = documentSnapshot.get("productSubImage") as? List<String> ?: emptyList()
+
+                // 각 이미지 파일명에 대해 Firebase Storage에서 실제 이미지 URI를 가져오기
+                subImageFileNames.map { fileName ->
+                    // Firebase Storage에서 이미지 URI를 가져오는 함수 호출
+                    gettingImage(fileName)
+                }// 이미지 URI를 가져오는 함수 호출
+            } else {
+                // 문서가 없으면 빈 리스트 반환
+                emptyList()
+            }
+        }
+
         // 상품 id받아서 서브 이미지리스트 받아오기
         suspend fun gettingSubImage(productDocumentId: String): List<Uri> {
             val documentSnapshot = ProductRepository.gettingSubImage(productDocumentId)

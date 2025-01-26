@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.transition.Visibility
@@ -26,6 +27,7 @@ import com.judamie_user.android.firebase.model.UserModel
 import com.judamie_user.android.firebase.service.ProductService
 import com.judamie_user.android.firebase.service.UserService
 import com.judamie_user.android.ui.component.CartDialogFragment
+import com.judamie_user.android.viewmodel.componentviewmodel.CartIdCountViewModel
 import com.judamie_user.android.viewmodel.fragmentviewmodel.ShopCartViewModel
 import com.judamie_user.android.viewmodel.rowviewmodel.RowCartProductListViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -51,6 +53,14 @@ class ShopCartFragment(val mainFragment: MainFragment) : Fragment() {
     // RecyclerView CheckBox 상태 관리
     val checkBoxStates = MutableLiveData<MutableList<Boolean>?>()
 
+    // 번들 담을 변수
+    var cartMap : HashMap<String, Int>? = null
+
+    var bundle : HashMap<String, Int>? = null
+
+
+    private lateinit var cartIdCountViewModel: CartIdCountViewModel
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -70,41 +80,32 @@ class ShopCartFragment(val mainFragment: MainFragment) : Fragment() {
             Log.d("Auth", "User is logged in: ${user.uid}")
         }
 
+        // ViewModel 가져오기
+        cartIdCountViewModel = ViewModelProvider(requireActivity()).get(CartIdCountViewModel::class.java)
+
+
+        // cartMap 값 확인
+        Log.d("ShopCartFragment", "Cart Map from arguments: $cartMap")
+
 
         // RecyclerView 구성을 위한 리스트를 초기화한다.
         recyclerViewList.clear()
+
 
         // 툴바 구성 메서드 호출
         settingToolbar()
         // 장바구니 RecyclerView 구성 메서드 호출
         settingCartRecyclerView()
+        // 총합 계산하기
         calculateSelectedTotalPrice()
         // 데이터를 가져와 RecyclerView를 갱신하는 메서드를 호출한다.
         loadCartProducts()
 
-        // 장바구니가 비었을 때 텍스트와 버튼을 안보이는 상태로 설정
-        // fragmentShopCartBinding.textViewEmptyCart.isVisible = false
-        // fragmentShopCartBinding.buttonEmptyCart.isVisible = false
 
         return fragmentShopCartBinding.root
     }
 
-//    // 총합 계산 메서드
-//    fun calculateSelectedTotalPrice() {
-//        val selectedTotalPrice = checkBoxStates.value?.mapIndexedNotNull { index, isChecked ->
-//            if (isChecked) {
-//                val price = recyclerViewList[index].productPrice
-//                val quantity = productCountList.value?.get(index) ?: 1
-//                price * quantity
-//            } else {
-//                fragmentShopCartBinding.shopCartViewModel?.buttonCartProductSelectedText?.value =
-//                    "0원 방문 픽업 구매하기"
-//            }
-//        }
-//
-//        fragmentShopCartBinding.shopCartViewModel?.buttonCartProductSelectedText?.value =
-//            "{$selectedTotalPrice}원 방문 픽업 구매하기"
-//    }
+
 
     // 총합 계산 메서드
     fun calculateSelectedTotalPrice() {
@@ -112,8 +113,10 @@ class ShopCartFragment(val mainFragment: MainFragment) : Fragment() {
             if (isChecked) {
                 // val price = recyclerViewList[index].productPrice
                 val price = recyclerViewList.getOrNull(index)?.productPrice ?: 0
+                val discountRate = recyclerViewList.getOrNull(index)?.productDiscountRate ?: 0
+
                 val quantity = productCountList.value?.get(index) ?: 1
-                price * quantity
+                (price * quantity * (100 - discountRate) * 0.01).toInt()
             } else {
                 null // 체크되지 않은 항목은 제외
             }
@@ -128,6 +131,13 @@ class ShopCartFragment(val mainFragment: MainFragment) : Fragment() {
             }
     }
 
+//    // 장바구니 넣기할떄 수량,상품 id 가져옴
+//    fun updateCart(newCartMap: HashMap<String, Int>) {
+//        cartMap?.putAll(newCartMap)
+//
+//        Log.d("CartMap", "Uㅍㅍㅍㅍ: $cartMap")
+//    }
+
 
     // 로그인한 유저의 장바구니 상품 리스트 가져오기(리사이클러뷰 갱신)
     fun loadCartProducts() {
@@ -141,7 +151,6 @@ class ShopCartFragment(val mainFragment: MainFragment) : Fragment() {
             }
             userModel = work1.await()
             val userCartList = userModel.userCartList
-
 
             // CartList에 해당하는 상품 정보 리스트 가져오기
             val work2 = async(Dispatchers.IO) {
@@ -178,8 +187,47 @@ class ShopCartFragment(val mainFragment: MainFragment) : Fragment() {
             // checkBoxStates 초기화
             checkBoxStates.value = MutableList(recyclerViewList.size) { false }
 
+                val cartMap = cartIdCountViewModel.cartMap.value
+
+                // productCountList 초기화
+                    // size가 일치하는지 확인
+                    productCountList.value = MutableList(productList.size) { index ->
+                        val productId = productList.getOrNull(index)?.productDocumentId
+                        Log.d("CartMap", "ProductId: $productId")
+                        if (productId != null) {
+                            // cartMap에서 해당 상품의 수량을 가져옴, 없으면 기본값 1
+                            val quantity = cartMap?.get(productId)
+                            Log.d("CartMap", "CartMap for $productId: $quantity")
+                            quantity ?: 1
+                        } else {
+                            1 // 기본값 1
+                        }
+                    }
+
+
             // 수량 리스트 초기화
-            productCountList.value = MutableList(recyclerViewList.size) { 1 }
+            // productCountList.value = MutableList(recyclerViewList.size) { 1 }
+
+//                // arguments에서 cartMap을 가져옴
+//                arguments?.let {
+//                    val cartMap = it.getSerializable("cartMap") as? HashMap<String, Int> ?: HashMap()
+//                    Log.d("cartMap", "gaga: $cartMap")
+//
+//                    // productCountList 초기화
+//                    // size가 일치하는지 확인
+//                    productCountList.value = MutableList(recyclerViewList.size) { index ->
+//                        val productId = recyclerViewList.getOrNull(index)?.productDocumentId
+//                        if (productId != null) {
+//                            // cartMap에서 해당 상품의 수량을 가져옴, 없으면 기본값 1
+//                            cartMap[productId] ?: 1
+//                        } else {
+//                            1 // 기본값 1
+//                        }
+//                    }
+//
+//                    // cartMap 값 확인
+//                    Log.d("ShopCartFragment", "Cart Map: $cartMap")
+//                }
 
             fragmentShopCartBinding.recyclerViewShopCart.adapter?.notifyDataSetChanged()
 
@@ -311,8 +359,6 @@ class ShopCartFragment(val mainFragment: MainFragment) : Fragment() {
 
         if (selectedIds.isNotEmpty()) {
 
-
-            var selectedId = selectedIds.size
             // 선택된 ID를 가지고 삭제 작업을 수행
             CoroutineScope(Dispatchers.Main).launch {
                 val deleteWork = async(Dispatchers.IO) {
@@ -323,52 +369,6 @@ class ShopCartFragment(val mainFragment: MainFragment) : Fragment() {
                     }
                 }
                 deleteWork.await()
-
-
-//                var recyclerViewListSize = recyclerViewList.size
-//                // 삭제 후 RecyclerView 갱신을 위한 데이터 업데이트
-//                recyclerViewList.removeAll { product ->
-//                    selectedIds.contains(product.productDocumentId)
-//                }
-//
-//                // 체크박스 상태 업데이트
-//                val updatedCheckBoxStates = checkBoxStates.value?.filterIndexed { index, _ ->
-//                    !selectedIds.contains(recyclerViewList.getOrNull(index)?.productDocumentId)
-//                }
-//
-//                // 체크박스 상태 리스트 업데이트
-//                checkBoxStates.value = updatedCheckBoxStates as MutableList<Boolean>?
-//
-//                // 수량 리스트 상태 업데이트
-//                productCountList.value = MutableList(recyclerViewList.size) { 1 }
-//
-//
-//
-//                if(recyclerViewListSize == 1 || selectedId == recyclerViewList.size ){
-//
-//                    // recyclerViewList.clear()
-//                    loadCartProducts()
-//                    fragmentShopCartBinding.recyclerViewShopCart.adapter?.notifyDataSetChanged()
-//
-//                    // fragmentShopCartBinding.textViewShopCartEmpty.visibility = View.VISIBLE
-//                    // fragmentShopCartBinding.buttonShopCartEmpty.visibility = View.VISIBLE
-//                    // calculateSelectedTotalPrice()
-//                    // fragmentShopCartBinding.shopCartViewModel?.buttonCartProductSelectedText?.value ="0원 방문 픽업 구매하기"
-//
-//
-//                }else{
-//                    loadCartProducts()
-//                    fragmentShopCartBinding.recyclerViewShopCart.adapter?.notifyDataSetChanged()
-//                    // loadCartProducts()
-//                    // calculateSelectedTotalPrice()
-//                    // fragmentShopCartBinding.shopCartViewModel?.buttonCartProductSelectedText?.value ="0원 방문 픽업 구매하기"
-//                }
-//
-//                // 총합 다시 계산
-//                // calculateSelectedTotalPrice()
-//
-//                // loadCartProducts()
-
 
                 // 삭제 후 RecyclerView 갱신을 위한 데이터 업데이트
                 recyclerViewList.removeAll { product ->
@@ -455,10 +455,11 @@ class ShopCartFragment(val mainFragment: MainFragment) : Fragment() {
 
             val rowViewModel = holder.rowCartProductListBinding.rowCartProductListViewModel!!
 
+            val productSalePrice = ((100 - recyclerViewList[position].productDiscountRate) * recyclerViewList[position].productPrice * 0.01).toInt()
 
             holder.rowCartProductListBinding.rowCartProductListViewModel?.textViewCartProductNameText?.value = recyclerViewList[position].productName
             holder.rowCartProductListBinding.rowCartProductListViewModel?.textViewCartProductPriceText?.value =
-                recyclerViewList[position].productPrice.toString()
+                productSalePrice.toString()
             holder.rowCartProductListBinding.rowCartProductListViewModel?.textViewCartProductPercentText?.value =
                 recyclerViewList[position].productDiscountRate.toString()
 
@@ -497,8 +498,6 @@ class ShopCartFragment(val mainFragment: MainFragment) : Fragment() {
             // 수량 증가 버튼 클릭 시 수량 증가
             holder.rowCartProductListBinding.buttonCartProductCntPlus.setOnClickListener {
                 val currentCount = productCountList.value?.get(position) ?: 1
-                // 상품의 재고 수량
-                val productStock = recyclerViewList[position].productStock
 
                 val newCount = currentCount + 1
                 productCountList.value?.set(position, newCount)
