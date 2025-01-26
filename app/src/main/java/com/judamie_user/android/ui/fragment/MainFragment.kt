@@ -1,14 +1,17 @@
 package com.judamie_user.android.ui.fragment
 
+import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.commit
+import com.bumptech.glide.Glide
 import com.google.android.material.transition.MaterialSharedAxis
 import com.judamie_user.android.R
 import com.judamie_user.android.databinding.FragmentMainBinding
@@ -195,6 +198,11 @@ class MainFragment() : Fragment() {
             fragmentName.str,
             FragmentManager.POP_BACK_STACK_INCLUSIVE
         )
+    }
+
+    // 서버에 있는 이미지를 가져와 ImageView에 보여준다.
+    fun showServiceImage(imageUri: Uri, imageView: ImageView){
+        Glide.with(this@MainFragment).load(imageUri).into(imageView)
     }
 }
 

@@ -22,11 +22,16 @@ data class ShopCartViewModel(val shopCartFragment: ShopCartFragment) : ViewModel
 
     // 상품 선택 체크박스
     // checkBoxCartProductAll - checkedBox
-    val checkBoxCartProductAllCheckedState = MutableLiveData(true)
+    val checkBoxCartProductAllCheckedState = MutableLiveData(false)
+
+    // 구매 버튼 텍스트
+    // buttonCartProductSelected - Text
+    val buttonCartProductSelectedText = MutableLiveData<String>()
+
 
     // checkBoxCartProductAll - onClick
     fun checkBoxCartProductAllOnClick(){
-        if (checkBoxCartProductAllCheckedState.value == true){
+        if (checkBoxCartProductAllCheckedState.value == false){
             val isChecked = true
             shopCartFragment.updateAllCheckBoxes(isChecked)
         }
@@ -36,22 +41,23 @@ data class ShopCartViewModel(val shopCartFragment: ShopCartFragment) : ViewModel
         }
     }
 
-    // 장바구니 비었을 때 버튼
-    // buttonShopCartEmpty - OnClick
-    fun buttonShopCartEmptyOnClick() {
-        // 상품 목록 (홈) 화면 이동 메서드 호출
-    }
 
     // 선택된 장바구니 품목 삭제 버튼
     // buttonShopCartDelete- onClick
     fun buttonShopCartDeleteOnClick(){
-
+        shopCartFragment.selectionDelete()
     }
 
     // 결제하기 버튼
     // buttonCartProductSelected - onClick
     fun buttonCartProductSelectedOnClick() {
         shopCartFragment.moveToPaymentProduct()
+    }
+
+    // 장바구니 비었을때 상품 보러가기 버튼
+    // buttonShopCartEmpty - onClick
+    fun buttonShopCartEmptyOnClick() {
+        shopCartFragment.moveHomeFragment()
     }
 
     companion object{

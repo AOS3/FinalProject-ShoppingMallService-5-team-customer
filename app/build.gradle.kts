@@ -59,7 +59,6 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     implementation(libs.play.services.maps)
     implementation(libs.firebase.firestore.ktx)
-    implementation(libs.firebase.storage.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -75,21 +74,15 @@ dependencies {
 
     implementation ("com.google.android.gms:play-services-maps:18.1.0")
 
-    implementation ("com.squareup.okhttp3:okhttp:4.12.0")
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
 
     implementation(platform("com.google.firebase:firebase-bom:33.8.0"))
     implementation("com.google.firebase:firebase-analytics")
 
-    //파이어베이스 storage
-    implementation(libs.firebase.firestore.ktx)
-    implementation(libs.firebase.storage)
+    implementation("com.google.firebase:firebase-auth")
+    implementation ("com.google.firebase:firebase-appcheck-safetynet:16.1.2")
 
-    //glide
-    //사진가져오기
-    implementation("com.github.bumptech.glide:glide:4.16.0")
-
-    //스텔레톤(서버에서 받아오는중에 애니메이션)
-    implementation ("com.facebook.shimmer:shimmer:0.5.0")
-    implementation(kotlin("script-runtime"))
+    implementation("com.google.firebase:firebase-firestore:25.1.1")
+    implementation("com.google.firebase:firebase-storage:21.0.1")
 
 }

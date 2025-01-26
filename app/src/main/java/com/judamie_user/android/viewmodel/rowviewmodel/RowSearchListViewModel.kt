@@ -1,12 +1,15 @@
 package com.judamie_user.android.viewmodel.rowviewmodel
 
+import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.judamie_user.android.ui.fragment.HomeFragment
-import com.judamie_user.android.ui.fragment.SearchFragment
 
 data class RowSearchListViewModel(val fragment: Fragment) : ViewModel() {
+
+    // 상품 이미지
+    // imageViewSearchProduct
+    val imageViewSearchProductBitmap = MutableLiveData("")
 
     // 상품 이름
     // textViewSearchProductName - text
@@ -20,19 +23,19 @@ data class RowSearchListViewModel(val fragment: Fragment) : ViewModel() {
     // textViewSearchProductPrice - text
     val textViewSearchProductPriceText = MutableLiveData("")
 
-    // 리뷰 유무 (텍스트)
+    // 리뷰 (리뷰 (98))
     // textViewSearchProductReview - text
     val textViewSearchProductReviewText = MutableLiveData("")
-
-    // 리뷰 수
-    // textViewSearchProductReviewCount - text
-    val textViewSearchProductReviewCountText = MutableLiveData("")
 
     // 판매자
     // textViewSearchProductSeller - text
     val textViewSearchProductSellerText = MutableLiveData("")
 
-    // 찜 목록 추가/제거 버튼
+    // 찜 여부 상태
+    // imageButtonSearchSetWishList - srcCompact
+    val imageButtonSearchSetWishListSrcCompact = MutableLiveData(false)
+
+    // 찜 목록 추가/제거 버튼 동작
     // imageButtonSearchSetWishList - onClick
     fun imageButtonSearchSetWishListOnClick() {
 

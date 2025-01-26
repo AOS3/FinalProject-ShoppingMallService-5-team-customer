@@ -43,23 +43,23 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/textFieldRegisterStep1Id"
                     android:layout_width="350dp"
-                    android:layout_height="60dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     android:hint="아이디"
+                    app:boxStrokeColor="@color/material_on_surface_stroke"
                     app:counterEnabled="true"
                     app:counterMaxLength="15"
                     app:endIconMode="clear_text"
                     app:errorEnabled="true"
-                    tools:endIconMode="clear_text"
-                    app:boxStrokeColor="@color/material_on_surface_stroke"
-                    app:hintTextColor="@color/material_dynamic_primary10">
+                    app:hintTextColor="@color/material_dynamic_primary10"
+                    tools:endIconMode="clear_text">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:digits="@string/digit_value"
                         android:singleLine="true"
-                        android:text=""
+                        android:text="@={registerStep1ViewModel.textFieldRegisterStep1IdEditTextText}"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
                         android:textSize="16sp" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -67,12 +67,13 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/textFieldRegisterStep1Pw1"
                     android:layout_width="350dp"
-                    android:layout_height="60dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     android:hint="비밀번호"
                     android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                    app:endIconMode="password_toggle"
                     app:boxStrokeColor="@color/material_on_surface_stroke"
+                    app:endIconMode="password_toggle"
+                    app:errorEnabled="true"
                     app:hintTextColor="@color/material_dynamic_primary10">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -81,19 +82,20 @@
                         android:digits="@string/digit_value"
                         android:inputType="text|textPassword"
                         android:singleLine="true"
-                        android:text=""
+                        android:text="@={registerStep1ViewModel.textFieldRegisterStep1Pw1EditTextText}"
                         android:textSize="16sp" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/textFieldRegisterStep1Pw2"
                     android:layout_width="350dp"
-                    android:layout_height="60dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     android:hint="비밀번호 확인"
                     android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                    app:endIconMode="password_toggle"
                     app:boxStrokeColor="@color/material_on_surface_stroke"
+                    app:endIconMode="password_toggle"
+                    app:errorEnabled="true"
                     app:hintTextColor="@color/material_dynamic_primary10">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -102,7 +104,7 @@
                         android:digits="@string/digit_value"
                         android:inputType="text|textPassword"
                         android:singleLine="true"
-                        android:text=""
+                        android:text="@={registerStep1ViewModel.textFieldRegisterStep1Pw2EditTextText}"
                         android:textSize="16sp" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -116,7 +118,7 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/textFieldRegisterStep1FragmentName"
                     android:layout_width="350dp"
-                    android:layout_height="60dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     android:layout_marginBottom="20dp"
                     android:hint="이름"
@@ -129,12 +131,11 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:digits="@string/digit_value"
                         android:singleLine="true"
-                        android:text=""
+                        android:text="@={registerStep1ViewModel.textFieldRegisterStep1FragmentNameEditTextText}"
                         android:textSize="16sp"
                         app:boxStrokeColor="@color/material_on_surface_stroke"
-                        app:hintTextColor="@color/material_dynamic_primary10"/>
+                        app:hintTextColor="@color/material_dynamic_primary10" />
                 </com.google.android.material.textfield.TextInputLayout>
 
             </LinearLayout>

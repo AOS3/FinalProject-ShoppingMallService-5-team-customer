@@ -19,13 +19,19 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.google.android.material.divider.MaterialDividerItemDecoration
+import com.google.firebase.firestore.model.Values
 import com.judamie_user.android.R
 import com.judamie_user.android.activity.LoginActivity
 import com.judamie_user.android.activity.ShopActivity
 import com.judamie_user.android.databinding.FragmentSearchBinding
 import com.judamie_user.android.databinding.RowCartProductListBinding
 import com.judamie_user.android.databinding.RowSearchListBinding
+import com.judamie_user.android.firebase.model.ProductModel
+import com.judamie_user.android.firebase.service.ProductService
+import com.judamie_user.android.util.ProductCategory
+import com.judamie_user.android.util.tools.Companion.formatToComma
 import com.judamie_user.android.viewmodel.fragmentviewmodel.RegisterVerificationViewModel
 import com.judamie_user.android.viewmodel.fragmentviewmodel.SearchViewModel
 import com.judamie_user.android.viewmodel.rowviewmodel.RowCartProductListViewModel
@@ -34,6 +40,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 class SearchFragment(val mainFragment: MainFragment) : Fragment() {
@@ -41,20 +48,28 @@ class SearchFragment(val mainFragment: MainFragment) : Fragment() {
     lateinit var fragmentSearchBinding: FragmentSearchBinding
     lateinit var shopActivity: ShopActivity
 
-    // 검색 RecyclerView 임시 리스트
-    var recyclerViewSearchList = mutableListOf<String>()
+//    // 검색 RecyclerView 임시 리스트
+//    var recyclerViewSearchList = mutableListOf<String>()
+//
+//    // RecyclerView 구성을 위한 임시 데이터
+//    val tempList = arrayOf(
+//        "조니워커 블루",
+//        "발렌타인",
+//        "마오타이",
+//        "조니워커 블랙",
+//        "발렌타인 12년"
+//    )
 
-    // RecyclerView 구성을 위한 임시 데이터
-    val tempList = arrayOf(
-        "조니워커 블루",
-        "발렌타인",
-        "마오타이",
-        "조니워커 블랙",
-        "발렌타인 12년"
-    )
+    // 검색 RecyclerView를 구성하기 위해 사용할 리스트
+    private var recyclerViewSearchList = mutableListOf<ProductModel>()
+
+    // 검색 결과 RecyclerView를 구성하기 위해 사용할 리스트
+    private var recyclerViewSearchResultList = mutableListOf<ProductModel>()
 
     // 검색어를 담을 변수
-    var searchKeyword = ""
+    private var searchKeyword = ""
+
+    private lateinit var productCategory:ProductCategory
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -82,10 +97,10 @@ class SearchFragment(val mainFragment: MainFragment) : Fragment() {
         settingToolbar()
         // 검색 설정 메서드 호출
         settingSearchView()
-        // 검색 결과 갱신 메서드 호출
-        refreshSearchRecyclerView()
         // Search RecyclerView 설정 메서드 호출
         settingSearchRecyclerView()
+        // 검색 결과 갱신 메서드 호출
+        refreshSearchRecyclerView()
 
         return fragmentSearchBinding.root
     }
@@ -132,17 +147,6 @@ class SearchFragment(val mainFragment: MainFragment) : Fragment() {
         fragmentSearchBinding.apply {
             recyclerViewSearch.layoutManager = GridLayoutManager(requireContext(), 2)
             recyclerViewSearch.adapter = SearchRecyclerViewAdapter()
-            val horizontalDivider = MaterialDividerItemDecoration(
-                requireContext(),
-                MaterialDividerItemDecoration.HORIZONTAL
-            )
-            recyclerViewSearch.addItemDecoration(horizontalDivider)
-
-            val verticalDivider = MaterialDividerItemDecoration(
-                requireContext(),
-                MaterialDividerItemDecoration.VERTICAL
-            )
-            recyclerViewSearch.addItemDecoration(verticalDivider)
         }
     }
 
@@ -197,19 +201,19 @@ class SearchFragment(val mainFragment: MainFragment) : Fragment() {
                 RowSearchListViewModel(this@SearchFragment)
             rowSearchListBinding.lifecycleOwner = this@SearchFragment
 
+            val searchViewHolder = SearchViewHolder(rowSearchListBinding)
+
             // 리사이클러뷰 항목 클릭시 상세 거래 완료 내역 보기 화면으로 이동
             rowSearchListBinding.root.setOnClickListener {
                 mainFragment.replaceFragment(ShopSubFragmentName.PRODUCT_INFO_FRAGMENT, true, true, null)
             }
 
-            val searchViewHolder = SearchViewHolder(rowSearchListBinding)
-
             // 리사이클러뷰 항목 클릭시 상세 거래 완료 내역 보기 화면으로 이동
             rowSearchListBinding.root.setOnClickListener {
                 // 사용자가 누른 항목의 게시글 문서 번호를 담아서 전달
                 val dataBundle = Bundle()
-//                dataBundle.putString("boardDocumentId", recyclerViewList[mainViewHolder.adapterPosition].boardDocumentId)
-//
+                //dataBundle.putString("productDocumentId", recyclerViewSearchResultList[searchViewHolder.adapterPosition].productDocumentId)
+
                 mainFragment.replaceFragment(ShopSubFragmentName.PRODUCT_INFO_FRAGMENT, true, true, dataBundle)
             }
 
@@ -230,29 +234,85 @@ class SearchFragment(val mainFragment: MainFragment) : Fragment() {
 
         override fun onBindViewHolder(holder: SearchViewHolder, position: Int) {
             holder.rowSearchListBinding.rowSearchListViewModel?.textViewSearchProductNameText?.value =
-                recyclerViewSearchList[position]
+                recyclerViewSearchList[position].productName
+            holder.rowSearchListBinding.rowSearchListViewModel?.textViewSearchProductPriceText?.value =
+                "${recyclerViewSearchList[position].productPrice.formatToComma()}"
+
+            // 할인률
+            val discount = recyclerViewSearchList[position].productDiscountRate
+            holder.rowSearchListBinding.rowSearchListViewModel?.textViewSearchDiscountRatingText?.value =
+                if (discount > 0) "${discount}%" else ""
+            holder.rowSearchListBinding.textViewSearchDiscountRating.visibility =
+                if (discount > 0) View.VISIBLE else View.GONE
+
+            // 리뷰 개수
+            val reviewSize = recyclerViewSearchList[position].productReview.size
+            holder.rowSearchListBinding.rowSearchListViewModel?.textViewSearchProductReviewText?.value = if (reviewSize > 0) "리뷰 ($reviewSize)" else ""
+            holder.rowSearchListBinding.textViewSearchProductReview.visibility = if (reviewSize > 0) View.VISIBLE else View.GONE
+
+            // 썸네일 이미지
+            val imageUrl = recyclerViewSearchList[position].productMainImage // 현재 항목의 이미지 URL
+
+            CoroutineScope(Dispatchers.Main).launch {
+                try {
+                    val imageUrl = withContext(Dispatchers.IO) {
+                        ProductService.gettingImage(imageUrl)
+                    }
+
+                    // Glide로 이미지 로드
+                    Glide.with(holder.rowSearchListBinding.root.context)
+                        .load(imageUrl)
+                        .placeholder(R.drawable.liquor_24px)
+                        .error(R.drawable.liquor_24px)
+                        .into(holder.rowSearchListBinding.imageViewSearchProduct)
+
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+            // TODO
+            // 판매자
+//            holder.rowSearchListBinding.rowSearchListViewModel?.textViewSearchProductSellerText?.value =
+//                "${recyclerViewCategoryList[position].productSeller}%"
 
         }
     }
 
     // 검색 결과를 가져와 RecyclerView를 갱신하는 메서드
     fun refreshSearchRecyclerView() {
-        val keyword = fragmentSearchBinding.editTextSearchInput.toString()
+        CoroutineScope(Dispatchers.Main).launch {
+            val work1 = async(Dispatchers.IO){
+                ProductService.gettingProductList(ProductCategory.PRODUCT_CATEGORY_DEFAULT)
+            }
+            val productList = work1.await()
+            // 검색 출력 사이즈 확인 로그
+            // Log.d("test100", "검색된 상품 개수 : ${productList.size}")
 
-        recyclerViewSearchList.clear()
-        recyclerViewSearchList.addAll(tempList.filter { it.contains(searchKeyword, ignoreCase = true) })
-        // 검색에 결과가 없으면
-        if (recyclerViewSearchList.isEmpty()) {
-            // 메시지를 표시
-            fragmentSearchBinding.textViewSearchEmptyProduct.visibility = View.VISIBLE
-            fragmentSearchBinding.recyclerViewSearch.visibility = View.GONE
-        } else {
-            // 결과가 있으면 리사이클러뷰 표시
-            fragmentSearchBinding.textViewSearchEmptyProduct.visibility = View.GONE
-            fragmentSearchBinding.recyclerViewSearch.visibility = View.VISIBLE
+            recyclerViewSearchList.clear()
+            recyclerViewSearchList.addAll((productList.filter { it.productName.contains(searchKeyword, ignoreCase = true) }))
+
+            // 검색에 결과가 없으면
+            if (recyclerViewSearchList.isEmpty()) {
+                // 메시지를 표시
+                fragmentSearchBinding.textViewSearchEmptyProduct.visibility = View.VISIBLE
+                fragmentSearchBinding.recyclerViewSearch.visibility = View.GONE
+                fragmentSearchBinding.textViewSearchResultProductCount.visibility = View.GONE
+
+
+            } else {
+                // 결과가 있으면 리사이클러뷰 표시
+                fragmentSearchBinding.textViewSearchEmptyProduct.visibility = View.GONE
+                fragmentSearchBinding.recyclerViewSearch.visibility = View.VISIBLE
+                fragmentSearchBinding.textViewSearchResultProductCount.visibility = View.VISIBLE
+
+            }
+
+            // 검색 결과에 맞는 RecyclerView의 어댑터를 갱신
+            fragmentSearchBinding.recyclerViewSearch.adapter?.notifyDataSetChanged()
+            // 검색 결과 개수 업데이트
+            fragmentSearchBinding.searchViewModel?.textViewSearchResultProductCountText?.value = "총 ${recyclerViewSearchResultList.size} 개"
         }
-        // 검색 결과에 맞는 RecyclerView의 어댑터를 갱신
-        fragmentSearchBinding.recyclerViewSearch.adapter?.notifyDataSetChanged()
+
     }
 
 }

@@ -27,7 +27,7 @@ enum class ProductCategory(val number:Int,val str:String){
     //맥주
     PRODUCT_CATEGORY_BEER(11,"맥주"),
     //논알콜
-    PRODUCT_CATEGORY_NON_ALC(12,"논알콜"),
+    PRODUCT_CATEGORY_NON_ALC(12,"논알콜")
 }
 
 //상품 상태(품절과 무관하고 판매자가 제품을 삭제했을때 2로바뀜)
@@ -35,7 +35,16 @@ enum class ProductState(val number:Int,val str:String){
     // 상품 팔고있음
     PRODUCT_NORMAL(1,"팔고있음"),
     // 상품 팔지않음
-    PRODUCT_DELETE(2,"팔지않음")
+    PRODUCT_DELETE(2,"팔지않음");
+
+    companion object {
+        // 숫자를 받아서 ProductState로 변환
+        fun fromNumber(number: Int): ProductState {
+            return values().find { it.number == number }
+                ?: PRODUCT_NORMAL // 기본값 설정
+        }
+    }
+
 }
 
 // 픽업지 상태를 나타내는 값
@@ -70,9 +79,9 @@ enum class LoginResult(val number: Int, val str: String) {
     LOGIN_RESULT_SIGN_OUT_MEMBER(4, "탈퇴한 회원"),
 }
 
-// 리뷰 상태값
-enum class ReviewState(val num:Int,var str:String){
-    REVIEW_STATE_NORMAL(1,"정상"),
-    REVIEW_STATE_DELETE(2,"삭제")
+// 정렬 기준 Enum
+enum class SortType(val number: Int, val str: String) {
+    VIEW_LATEST(1, "최신순"),
+    VIEW_LOWEST_PRICE(2, "가격 낮은순"),
+    VIEW_HIGHEST_PRICE(3, "가격 높은순")
 }
-

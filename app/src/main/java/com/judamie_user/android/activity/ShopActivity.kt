@@ -1,9 +1,11 @@
 package com.judamie_user.android.activity
 
+import android.net.Uri
 import android.os.Bundle
 import android.os.SystemClock
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.ImageView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -15,6 +17,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.commit
 import androidx.lifecycle.ViewModelProvider
+import com.bumptech.glide.Glide
 import com.google.android.material.transition.MaterialSharedAxis
 import com.judamie_user.android.R
 import com.judamie_user.android.databinding.ActivityShopBinding
@@ -36,7 +39,11 @@ class ShopActivity : AppCompatActivity() {
     var newFragment: Fragment? = null
     var oldFragment: Fragment? = null
 
-    val userDocumentID = "iElD58FO0PGqugxA8NpS"
+
+    // 로그인한 사용자의 문서 id와 이름을 받을 변수
+    var userDocumentID = ""
+    var userName = ""
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,6 +59,11 @@ class ShopActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        // 사용자 문서 id와 닉네임을 받는다.
+        userDocumentID = intent.getStringExtra("user_document_id")!!
+        userName = intent.getStringExtra("user_name")!!
+
         replaceFragment(ShopFragmentName.MAIN_FRAGMENT, false, false, null)
     }
 
@@ -133,6 +145,11 @@ class ShopActivity : AppCompatActivity() {
                 inputManager.showSoftInput(view, 0)
             }
         }
+    }
+
+    // 서버에 있는 이미지를 가져와 ImageView에 보여준다.
+    fun showServiceImage(imageUri: Uri, imageView: ImageView){
+        Glide.with(this@ShopActivity).load(imageUri).into(imageView)
     }
 
     // 키보드를 내리는 메서드

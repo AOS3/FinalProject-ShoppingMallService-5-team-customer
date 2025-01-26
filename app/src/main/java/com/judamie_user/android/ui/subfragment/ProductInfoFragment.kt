@@ -15,10 +15,16 @@ import com.judamie_user.android.R
 import com.judamie_user.android.activity.ShopActivity
 import com.judamie_user.android.databinding.FragmentProductInfoBinding
 import com.judamie_user.android.databinding.RowProductIntoImgListBinding
+import com.judamie_user.android.firebase.model.UserModel
+import com.judamie_user.android.firebase.service.UserService
 import com.judamie_user.android.ui.fragment.MainFragment
 import com.judamie_user.android.ui.fragment.ShopSubFragmentName
 import com.judamie_user.android.viewmodel.fragmentviewmodel.ProductInfoViewModel
 import com.judamie_user.android.viewmodel.rowviewmodel.RowProductInfoImgListViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 
 class ProductInfoFragment(val mainFragment: MainFragment) : Fragment() {
 
@@ -32,6 +38,12 @@ class ProductInfoFragment(val mainFragment: MainFragment) : Fragment() {
     val tempImgList1 = Array(5) {
         R.drawable.sampleproductimage_gp18
     }
+
+
+    // 번들로 전달된 데이터를 담을 변수 : 상품 문서 id
+    lateinit var productDocumentId:String
+    // 사용자 정보를 담을 변수
+    lateinit var userModel: UserModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -51,8 +63,15 @@ class ProductInfoFragment(val mainFragment: MainFragment) : Fragment() {
         settingCartRecyclerView()
         // RatingBar 속성 설정
         setupRatingBar()
+        // arguments의 값을 변수에 담아주는 메서드 호출
+        gettingArguments()
 
         return fragmentProductInfoBinding.root
+    }
+
+    // arguments의 값을 변수에 담아준다.
+    fun gettingArguments(){
+        productDocumentId = arguments?.getString("productDocumentId")!!
     }
 
     // 별점 설정 메서드
@@ -131,10 +150,25 @@ class ProductInfoFragment(val mainFragment: MainFragment) : Fragment() {
     fun addCartProduct() {
         fragmentProductInfoBinding.apply {
             // 동일한 상품이 장바구니에 없을 경우
-            // WishList 상품 추가O + 토스트 표시 : "장바구니에 상품이 추가되었습니다"
-            Toast.makeText(shopActivity, "장바구니에 상품이 추가되었습니다", Toast.LENGTH_SHORT).show()
-            // 동일한 상품이 장바구니에 있을 경우
-            // WishList 상품 추가X + 토스트 표시 : "장바구니에 동일한 상품이 있습니다."
+            // 일단 로그인한 사용자 정보 가져와서 장바구니,, 목록 살펴보기
+            CoroutineScope(Dispatchers.Main).launch{
+                val work1 = async(Dispatchers.IO){
+                    UserService.selectUserDataByUserDocumentIdOne(shopActivity.userDocumentID)
+                }
+                userModel = work1.await()
+
+                if (productDocumentId in userModel.userCartList){
+                    // 동일한 상품이 장바구니에 있을 경우
+                    // WishList 상품 추가X + 토스트 표시 : "장바구니에 동일한 상품이 있습니다."
+                    Toast.makeText(shopActivity, "장바구니에 동일한 상품이 있습니다.", Toast.LENGTH_SHORT).show()
+                } else{
+                    // WishList 상품 추가O + 토스트 표시 : "장바구니에 상품이 추가되었습니다"
+                    // 서버에 추가하기
+                    userModel.userCartList.add(productDocumentId)
+                    UserService.addCartData(userModel)
+                    Toast.makeText(shopActivity, "장바구니에 상품이 추가되었습니다", Toast.LENGTH_SHORT).show()
+                }
+            }
         }
     }
 
