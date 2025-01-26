@@ -159,8 +159,8 @@ class PaymentProductFragment(val mainFragment: MainFragment) : Fragment() {
         fragmentPaymentProductBinding.apply {
             recyclerViewPaymentProduct.adapter = PaymentRecyclerViewAdapter()
             recyclerViewPaymentProduct.layoutManager = LinearLayoutManager(shopActivity)
-            val deco = MaterialDividerItemDecoration(shopActivity, MaterialDividerItemDecoration.VERTICAL)
-            recyclerViewPaymentProduct.addItemDecoration(deco)
+            //val deco = MaterialDividerItemDecoration(shopActivity, MaterialDividerItemDecoration.VERTICAL)
+            //recyclerViewPaymentProduct.addItemDecoration(deco)
         }
     }
 
