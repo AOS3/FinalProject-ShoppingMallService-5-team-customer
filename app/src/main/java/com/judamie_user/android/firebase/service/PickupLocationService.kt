@@ -18,5 +18,11 @@ class PickupLocationService {
             }.toMutableList()
         }
 
+        // 유저의 픽업지 정보를 가져오는 메서드
+        suspend fun getUserPickupLocation(userDocumentID: String): String? {
+            val userPickLocationInfo = PickupLocationRepository.getUserPickupLocation(userDocumentID)
+            return userPickLocationInfo
+        }
+
     }
 }
