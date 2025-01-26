@@ -67,9 +67,26 @@ class ProductService {
             }
         }
 
-        // 이미지 가져오는 함수
-        suspend fun gettingImage(imageFileName: String): Uri {
-            return ProductRepository.gettingImage(imageFileName)
+
+
+        // 이미지 데이터를 가져온다.
+        suspend fun gettingImage(imageFileName:String) : Uri {
+            val imageUri = ProductRepository.gettingImage(imageFileName)
+            return imageUri
+        }
+
+        // 제품 하나의 정보를 가져오는 메서드
+        suspend fun gettingProductOne(documentID:String) : ProductModel{
+            val productVO = ProductRepository.gettingProductOne(documentID)
+            val productModel = productVO.toProductModel(documentID)
+
+            return productModel
+        }
+
+        // 제품 하나의 정보를 가져오는 메서드 (특정 필드만 가져오기)
+        suspend fun gettingProductName(documentID: String): String? {
+            val productName = ProductRepository.gettingProductName(documentID)
+            return productName
         }
     }
 }

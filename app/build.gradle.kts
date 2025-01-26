@@ -85,4 +85,9 @@ dependencies {
     implementation("com.google.firebase:firebase-firestore:25.1.1")
     implementation("com.google.firebase:firebase-storage:21.0.1")
 
+    //스텔레톤(서버에서 받아오는중에 애니메이션)
+    implementation ("com.facebook.shimmer:shimmer:0.5.0")
+    implementation(kotlin("script-runtime"))
+
+
 }
