@@ -88,8 +88,7 @@
             android:clipToOutline="true"
             android:scaleType="fitXY"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@{rowPaymentProductListViewModel.imageViewCartProductSrc}" />
+            app:layout_constraintTop_toTopOf="parent" />
 
 
         <ProgressBar
