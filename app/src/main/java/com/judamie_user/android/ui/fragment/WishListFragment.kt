@@ -84,6 +84,8 @@ class WishListFragment(val mainFragment: MainFragment) : Fragment() {
             CoroutineScope(Dispatchers.Main).launch {
                 gettingUserWishList()
             }
+        }else{
+            fragmentWishListBinding.progressBarWishList.visibility = View.GONE
         }
 
 
