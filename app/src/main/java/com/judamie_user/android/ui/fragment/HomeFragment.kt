@@ -1,6 +1,7 @@
 package com.judamie_user.android.ui.fragment
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -16,7 +17,12 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.judamie_user.android.R
 import com.judamie_user.android.activity.ShopActivity
 import com.judamie_user.android.databinding.FragmentHomeBinding
+import com.judamie_user.android.firebase.service.PickupLocationService
 import com.judamie_user.android.viewmodel.fragmentviewmodel.HomeViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 
 
 class HomeFragment(val mainFragment:MainFragment) : Fragment() {
@@ -47,11 +53,29 @@ class HomeFragment(val mainFragment:MainFragment) : Fragment() {
         // 탭 레이아웃 동작 메서드 호출
         showCategory()
 
+        // 픽업지를 고르러갈 버튼을 구성한다
+        settingButtonHomePickupLoc()
+
 
         return fragmentHomeBinding.root
     }
     // 픽업지를 고르러갈 버튼을 구성한다
     fun settingButtonHomePickupLoc(){
+        CoroutineScope(Dispatchers.Main).launch {
+            val gettingUserPickupLocationInfo = async(Dispatchers.IO){
+                PickupLocationService.getUserPickupLocation(shopActivity.userDocumentID)
+            }
+            val userPickupLocation = gettingUserPickupLocationInfo.await()
+
+            if(userPickupLocation!!.isEmpty()){
+                val buttonText = "픽업지를 설정해주세요"
+                fragmentHomeBinding.homeViewModel?.buttonHomePickupLocText?.value = buttonText
+            }else{
+                fragmentHomeBinding.homeViewModel?.buttonHomePickupLocText?.value = userPickupLocation
+            }
+
+        }
+
 
     }
 

@@ -163,6 +163,7 @@
                 android:backgroundTint="@android:color/transparent"
                 android:drawableEnd="@drawable/arrow_forward_ios_24px"
                 android:ellipsize="end"
+                android:text="@{homeViewModel.buttonHomePickupLocText}"
                 android:onClick="@{()->homeViewModel.buttonHomePickupLocOnClick()}"
                 android:singleLine="true"
                 android:textAlignment="textStart"

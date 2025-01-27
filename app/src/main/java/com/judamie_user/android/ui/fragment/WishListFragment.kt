@@ -12,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -77,11 +78,14 @@ class WishListFragment(val mainFragment: MainFragment) : Fragment() {
         //리사이클러뷰 세팅
         settingRecyclerViewWishList()
 
+
         if (userWishListProductID.isEmpty()) {
             //유저의 찜목록을 가져온다
             CoroutineScope(Dispatchers.Main).launch {
                 gettingUserWishList()
             }
+        }else{
+            fragmentWishListBinding.progressBarWishList.visibility = View.GONE
         }
 
 
@@ -131,6 +135,7 @@ class WishListFragment(val mainFragment: MainFragment) : Fragment() {
                         swipeRefreshLayout.isRefreshing = true // 로딩 애니메이션 시작
                         recyclerViewWishList.visibility = View.INVISIBLE
                         progressBarWishList.visibility = View.VISIBLE
+                        swipeRefreshLayout.isRefreshing = false // 작업 완료 후 애니메이션 종료
                         try {
                             // 찜 목록 가져오기 (suspend 함수 호출)
                             userWishListProductID.clear()
@@ -141,7 +146,6 @@ class WishListFragment(val mainFragment: MainFragment) : Fragment() {
                         } catch (e: Exception) {
                             e.printStackTrace() // 예외 처리
                         } finally {
-                            swipeRefreshLayout.isRefreshing = false // 작업 완료 후 애니메이션 종료
                             recyclerViewWishList.visibility = View.VISIBLE
                         }
                     }
