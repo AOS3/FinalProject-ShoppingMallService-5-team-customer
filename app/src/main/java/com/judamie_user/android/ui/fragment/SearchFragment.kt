@@ -205,14 +205,9 @@ class SearchFragment(val mainFragment: MainFragment) : Fragment() {
 
             // 리사이클러뷰 항목 클릭시 상세 거래 완료 내역 보기 화면으로 이동
             rowSearchListBinding.root.setOnClickListener {
-                mainFragment.replaceFragment(ShopSubFragmentName.PRODUCT_INFO_FRAGMENT, true, true, null)
-            }
-
-            // 리사이클러뷰 항목 클릭시 상세 거래 완료 내역 보기 화면으로 이동
-            rowSearchListBinding.root.setOnClickListener {
                 // 사용자가 누른 항목의 게시글 문서 번호를 담아서 전달
                 val dataBundle = Bundle()
-                //dataBundle.putString("productDocumentId", recyclerViewSearchResultList[searchViewHolder.adapterPosition].productDocumentId)
+                dataBundle.putString("productDocumentId", recyclerViewSearchResultList[searchViewHolder.adapterPosition].productDocumentId)
 
                 mainFragment.replaceFragment(ShopSubFragmentName.PRODUCT_INFO_FRAGMENT, true, true, dataBundle)
             }
