@@ -207,7 +207,7 @@ class SearchFragment(val mainFragment: MainFragment) : Fragment() {
             rowSearchListBinding.root.setOnClickListener {
                 // 사용자가 누른 항목의 게시글 문서 번호를 담아서 전달
                 val dataBundle = Bundle()
-                dataBundle.putString("productDocumentId", recyclerViewSearchResultList[searchViewHolder.adapterPosition].productDocumentId)
+                dataBundle.putString("productDocumentId", recyclerViewSearchList[searchViewHolder.adapterPosition].productDocumentId)
 
                 mainFragment.replaceFragment(ShopSubFragmentName.PRODUCT_INFO_FRAGMENT, true, true, dataBundle)
             }
