@@ -231,12 +231,9 @@ class ViewPagerFragment(val mainFragment: MainFragment) : Fragment() {
                 val dataBundle = Bundle()
                 dataBundle.putString("productDocumentId", recyclerViewCategoryList[homeViewHolder.adapterPosition].productDocumentId)
 
-//
+
                 mainFragment.replaceFragment(ShopSubFragmentName.PRODUCT_INFO_FRAGMENT, true, true, dataBundle)
             }
-
-            // val homeViewHolder = HomeViewHolder(rowSearchListBinding)
-
 
             return homeViewHolder
         }
