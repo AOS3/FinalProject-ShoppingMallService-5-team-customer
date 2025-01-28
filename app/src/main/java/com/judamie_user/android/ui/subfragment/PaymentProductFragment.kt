@@ -1,20 +1,16 @@
 package com.judamie_user.android.ui.subfragment
 
 import android.app.AlertDialog
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.size
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.google.android.material.divider.MaterialDividerItemDecoration
 import com.judamie_manager.firebase.model.CouponModel
 import com.judamie_user.android.R
 import com.judamie_user.android.activity.ShopActivity
@@ -23,16 +19,14 @@ import com.judamie_user.android.databinding.RowPaymentProductListBinding
 import com.judamie_user.android.firebase.model.PickupLocationModel
 import com.judamie_user.android.firebase.model.ProductModel
 import com.judamie_user.android.firebase.model.UserModel
-import com.judamie_user.android.firebase.repository.UserRepository
 import com.judamie_user.android.firebase.service.CouponService
 import com.judamie_user.android.firebase.service.PickupLocationService
 import com.judamie_user.android.firebase.service.ProductService
 import com.judamie_user.android.firebase.service.UserService
 import com.judamie_user.android.ui.fragment.CartItem
 import com.judamie_user.android.ui.fragment.MainFragment
-import com.judamie_user.android.ui.fragment.ShopCartFragment
 import com.judamie_user.android.ui.fragment.ShopSubFragmentName
-import com.judamie_user.android.util.ProductCategory
+import com.judamie_user.android.util.CouponUsableType
 import com.judamie_user.android.util.tools.Companion.formatToComma
 import com.judamie_user.android.viewmodel.fragmentviewmodel.PaymentProductViewModel
 import com.judamie_user.android.viewmodel.rowviewmodel.RowPaymentProductListViewModel
@@ -42,7 +36,6 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import kotlin.time.times
 
 class PaymentProductFragment(val mainFragment: MainFragment) : Fragment() {
 
@@ -63,7 +56,7 @@ class PaymentProductFragment(val mainFragment: MainFragment) : Fragment() {
     // 사용자 정보를 담을 변수
     private lateinit var userModel : UserModel
 
-    private lateinit var userPickupLocModel : PickupLocationModel
+    private lateinit var pickupModel : PickupLocationModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -86,8 +79,6 @@ class PaymentProductFragment(val mainFragment: MainFragment) : Fragment() {
         settingPaymentRecyclerView()
         // 결제 상품 목록을 갱신하는 메서드
         refreshPaymentRecyclerView()
-        // 결제 금액 표시 메서드 호출
-        settingTotalPrice()
 
         return fragmentPaymentProductBinding.root
     }
@@ -134,32 +125,32 @@ class PaymentProductFragment(val mainFragment: MainFragment) : Fragment() {
     // 유저의 정보를 가져오는 메서드
     fun settingUserInfo() {
         CoroutineScope(Dispatchers.Main).launch {
-            try {
-                // 유저 정보 가져오기
-                val work1 = async(Dispatchers.IO) {
-                    UserService.selectUserDataByUserDocumentIdOne(shopActivity.userDocumentID)
-                }
+            // 유저 정보 가져오기
+            val work1 = async(Dispatchers.IO) {
+                UserService.selectUserDataByUserDocumentIdOne(shopActivity.userDocumentID)
+            }
+            userModel = work1.await()
 
-                // 유저 픽업지 정보 가져오기
-                val work2 = async(Dispatchers.IO) {
-                    PickupLocationService.gettingUserPickupLocation(shopActivity.userDocumentID)
-                }
-                userModel = work1.await()
-                //userPickupLocModel = work2.await()
+            // 유저 픽업지 정보 가져오기
+            val userPickupLoc = userModel.userPickupLoc
+            //Log.d("test100", "설정된 유저 픽업지: $userPickupLoc")
 
-                // 뷰에 데이터 반영
-                fragmentPaymentProductBinding.apply {
-                    paymentProductViewModel?.apply {
-                        textViewPaymentUserNameText?.value = userModel.userName
-                        textViewPaymentUserNoText?.value = userModel.userPhoneNumber
-                        //textViewPaymentPickupLocNameText?.value = userPickupLoc
-                        textViewPaymentProductCountText?.value =
-                            "${recyclerViewPaymentProduct.size}개"
-                    }
+            val work2 = async(Dispatchers.IO) {
+                PickupLocationService.gettingPickupLocationById(userPickupLoc)
+            }
+            pickupModel = work2.await()
+
+            //Log.d("test100", "픽업지 ID: $pickupModel")
+
+            // 뷰에 데이터 반영
+            fragmentPaymentProductBinding.apply {
+                paymentProductViewModel?.apply {
+                    textViewPaymentUserNameText?.value = userModel.userName
+                    textViewPaymentUserNoText?.value = userModel.userPhoneNumber
+                    textViewPaymentPickupLocNameText?.value = pickupModel.pickupLocName
+                    textViewPaymentPickupLocAddressInfoText?.value =
+                        "${pickupModel.pickupLocStreetAddress}" + "${pickupModel.pickupLocAddressDetail}"
                 }
-            } catch (e: Exception) {
-                e.printStackTrace()
-                // 에러 처리 (필요시)
             }
         }
     }
@@ -182,6 +173,12 @@ class PaymentProductFragment(val mainFragment: MainFragment) : Fragment() {
             productsWithCounts?.let { recyclerViewPaymentList.addAll(it) }
 
             fragmentPaymentProductBinding.recyclerViewPaymentProduct.adapter?.notifyDataSetChanged()
+
+            // 결제 금액 계산 메서드 호출
+            settingTotalPrice()
+
+            fragmentPaymentProductBinding.paymentProductViewModel?.textViewPaymentProductCountText?.value =
+                "${recyclerViewPaymentList.size}건"
         }
     }
 
@@ -270,16 +267,20 @@ class PaymentProductFragment(val mainFragment: MainFragment) : Fragment() {
                 }
                 val couponList = work2.await()
 
+                // TODO
+                // 쿠폰 날짜가 만료되면 안보이도록 한다.
+                // CouponUsableType이 2가 아닌 쿠폰만 필터링
+                val filteredCouponList = couponList.filter { coupon ->
+                    coupon.couponState != CouponUsableType.fromNumber(2)
+                }
                 // 다이얼로그 표시
-                settingCouponDialog(couponList)
+                settingCouponDialog(filteredCouponList)
             } catch (e:Exception) {
 
             }
-
             // Coupon 목록 값 확인
             //Log.d("test100", "User Coupon List: ${userCouponList}")
         }
-
     }
 
     // 쿠폰 선택 다이얼로그 표시
@@ -331,13 +332,19 @@ class PaymentProductFragment(val mainFragment: MainFragment) : Fragment() {
             product.productPrice * count
         }
         // 쿠폰 할인 금액
-        val couponDiscountRate = selectedCoupon?.couponDiscountRate as? Int ?: 0
+        val couponDiscountRate = selectedCoupon?.couponDiscountRate?.toIntOrNull() ?: 0
         val discountCouponAmount = totalProductPrice * couponDiscountRate/100
         // 최종 결제 금액
         val totalPaymentPrice = totalProductPrice - discountCouponAmount
 
         fragmentPaymentProductBinding.paymentProductViewModel?.textViewPaymentAllProductPriceText?.value = "${totalProductPrice.formatToComma()}"
-        fragmentPaymentProductBinding.paymentProductViewModel?.textViewPaymentCouponDiscountPriceText?.value = "- ${discountCouponAmount.formatToComma()}"
+        fragmentPaymentProductBinding.paymentProductViewModel?.textViewPaymentCouponDiscountPriceText?.value = if (couponDiscountRate > 0) {
+            // 쿠폰 적용
+            "- ${discountCouponAmount.formatToComma()}"
+        } else {
+            // 쿠폰 미적용
+            "0원"
+        }
         fragmentPaymentProductBinding.paymentProductViewModel?.textViewPaymentTotalPriceText?.value = "${totalPaymentPrice.formatToComma()}"
 
         fragmentPaymentProductBinding.paymentProductViewModel?.buttonPaymentPayText?.value = "${totalPaymentPrice.formatToComma()} 결제하기"

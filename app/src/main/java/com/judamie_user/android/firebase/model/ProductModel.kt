@@ -3,7 +3,6 @@ package com.judamie_user.android.firebase.model
 import com.judamie_user.android.firebase.vo.ProductVO
 import com.judamie_user.android.util.ProductState
 
-
 class ProductModel {
     var productDocumentId = ""
     var productName= ""
