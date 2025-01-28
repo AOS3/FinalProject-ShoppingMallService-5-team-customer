@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.judamie_user.android.R
@@ -48,7 +47,7 @@ class UserSettingFragment(val mainFragment: MainFragment) : Fragment() {
     fun showDialogLogout() {
         val dialogView = layoutInflater.inflate(R.layout.dialog_logout, null)
 
-        val buttonCancel = dialogView.findViewById<Button>(R.id.buttonCancle)
+        val buttonCancel = dialogView.findViewById<Button>(R.id.buttonCancel)
         val buttonLogout = dialogView.findViewById<Button>(R.id.buttonLogout)
 
         val dialog = MaterialAlertDialogBuilder(requireContext())
@@ -71,7 +70,7 @@ class UserSettingFragment(val mainFragment: MainFragment) : Fragment() {
     fun showDialogMembershipWithdrawal() {
         val dialogView = layoutInflater.inflate(R.layout.dialog_membership_withdrawal, null)
 
-        val buttonCancel = dialogView.findViewById<Button>(R.id.buttonCancle)
+        val buttonCancel = dialogView.findViewById<Button>(R.id.buttonCancel)
         val buttonMembershipWithdrawal = dialogView.findViewById<Button>(R.id.buttonMembershipWithdrawal)
 
         val dialog = MaterialAlertDialogBuilder(requireContext())

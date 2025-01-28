@@ -1,6 +1,7 @@
 package com.judamie_user.android.firebase.service
 
 import android.content.Context
+import android.util.Log
 import androidx.core.content.edit
 import com.judamie_user.android.firebase.model.UserModel
 import com.judamie_user.android.firebase.repository.UserRepository
@@ -80,6 +81,8 @@ class UserService {
         suspend fun selectUserDataByUserDocumentIdOne(userDocumentId:String) : UserModel{
             val userVO = UserRepository.selectUserDataByUserDocumentIdOne(userDocumentId)
             val userModel = userVO.toUserModel(userDocumentId)
+
+            Log.d("test101",userModel.userPickupLoc)
             return userModel
         }
 

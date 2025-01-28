@@ -158,6 +158,7 @@ class UserRepository {
             val collectionReference = firestore.collection("UserData")
             val result = collectionReference.document(userDocumentId).get().await()
             val userVO = result.toObject(UserVO::class.java)!!
+
             return userVO
         }
 

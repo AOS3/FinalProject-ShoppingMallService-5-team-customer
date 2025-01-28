@@ -45,11 +45,14 @@ import android.util.Base64
 import android.widget.ImageButton
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
+import com.judamie_user.android.activity.ShopActivity
 import com.judamie_user.android.databinding.DialogSettingPickupLocationBinding
 import com.judamie_user.android.databinding.DialogShowPickupLocationInformationBinding
 import com.judamie_user.android.firebase.model.PickupLocationModel
+import com.judamie_user.android.firebase.repository.PickupLocationRepository
 import com.judamie_user.android.firebase.service.CouponService
 import com.judamie_user.android.firebase.service.PickupLocationService
+import com.judamie_user.android.firebase.service.UserService
 import com.judamie_user.android.viewmodel.componentviewmodel.SettingPickupLocationDialogViewModel
 import com.judamie_user.android.viewmodel.componentviewmodel.ShowPickupLocationInformationDialogViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -70,6 +73,7 @@ import java.security.MessageDigest
 
 class SetPickUpLocationFragment(val mainFragment: MainFragment) : Fragment() {
     lateinit var fragmentSetPickUpLocationBinding: FragmentSetPickUpLocationBinding
+    lateinit var shopActivity: ShopActivity
 
     // 권한 확인을 위한 런처
     lateinit var permissionCheckLauncher: ActivityResultLauncher<Array<String>>
@@ -134,6 +138,7 @@ class SetPickUpLocationFragment(val mainFragment: MainFragment) : Fragment() {
         fragmentSetPickUpLocationBinding.setPickUpLocationViewModel =
             SetPickUpLocationViewModel(this)
         fragmentSetPickUpLocationBinding.lifecycleOwner = viewLifecycleOwner
+        shopActivity = activity as ShopActivity
         // MapsInitializer 호출
         MapsInitializer.initialize(requireContext(), MapsInitializer.Renderer.LATEST, null)
 
@@ -145,6 +150,9 @@ class SetPickUpLocationFragment(val mainFragment: MainFragment) : Fragment() {
 
         // 구글 맵 설정
         settingGoogleMap()
+
+        //유저의 픽업지 설정
+        gettingUserPickupLocationInfo()
 
         setupCustomZoomControls()
 
@@ -277,53 +285,6 @@ class SetPickUpLocationFragment(val mainFragment: MainFragment) : Fragment() {
             }
         }
     }
-
-
-//    fun addCenterMarker(centerLatLng: LatLng): String? {
-//        // 기존 중심 마커 제거
-//        centerMarker?.remove()
-//
-//        // 마커 옵션 설정
-//        val markerOptions = MarkerOptions()
-//            .position(centerLatLng)
-//            .title("선택한 위치")
-//            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
-//
-//        // 커스텀 마커 아이콘 설정
-//        val markerBitmap = vectorToBitmap(requireContext(), R.drawable.red_marker)
-//        markerOptions.icon(BitmapDescriptorFactory.fromBitmap(markerBitmap))
-//        centerMarker = mainGoogleMap.addMarker(markerOptions)
-//
-//        // Geocoder 사용
-//        val geocoder = Geocoder(requireContext(), Locale.KOREAN)
-//        return try {
-//            val addresses = geocoder.getFromLocation(centerLatLng.latitude, centerLatLng.longitude, 1)
-//
-//            if (!addresses.isNullOrEmpty()) {
-//                val thoroughfare = addresses[0].thoroughfare // 도로명 주소
-//                val subThoroughfare = addresses[0].subThoroughfare // 건물 번호
-//                val roadNameAddress = if (thoroughfare != null && subThoroughfare != null) {
-//                    "$thoroughfare $subThoroughfare" // 도로명 주소와 건물 번호를 조합
-//                } else {
-//                    thoroughfare ?: addresses[0].getAddressLine(0) // 도로명 주소 또는 전체 주소
-//                }
-//
-//                // ViewModel에 주소 설정
-//                fragmentSetPickUpLocationBinding.setPickUpLocationViewModel?.textViewSetPickUpLocationCenterAddressText?.value = roadNameAddress
-//                Log.d("CenterMarker", "도로명 주소: $roadNameAddress")
-//                roadNameAddress // 반환
-//            } else {
-//                Log.e("CenterMarker", "주소를 찾을 수 없습니다.")
-//                null
-//            }
-//        } catch (e: IOException) {
-//            Log.e("Geocoder", "Geocoding 에러: $e")
-//            null
-//        }
-//    }
-
-
-
     // 권한 확인을 위해 사용할 런처 생성
     fun createPermissionCheckLauncher() {
         // 런처를 등록한다.
@@ -411,6 +372,9 @@ class SetPickUpLocationFragment(val mainFragment: MainFragment) : Fragment() {
     fun onMarkerClick(marker: Marker) {
         val pickupLocationModel = markerModelMap[marker]
         if (pickupLocationModel != null) {
+            Log.d("test101",pickupLocationModel.pickupLocDocumentID)
+        }
+        if (pickupLocationModel != null) {
             val binding: DialogSettingPickupLocationBinding = DataBindingUtil.inflate(
                 layoutInflater,
                 R.layout.dialog_setting_pickup_location,
@@ -430,7 +394,7 @@ class SetPickUpLocationFragment(val mainFragment: MainFragment) : Fragment() {
             viewModel.textViewDialogSettingPickupLocationStreetAddressText?.value = pickupLocationModel.pickupLocStreetAddress
             viewModel.textViewDialogSettingPickupLocationAddressDetailText?.value = pickupLocationModel.pickupLocAddressDetail
             viewModel.textViewDialogSettingPickupLocationPhoneNumberText?.value = pickupLocationModel.pickupLocPhoneNumber
-            viewModel.textViewDialogSettingPickupLocationDetailText?.value = pickupLocationModel.pickupLocInfomation
+            viewModel.textViewDialogSettingPickupLocationDetailText?.value = pickupLocationModel.pickupLocInformation
 
             viewModel.onCloseClick = {
                 dialog.dismiss()
@@ -439,7 +403,16 @@ class SetPickUpLocationFragment(val mainFragment: MainFragment) : Fragment() {
             viewModel.onChoiceClick = {
                 fragmentSetPickUpLocationBinding.setPickUpLocationViewModel?.apply {
                     selectedPickupLocation.value = pickupLocationModel // 선택된 위치 설정
-                    textViewSetPickUpLocationNameText.value = pickupLocationModel.pickupLocName
+
+                    //유저가 선택한 픽업지를 db에 반영
+                    CoroutineScope(Dispatchers.Main).launch {
+                        val workSettingPickupLocation = async (Dispatchers.IO){
+
+                            PickupLocationRepository.settingUserPickupLocation(shopActivity.userDocumentID,pickupLocationModel.pickupLocDocumentID)
+                        }
+                        workSettingPickupLocation.join()
+                    }
+                    gettingUserPickupLocationInfo()
                 }
                 dialog.dismiss()
             }
@@ -454,6 +427,32 @@ class SetPickUpLocationFragment(val mainFragment: MainFragment) : Fragment() {
             dialog.show()
         } else {
             Log.e("onMarkerClick", "No matching model found for marker.")
+        }
+    }
+
+    fun gettingUserPickupLocationInfo(){
+        CoroutineScope(Dispatchers.Main).launch {
+            val userInfo = async(Dispatchers.IO) {
+                UserService.selectUserDataByUserDocumentIdOne(shopActivity.userDocumentID)
+            }
+            val userModel = userInfo.await()
+            if (userModel.userPickupLoc.isEmpty()){
+                fragmentSetPickUpLocationBinding.setPickUpLocationViewModel?.textViewSetPickUpLocationNameText?.value = "설정안됨"
+            }else{
+                val userPickupLoc = userModel.userPickupLoc
+
+                CoroutineScope(Dispatchers.Main).launch {
+                    val workPickupLocationModel = async(Dispatchers.IO) {
+                        PickupLocationService.gettingPickupLocationById(userPickupLoc)
+                    }
+                    val pickupLocationModel = workPickupLocationModel.await()
+
+                    fragmentSetPickUpLocationBinding.setPickUpLocationViewModel?.textViewSetPickUpLocationNameText?.value =
+                        pickupLocationModel.pickupLocName
+
+                }
+            }
+
         }
     }
 
@@ -492,7 +491,7 @@ class SetPickUpLocationFragment(val mainFragment: MainFragment) : Fragment() {
         viewModel.textViewDialogShowPickupLocationInformationStreetAddressText?.value = pickupLocationModel.pickupLocStreetAddress
         viewModel.textViewDialogShowPickupLocationInformationAddressDetailText?.value = pickupLocationModel.pickupLocAddressDetail
         viewModel.textViewDialogShowPickupLocationInformationPhoneNumberText?.value = pickupLocationModel.pickupLocPhoneNumber
-        viewModel.textViewDialogShowPickupLocationInformationDetailText?.value = pickupLocationModel.pickupLocInfomation
+        viewModel.textViewDialogShowPickupLocationInformationDetailText?.value = pickupLocationModel.pickupLocInformation
 
         viewModel.onCallClick = {
             val intent = Intent(Intent.ACTION_DIAL).apply {
@@ -632,6 +631,6 @@ class SetPickUpLocationFragment(val mainFragment: MainFragment) : Fragment() {
             Log.e("CenterMarkerKakao", "Kakao API 호출 에러: ${e.message}")
         }
 
-        return null // 비동기로 실행되므로 즉각 반환할 값은 없음
+        return null // 비동기로 실행되므로 즉각 반환할 값은 없음 아마도?
     }
 }
