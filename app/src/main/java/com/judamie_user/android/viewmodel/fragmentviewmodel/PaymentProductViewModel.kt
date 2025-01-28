@@ -31,6 +31,8 @@ data class PaymentProductViewModel(val paymentProductFragment: PaymentProductFra
     // 픽업지 정보
     // textViewPaymentPickupLocName - Text
     val textViewPaymentPickupLocNameText = MutableLiveData("")
+    // textViewPaymentPickupLocAddressInfo - Text
+    val textViewPaymentPickupLocAddressInfoText = MutableLiveData("")
 
     // 상품 총 가격
     // textViewPaymentAllProductPrice - Text
