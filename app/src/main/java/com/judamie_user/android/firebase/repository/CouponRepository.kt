@@ -57,8 +57,10 @@ class CouponRepository {
                     }
                 }
             }
+            Log.d("test", couponList[0].couponState.toString()) //1
             return couponList
         }
+
 
     }
 }

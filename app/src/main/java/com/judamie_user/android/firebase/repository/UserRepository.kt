@@ -1,8 +1,10 @@
 package com.judamie_user.android.firebase.repository
 
+import android.os.Bundle
 import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
 import com.judamie_user.android.firebase.vo.UserVO
+import com.judamie_user.android.util.UserState
 import kotlinx.coroutines.tasks.await
 
 class UserRepository {
@@ -264,6 +266,19 @@ class UserRepository {
                     .update("userWishList", currentWishList)
                     .await()
             }
+        }
+
+        // 탈퇴처리(해당 유저의 상태값을 변경한다)
+        suspend fun updateUserState(userDocumentId:String, newState: UserState){
+            val firestore = FirebaseFirestore.getInstance()
+            val collectionReference = firestore.collection("UserData")
+            val documentReference = collectionReference.document(userDocumentId)
+
+            val updateMap = mapOf(
+                "userState" to newState.number
+            )
+
+            documentReference.update(updateMap).await()
         }
 
     }
