@@ -155,5 +155,10 @@ class UserService {
         suspend fun deleteUserWishList(userDocumentID: String, productDocumentID: String) {
             UserRepository.deleteUserWishList(userDocumentID,productDocumentID)
         }
+
+        // 탈퇴처리(해당 유저의 상태값을 변경한다)
+        suspend fun updateUserState(userDocumentId:String, newState: UserState){
+            UserRepository.updateUserState(userDocumentId,newState)
+        }
     }
 }
