@@ -1,5 +1,7 @@
 package com.judamie_user.android.util
 
+import com.judamie_user.android.util.ProductState.PRODUCT_NORMAL
+
 //주류 카테고리
 enum class ProductCategory(val number:Int,val str:String){
     //기본값
@@ -60,7 +62,15 @@ enum class CouponUsableType(var num:Int, var str: String){
     // 사용 가능
     COUPON_USABLE(1, "사용 가능"),
     // 사용 불가능
-    COUPON_UNUSABLE(2, "사용 불가능")
+    COUPON_UNUSABLE(2, "사용 불가능");
+
+    companion object {
+        // 숫자를 받아서 CouponUsableType 변환
+        fun fromNumber(number: Int): CouponUsableType {
+            return values().find { it.num == number }
+                ?: COUPON_USABLE // 기본값 설정
+        }
+    }
 }
 
 // 사용자 상태 값

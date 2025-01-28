@@ -2,7 +2,9 @@ package com.judamie_user.android.firebase.service
 
 import com.judamie_manager.firebase.model.CouponModel
 import com.judamie_manager.firebase.vo.CouponVO
+import com.judamie_user.android.firebase.model.ProductModel
 import com.judamie_user.android.firebase.repository.CouponRepository
+import com.judamie_user.android.firebase.repository.ProductRepository
 
 class CouponService {
     companion object{
@@ -13,6 +15,11 @@ class CouponService {
                 val couponDocumentID = couponVO.couponName
                 couponVO.toCouponModel(couponDocumentID)
             }.toMutableList()
+        }
+
+        // userCoupons에 포함된 쿠폰 ID를 기반으로 상품 정보를 가져오기
+        suspend fun gettingCouponList(userCouponList: List<String>) : List<CouponModel>{
+            return CouponRepository.gettingCouponList(userCouponList)
         }
 
     }
