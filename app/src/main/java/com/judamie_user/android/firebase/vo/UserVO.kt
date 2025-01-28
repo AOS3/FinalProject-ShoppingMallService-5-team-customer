@@ -51,6 +51,7 @@ class UserVO {
         userModel.userWishList = userWishList.toMutableList()
         userModel.userCartList = userCartList.toMutableList()
         userModel.userCoupons = userCoupons.toMutableList()
+        userModel.userPickupLoc = userPickupLoc
 
 
         return userModel

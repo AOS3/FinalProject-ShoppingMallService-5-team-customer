@@ -1,23 +1,25 @@
 package com.judamie_user.android.ui.fragment
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.judamie_user.android.R
 import com.judamie_user.android.activity.ShopActivity
 import com.judamie_user.android.databinding.FragmentHomeBinding
 import com.judamie_user.android.firebase.service.PickupLocationService
+import com.judamie_user.android.firebase.service.UserService
 import com.judamie_user.android.viewmodel.fragmentviewmodel.HomeViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -62,22 +64,51 @@ class HomeFragment(val mainFragment:MainFragment) : Fragment() {
     // 픽업지를 고르러갈 버튼을 구성한다
     fun settingButtonHomePickupLoc(){
         CoroutineScope(Dispatchers.Main).launch {
-            val gettingUserPickupLocationInfo = async(Dispatchers.IO){
-                PickupLocationService.getUserPickupLocation(shopActivity.userDocumentID)
+            val userInfo = async(Dispatchers.IO){
+                UserService.selectUserDataByUserDocumentIdOne(shopActivity.userDocumentID)
             }
-            val userPickupLocation = gettingUserPickupLocationInfo.await()
-
-            if(userPickupLocation!!.isEmpty()){
-                val buttonText = "픽업지를 설정해주세요"
-                fragmentHomeBinding.homeViewModel?.buttonHomePickupLocText?.value = buttonText
+            val userModel = userInfo.await()
+            if (userModel.userPickupLoc.isEmpty()){
+                fragmentHomeBinding.homeViewModel?.buttonHomePickupLocText?.value = "픽업지설정안됨"
+                showUserMustSetPickupLocationDialog()
             }else{
-                fragmentHomeBinding.homeViewModel?.buttonHomePickupLocText?.value = userPickupLocation
+                val userPickupLoc  = userModel.userPickupLoc
+                CoroutineScope(Dispatchers.Main).launch {
+                    val workPickupLocationModel = async(Dispatchers.IO) {
+                        PickupLocationService.gettingPickupLocationById(userPickupLoc)
+                    }
+                    val pickupLocationModel = workPickupLocationModel.await()
+                    fragmentHomeBinding.homeViewModel?.buttonHomePickupLocText?.value = pickupLocationModel.pickupLocName
+                }
             }
+        }
+    }
 
+    //픽업지가 비워져있다면 사용자에게 픽업지를 꼭 고르도록 강제한다
+    fun showUserMustSetPickupLocationDialog() {
+        val dialogView = layoutInflater.inflate(R.layout.dialog_user_must_set_pickup_location, null)
+        val buttonUserMustSetPickupLocation = dialogView.findViewById<Button>(R.id.buttonUserMustSetPickupLocation)
+
+        val dialog = MaterialAlertDialogBuilder(requireContext())
+            .setView(dialogView)
+            .create()
+
+        // 다이얼로그를 취소할 수 없게 설정
+        dialog.setCancelable(false)
+        dialog.setCanceledOnTouchOutside(false)
+
+        // 픽업지 설정 버튼 클릭 이벤트
+        buttonUserMustSetPickupLocation.setOnClickListener {
+            // 다이얼로그 닫기
+            dialog.dismiss()
+
+            // 픽업지 설정 프래그먼트로 이동
+            mainFragment.replaceFragment(ShopSubFragmentName.SET_PICKUP_LOCATION_FRAGMENT, true, true, null)
         }
 
-
+        dialog.show()
     }
+
 
 
 

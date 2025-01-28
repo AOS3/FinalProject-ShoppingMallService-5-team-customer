@@ -23,7 +23,7 @@
 
 
         <android.widget.Button
-            android:id="@+id/buttonCancle"
+            android:id="@+id/buttonCancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
@@ -54,7 +54,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.73"
-            app:layout_constraintStart_toStartOf="@id/buttonCancle"
+            app:layout_constraintStart_toStartOf="@id/buttonCancel"
             app:layout_constraintTop_toBottomOf="@+id/textViewNoNotification"
             app:layout_constraintVertical_bias="0.0" />
 

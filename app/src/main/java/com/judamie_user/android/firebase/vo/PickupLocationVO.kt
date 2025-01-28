@@ -13,7 +13,7 @@ class PickupLocationVO {
     // 픽업지 전화번호
     var pickupLocPhoneNumber = ""
     // 픽업지 추가 사항
-    var pickupLocInfomation = ""
+    var pickupLocInformation = ""
     // 픽업지 상태
     var pickupLocState = 1
     // 시간
@@ -27,13 +27,13 @@ class PickupLocationVO {
         pickupLocationModel.pickupLocStreetAddress = pickupLocStreetAddress
         pickupLocationModel.pickupLocAddressDetail = pickupLocAddressDetail
         pickupLocationModel.pickupLocPhoneNumber = pickupLocPhoneNumber
-        pickupLocationModel.pickupLocInfomation = pickupLocInfomation
+        pickupLocationModel.pickupLocInformation = pickupLocInformation
         pickupLocationModel.pickupLocTimeStamp = pickupLocTimeStamp
 
 
         when(pickupLocState){
-            PickupStateType.PICKUP_STATE_NORMAL.num -> pickupLocationModel.pickupLocState = PickupStateType.PICKUP_STATE_NORMAL
-            PickupStateType.PICKUP_STATE_DELETE.num -> pickupLocationModel.pickupLocState = PickupStateType.PICKUP_STATE_DELETE
+            PickupStateType.PICKUP_STATE_NORMAL.num -> pickupLocationModel.pickupLocState = PickupStateType.PICKUP_STATE_NORMAL.num
+            PickupStateType.PICKUP_STATE_DELETE.num -> pickupLocationModel.pickupLocState = PickupStateType.PICKUP_STATE_DELETE.num
         }
 
         return pickupLocationModel
