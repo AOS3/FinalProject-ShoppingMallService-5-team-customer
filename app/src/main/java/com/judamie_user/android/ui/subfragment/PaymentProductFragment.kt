@@ -142,7 +142,7 @@ class PaymentProductFragment(val mainFragment: MainFragment) : Fragment() {
 
                 // 유저 픽업지 정보 가져오기
                 val work2 = async(Dispatchers.IO) {
-                    PickupLocationService.getUserPickupLocation(shopActivity.userDocumentID)
+                    PickupLocationService.gettingUserPickupLocation(shopActivity.userDocumentID)
                 }
                 userModel = work1.await()
                 //userPickupLocModel = work2.await()
