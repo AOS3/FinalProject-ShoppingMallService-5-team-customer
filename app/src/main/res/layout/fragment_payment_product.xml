@@ -173,7 +173,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="0.5"
-                                android:text="멋쟁이 호랑이 강남점" />
+                                android:text="@{paymentProductViewModel.textViewPaymentPickupLocNameText}" />
 
                         </LinearLayout>
 
@@ -192,9 +192,9 @@
                             android:id="@+id/buttonPaymentSelectCoupon"
                             android:layout_width="match_parent"
                             android:layout_height="40dp"
-                            android:layout_marginTop="10dp"
-                            android:layout_marginStart="5dp"
-                            android:layout_marginEnd="5dp"
+                            android:layout_marginStart="15dp"
+                            android:layout_marginTop="15dp"
+                            android:layout_marginEnd="15dp"
                             android:background="@drawable/background_shape_round_button"
                             android:backgroundTint="@color/white"
                             android:drawableStart="@drawable/coupon"
@@ -253,7 +253,7 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:layout_weight="0.5"
-                                        android:text="246,000원" />
+                                        android:text="@{paymentProductViewModel.textViewPaymentAllProductPriceText}" />
                                 </LinearLayout>
 
                                 <LinearLayout
@@ -276,14 +276,14 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:layout_weight="0.5"
-                                        android:text="-3,600원" />
+                                        android:text="@{paymentProductViewModel.textViewPaymentCouponDiscountPriceText}" />
                                 </LinearLayout>
 
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_marginStart="10dp"
-                                    android:layout_marginTop="15dp"
+                                    android:layout_marginTop="13dp"
                                     android:orientation="horizontal">
 
                                     <TextView
@@ -292,7 +292,7 @@
                                         android:layout_weight="0.5"
                                         android:text="총 결제 가격"
                                         android:textColor="#6F7979"
-                                        android:textSize="14sp"
+                                        android:textSize="15sp"
                                         android:textStyle="bold" />
 
                                     <TextView
@@ -300,7 +300,8 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:layout_weight="0.5"
-                                        android:text="243,000원"
+                                        android:textSize="15sp"
+                                        android:text="@{paymentProductViewModel.textViewPaymentTotalPriceText}"
                                         android:textStyle="bold" />
                                 </LinearLayout>
 
@@ -335,7 +336,7 @@
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="10dp"
             android:background="@drawable/button_round_activated"
-            android:text="243,000원 결제하기"
+            android:text="@{paymentProductViewModel.buttonPaymentPayText}"
             android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
