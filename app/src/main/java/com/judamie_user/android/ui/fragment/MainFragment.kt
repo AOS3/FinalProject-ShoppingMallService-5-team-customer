@@ -16,6 +16,7 @@ import com.google.android.material.transition.MaterialSharedAxis
 import com.judamie_user.android.R
 import com.judamie_user.android.databinding.FragmentMainBinding
 import com.judamie_user.android.ui.component.ShowPickupLocationDialogFragment
+import com.judamie_user.android.ui.subfragment.CompletedPaymentFragment
 import com.judamie_user.android.ui.subfragment.ModifyUserInfoFragment
 import com.judamie_user.android.ui.subfragment.PaymentProductFragment
 import com.judamie_user.android.ui.subfragment.ProductInfoFragment
@@ -153,6 +154,7 @@ class MainFragment() : Fragment() {
             ShopSubFragmentName.VIEW_PAGER_FRAGMENT -> ViewPagerFragment(this)
             ShopSubFragmentName.USER_PRODUCT_REVIEW_FRAGMENT -> UserProductReviewListFragment(this)
             ShopSubFragmentName.REVIEW_IMAGE_FRAGMENT -> ReviewImageFragment(this)
+            ShopSubFragmentName.COMPLETE_PAYMENT_FRAGMENT -> CompletedPaymentFragment(this)
         }
 
         // bundle 객체가 null이 아니라면
@@ -259,7 +261,8 @@ enum class ShopSubFragmentName(var number: Int, var str: String) {
     // 사용자 리뷰 목록 화면
     USER_PRODUCT_REVIEW_FRAGMENT(24, "UserProductReviewFragment"),
     // 리뷰 이미지 크게보기
-    REVIEW_IMAGE_FRAGMENT(25,"ReviewImageFragment")
-
+    REVIEW_IMAGE_FRAGMENT(25,"ReviewImageFragment"),
+    // 결제 완료 화면
+    COMPLETE_PAYMENT_FRAGMENT(26, "CompletePaymentFragment")
 
 }
