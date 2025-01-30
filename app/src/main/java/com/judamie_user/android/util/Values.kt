@@ -112,3 +112,9 @@ enum class OrderState(val num:Int,var str:String) {
     ORDER_STATE_BEFORE_TRANSFER(6, "입금 처리 전"),
     ORDER_STATE_TRANSFER_COMPLETED(7, "입금 처리 완료")
 }
+
+// 주문 Package 상태 (OrderPackage)
+enum class OrderPackageState(val num:Int,var str:String) {
+    ORDER_PACKAGE_STATE_ENABLE(1,"활성화"),
+    ORDER_PACKAGE_STATE_DISABLE(2,"비활성화")
+}
