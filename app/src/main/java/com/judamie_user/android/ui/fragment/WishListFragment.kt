@@ -300,12 +300,18 @@ class WishListFragment(val mainFragment: MainFragment) : Fragment() {
                 RowProductListViewModel(this@WishListFragment)
             rowProductListBinding.lifecycleOwner = viewLifecycleOwner
 
+            val recyclerViewHolder = RecyclerViewHolder(rowProductListBinding)
+
             // 리사이클러뷰 항목 클릭시 상세 거래 완료 내역 보기 화면으로 이동
             rowProductListBinding.root.setOnClickListener {
                 // 사용자가 누른 항목의 게시글 문서 번호를 담아서 전달
                 val dataBundle = Bundle()
-//                dataBundle.putString("boardDocumentId", recyclerViewList[mainViewHolder.adapterPosition].boardDocumentId)
-//
+                dataBundle.putString(
+                    "productDocumentId",
+                    productModelImageList[recyclerViewHolder.adapterPosition].first.productDocumentId
+                )
+
+
                 mainFragment.replaceFragment(
                     ShopSubFragmentName.PRODUCT_INFO_FRAGMENT,
                     true,
@@ -314,7 +320,7 @@ class WishListFragment(val mainFragment: MainFragment) : Fragment() {
                 )
             }
 
-            return RecyclerViewHolder(rowProductListBinding)
+            return recyclerViewHolder
         }
 
         override fun getItemCount(): Int {
