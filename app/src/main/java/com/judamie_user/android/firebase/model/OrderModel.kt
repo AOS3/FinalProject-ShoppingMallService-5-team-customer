@@ -22,7 +22,7 @@ class OrderModel {
     // 상품 개수
     var orderCount = 0
     // 총 가격
-    var orderPriceAmount = 0
+    var orderPriceAmount:Double = 0.0
     // 픽업지 문서 ID
     var pickupLocDocumentId = ""
     // 데이터가 들어온 시간

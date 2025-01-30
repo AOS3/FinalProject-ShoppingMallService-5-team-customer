@@ -7,19 +7,23 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.forEach
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.judamie_manager.firebase.model.CouponModel
 import com.judamie_user.android.R
+import com.judamie_user.android.activity.FragmentName
 import com.judamie_user.android.activity.ShopActivity
 import com.judamie_user.android.databinding.FragmentPaymentProductBinding
 import com.judamie_user.android.databinding.RowPaymentProductListBinding
+import com.judamie_user.android.firebase.model.OrderModel
 import com.judamie_user.android.firebase.model.PickupLocationModel
 import com.judamie_user.android.firebase.model.ProductModel
 import com.judamie_user.android.firebase.model.UserModel
 import com.judamie_user.android.firebase.service.CouponService
+import com.judamie_user.android.firebase.service.OrderService
 import com.judamie_user.android.firebase.service.PickupLocationService
 import com.judamie_user.android.firebase.service.ProductService
 import com.judamie_user.android.firebase.service.UserService
@@ -27,6 +31,7 @@ import com.judamie_user.android.ui.fragment.CartItem
 import com.judamie_user.android.ui.fragment.MainFragment
 import com.judamie_user.android.ui.fragment.ShopSubFragmentName
 import com.judamie_user.android.util.CouponUsableType
+import com.judamie_user.android.util.OrderState
 import com.judamie_user.android.util.tools.Companion.formatToComma
 import com.judamie_user.android.viewmodel.fragmentviewmodel.PaymentProductViewModel
 import com.judamie_user.android.viewmodel.rowviewmodel.RowPaymentProductListViewModel
@@ -36,6 +41,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlin.time.times
 
 class PaymentProductFragment(val mainFragment: MainFragment) : Fragment() {
 
@@ -117,10 +123,76 @@ class PaymentProductFragment(val mainFragment: MainFragment) : Fragment() {
 
     // 결제 처리 메서드
     fun proPayment() {
-        // TODO
-        // 결제 API 연동
-        // 결제 확인 화면으로 이동
+        fragmentPaymentProductBinding.apply {
+            CoroutineScope(Dispatchers.Main).launch {
+                // 상품별 주문 데이터 생성
+                recyclerViewPaymentList.forEach { (product, count) ->
+                    // productID를 통해 상품 정보 가져오기
+                    val productInfo = async(Dispatchers.IO) {
+                        ProductService.selectProductDataOneById(product.productDocumentId ?: "")
+                    }
+                    val productModel = productInfo.await()
+
+                    // 필요한 데이터 설정
+                    val userDocumentId = shopActivity.userDocumentID
+                    val sellerDocumentId = productModel.productSeller ?: ""
+                    val orderTime = System.nanoTime()
+                    val productDocumentId = productModel.productDocumentId ?: ""
+                    val productPrice = productModel.productPrice ?: 0
+                    val productDiscountRate = productModel.productDiscountRate ?: 0
+                    val orderCount = count
+                    val pickupLocDocumentId = userModel.userPickupLoc
+                    val orderState = OrderState.ORDER_STATE_PAYMENT_COMPLETE
+                    val orderTimeStamp = System.nanoTime()
+
+                    // 할인율을 적용한 주문 가격 계산
+                    val orderPriceAmount = ((productPrice * (1 - (productDiscountRate.toDouble() / 100.0))) * orderCount).toInt()
+
+                    // OrderModel 생성
+                    val orderModel = OrderModel().also {
+                        it.userDocumentId = userDocumentId
+                        it.pickupLocDocumentId = pickupLocDocumentId
+                        it.sellerDocumentID = sellerDocumentId
+                        it.productDocumentId = productDocumentId
+                        it.productPrice = productPrice
+                        it.productDiscountRate = productDiscountRate
+                        it.orderCount = orderCount
+                        it.orderTime = orderTime
+                        it.orderState = orderState
+                        it.orderPriceAmount = orderPriceAmount.toDouble()
+                        it.orderTimeStamp = orderTimeStamp
+                    }
+
+                    // 서버에 저장
+                    CoroutineScope(Dispatchers.Main).launch {
+                        // 프로그래스바를 보이게 한다
+                        progressBarPaymentProduct.visibility = View.VISIBLE
+
+                        val work1 = async(Dispatchers.IO) {
+                            // 서비스의 저장 메서드를 호출한다.
+                            OrderService.addOrderData(orderModel)
+                        }
+                        work1.await()
+
+                        // 프로그래스바 숨기기
+                        progressBarPaymentProduct.visibility = View.GONE
+
+                        // 결제 확인 화면으로 이동
+                        mainFragment.replaceFragment(
+                            ShopSubFragmentName.COMPLETE_PAYMENT_FRAGMENT,
+                            true,
+                            true,
+                            null
+                        )
+                    }
+                }
+            }
+
+            // TODO
+            // 결제 API 연동 작업
+        }
     }
+
 
     // 유저의 정보를 가져오는 메서드
     fun settingUserInfo() {
@@ -268,7 +340,8 @@ class PaymentProductFragment(val mainFragment: MainFragment) : Fragment() {
                 val couponList = work2.await()
 
                 // TODO
-                // 쿠폰 날짜가 만료되면 안보이도록 한다.
+                // 쿠폰 날짜가 만료되면 안보이도록 작업
+
                 // CouponUsableType이 2가 아닌 쿠폰만 필터링
                 val filteredCouponList = couponList.filter { coupon ->
                     coupon.couponState != CouponUsableType.fromNumber(2)
