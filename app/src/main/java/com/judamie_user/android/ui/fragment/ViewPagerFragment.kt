@@ -19,6 +19,7 @@ import com.judamie_user.android.databinding.FragmentViewPagerBinding
 import com.judamie_user.android.databinding.RowSearchListBinding
 import com.judamie_user.android.firebase.model.ProductModel
 import com.judamie_user.android.firebase.service.ProductService
+import com.judamie_user.android.firebase.service.UserService
 import com.judamie_user.android.util.ProductCategory
 import com.judamie_user.android.util.tools.Companion.formatToComma
 import com.judamie_user.android.viewmodel.fragmentviewmodel.ViewPagerViewModel
@@ -40,11 +41,14 @@ class ViewPagerFragment(val mainFragment: MainFragment) : Fragment() {
 //    }
 
     // 제품 카테고리 값을 담을 변수
-    private var categoryName:String? = null
+    private var categoryName: String? = null
     private lateinit var productCategory: ProductCategory
 
     // 상품 데이터를 담을 변수
     private lateinit var productModel: ProductModel
+
+    // 유저의 위시리스트에담겨있는 상품ID를 담을 리스트
+    private var userWishProductIDList = mutableListOf<String>()
 
     // 메인 RecyclerView를 구성하기 위해 사용할 리스트
     private var recyclerViewCategoryList = mutableListOf<ProductModel>()
@@ -98,6 +102,8 @@ class ViewPagerFragment(val mainFragment: MainFragment) : Fragment() {
         // 데이터를 가져와 RecyclerView 갱신 메서드 호출
         refreshMainRecyclerView()
 
+        settingSearchUserWishList()
+
         return fragmentViewPagerBinding.root
     }
 
@@ -108,7 +114,7 @@ class ViewPagerFragment(val mainFragment: MainFragment) : Fragment() {
         fragmentViewPagerBinding.autoCompleteTextView.setAdapter(arrayAdapter)
 
         fragmentViewPagerBinding.autoCompleteTextView.setOnItemClickListener { _, _, position, _ ->
-            when(position) {
+            when (position) {
                 // 최신순
                 0 -> {
                     refreshMainRecyclerView()
@@ -131,11 +137,10 @@ class ViewPagerFragment(val mainFragment: MainFragment) : Fragment() {
     }
 
 
-
     // RecyclerView를 갱신하는 메서드
-    private fun refreshMainRecyclerView(){
+    private fun refreshMainRecyclerView() {
         CoroutineScope(Dispatchers.Main).launch {
-            val work1 = async(Dispatchers.IO){
+            val work1 = async(Dispatchers.IO) {
                 ProductService.gettingProductList(productCategory)
             }
             recyclerViewCategoryList.clear()
@@ -153,7 +158,8 @@ class ViewPagerFragment(val mainFragment: MainFragment) : Fragment() {
             }
 
             // product 개수 업데이트
-            fragmentViewPagerBinding.viewPagerViewModel?.textViewHomeProductCountText?.value = "총 ${recyclerViewCategoryList.size} 개"
+            fragmentViewPagerBinding.viewPagerViewModel?.textViewHomeProductCountText?.value =
+                "총 ${recyclerViewCategoryList.size} 개"
         }
     }
 
@@ -165,47 +171,24 @@ class ViewPagerFragment(val mainFragment: MainFragment) : Fragment() {
         }
     }
 
+    // 유저의 위시리스트를 가져온다
+    private fun settingSearchUserWishList() {
+        // 1. 유저 컬렉션에서 유저의 제품 ID가 담긴 리스트를 가져온다
+        CoroutineScope(Dispatchers.Main).launch {
+            var work = async(Dispatchers.IO) {
+                UserService.gettingWishListByUserID(shopActivity.userDocumentID)
+            }
+            userWishProductIDList = work.await()
+        }
+        fragmentViewPagerBinding.recyclerViewHome.adapter?.notifyDataSetChanged()
+    }
 
 
     // 홈 RecyclerView 어뎁터
     inner class HomeRecyclerViewAdapter :
         RecyclerView.Adapter<HomeRecyclerViewAdapter.HomeViewHolder>() {
         inner class HomeViewHolder(val rowSearchListBinding: RowSearchListBinding) :
-            RecyclerView.ViewHolder(rowSearchListBinding.root) {
-            init {
-                // 초기 상태 설정
-                rowSearchListBinding.imageButtonSearchSetWishList.apply {
-                    setImageResource(R.drawable.bookmark_filled_24px) // 초기 아이콘
-                    imageTintList = ColorStateList.valueOf(
-                        ContextCompat.getColor(itemView.context, R.color.mainColor)
-                    )
-                    tag = "filled" // 초기 태그
-                }
-
-                // 클릭 이벤트 설정
-                rowSearchListBinding.imageButtonSearchSetWishList.setOnClickListener {
-                    rowSearchListBinding.apply {
-                        val isFilled = imageButtonSearchSetWishList.tag == "filled"
-
-                        if (isFilled) {
-                            // Outline으로 변경
-                            imageButtonSearchSetWishList.setImageResource(R.drawable.bookmark_outline_24px)
-                            imageButtonSearchSetWishList.imageTintList = ColorStateList.valueOf(
-                                ContextCompat.getColor(itemView.context, R.color.mainColor)
-                            )
-                            imageButtonSearchSetWishList.tag = "outline" // 태그 업데이트
-                        } else {
-                            // Filled로 변경
-                            imageButtonSearchSetWishList.setImageResource(R.drawable.bookmark_filled_24px)
-                            imageButtonSearchSetWishList.imageTintList = ColorStateList.valueOf(
-                                ContextCompat.getColor(itemView.context, R.color.mainColor)
-                            )
-                            imageButtonSearchSetWishList.tag = "filled" // 태그 업데이트
-                        }
-                    }
-                }
-            }
-        }
+            RecyclerView.ViewHolder(rowSearchListBinding.root)
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomeViewHolder {
             val rowSearchListBinding = DataBindingUtil.inflate<RowSearchListBinding>(
@@ -218,21 +201,73 @@ class ViewPagerFragment(val mainFragment: MainFragment) : Fragment() {
                 RowSearchListViewModel(this@ViewPagerFragment)
             rowSearchListBinding.lifecycleOwner = this@ViewPagerFragment
 
-//            // 리사이클러뷰 항목 클릭시 상세 거래 완료 내역 보기 화면으로 이동
-//            rowSearchListBinding.root.setOnClickListener {
-//                mainFragment.replaceFragment(ShopSubFragmentName.PRODUCT_INFO_FRAGMENT, true, true, null)
-//            }
-
             val homeViewHolder = HomeViewHolder(rowSearchListBinding)
 
             // 리사이클러뷰 항목 클릭시 상세 거래 완료 내역 보기 화면으로 이동
             rowSearchListBinding.root.setOnClickListener {
                 // 사용자가 누른 항목의 게시글 문서 번호를 담아서 전달
                 val dataBundle = Bundle()
-                dataBundle.putString("productDocumentId", recyclerViewCategoryList[homeViewHolder.adapterPosition].productDocumentId)
+                dataBundle.putString(
+                    "productDocumentId",
+                    recyclerViewCategoryList[homeViewHolder.adapterPosition].productDocumentId
+                )
 
 
-                mainFragment.replaceFragment(ShopSubFragmentName.PRODUCT_INFO_FRAGMENT, true, true, dataBundle)
+                mainFragment.replaceFragment(
+                    ShopSubFragmentName.PRODUCT_INFO_FRAGMENT,
+                    true,
+                    true,
+                    dataBundle
+                )
+            }
+
+            // 유저 찜목록으로 추가할 클릭리스너
+            rowSearchListBinding.imageButtonSearchSetWishList.setOnClickListener {
+                rowSearchListBinding.apply {
+                    val isFilled = imageButtonSearchSetWishList.tag == "filled"
+                    if (isFilled) {
+                        // Outline으로 변경
+                        imageButtonSearchSetWishList.setImageResource(R.drawable.bookmark_outline_24px)
+                        imageButtonSearchSetWishList.imageTintList = ColorStateList.valueOf(
+                            ContextCompat.getColor(
+                                homeViewHolder.itemView.context,
+                                R.color.mainColor
+                            )
+                        )
+                        imageButtonSearchSetWishList.tag = "outline" // 태그 업데이트
+
+                        CoroutineScope(Dispatchers.Main).launch {
+                            val deleteWishList = async(Dispatchers.IO) {
+                                UserService.deleteUserWishList(
+                                    shopActivity.userDocumentID,
+                                    recyclerViewCategoryList[homeViewHolder.adapterPosition].productDocumentId
+                                )
+                            }
+                            deleteWishList.await()
+                        }
+
+                    } else {
+                        // Filled로 변경
+                        imageButtonSearchSetWishList.setImageResource(R.drawable.bookmark_filled_24px)
+                        imageButtonSearchSetWishList.imageTintList = ColorStateList.valueOf(
+                            ContextCompat.getColor(
+                                homeViewHolder.itemView.context,
+                                R.color.mainColor
+                            )
+                        )
+                        imageButtonSearchSetWishList.tag = "filled" // 태그 업데이트
+
+                        CoroutineScope(Dispatchers.Main).launch {
+                            val addWishList = async(Dispatchers.IO) {
+                                UserService.addUserWishList(
+                                    shopActivity.userDocumentID,
+                                    recyclerViewCategoryList[homeViewHolder.adapterPosition].productDocumentId
+                                )
+                            }
+                            addWishList.await()
+                        }
+                    }
+                }
             }
 
             return homeViewHolder
@@ -251,8 +286,32 @@ class ViewPagerFragment(val mainFragment: MainFragment) : Fragment() {
 
             holder.rowSearchListBinding.rowSearchListViewModel?.textViewSearchProductNameText?.value =
                 recyclerViewCategoryList[position].productName
-            holder.rowSearchListBinding.rowSearchListViewModel?.textViewSearchProductPriceText?.value =
-                "${recyclerViewCategoryList[position].productPrice.formatToComma()}"
+
+            holder.rowSearchListBinding.imageButtonSearchSetWishList.apply {
+                if (userWishProductIDList.isNotEmpty()) {
+                    if (userWishProductIDList.contains(recyclerViewCategoryList[position].productDocumentId)) {
+                        setImageResource(R.drawable.bookmark_filled_24px) // 초기 아이콘
+                        imageTintList = ColorStateList.valueOf(
+                            ContextCompat.getColor(holder.itemView.context, R.color.mainColor)
+                        )
+                        tag = "filled" // 초기 태그
+                    } else {
+                        setImageResource(R.drawable.bookmark_outline_24px) // 초기 아이콘
+                        imageTintList = ColorStateList.valueOf(
+                            ContextCompat.getColor(holder.itemView.context, R.color.mainColor)
+                        )
+                        tag = "outline" // 초기 태그
+                    }
+                }else{
+                    setImageResource(R.drawable.bookmark_outline_24px) // 초기 아이콘
+                    imageTintList = ColorStateList.valueOf(
+                        ContextCompat.getColor(holder.itemView.context, R.color.mainColor)
+                    )
+                    tag = "outline" // 초기 태그
+                }
+            }
+
+
 
             // 할인률
             val discount = recyclerViewCategoryList[position].productDiscountRate
@@ -261,10 +320,23 @@ class ViewPagerFragment(val mainFragment: MainFragment) : Fragment() {
             holder.rowSearchListBinding.textViewSearchDiscountRating.visibility =
                 if (discount > 0) View.VISIBLE else View.GONE
 
+            if (discount > 0) {
+                val realPrice =
+                    recyclerViewCategoryList[position].productPrice - ((discount.toFloat() / 100) * recyclerViewCategoryList[position].productPrice)
+                holder.rowSearchListBinding.rowSearchListViewModel?.textViewSearchProductPriceText?.value =
+                    realPrice.toInt().formatToComma()
+            } else {
+                holder.rowSearchListBinding.rowSearchListViewModel?.textViewSearchProductPriceText?.value =
+                    recyclerViewCategoryList[position].productPrice.formatToComma()
+            }
+
+
             // 리뷰 개수
             val reviewSize = recyclerViewCategoryList[position].productReview.size
-            holder.rowSearchListBinding.rowSearchListViewModel?.textViewSearchProductReviewText?.value = if (reviewSize > 0) "리뷰 ($reviewSize)" else ""
-            holder.rowSearchListBinding.textViewSearchProductReview.visibility = if (reviewSize > 0) View.VISIBLE else View.GONE
+            holder.rowSearchListBinding.rowSearchListViewModel?.textViewSearchProductReviewText?.value =
+                if (reviewSize > 0) "리뷰 ($reviewSize)" else ""
+            holder.rowSearchListBinding.textViewSearchProductReview.visibility =
+                if (reviewSize > 0) View.VISIBLE else View.GONE
 
             // 썸네일 이미지
             val imageUrl = recyclerViewCategoryList[position].productMainImage // 현재 항목의 이미지 URL
