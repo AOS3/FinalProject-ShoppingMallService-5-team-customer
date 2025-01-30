@@ -26,6 +26,7 @@ import com.judamie_user.android.firebase.model.ProductModel
 import com.judamie_user.android.firebase.repository.UserRepository
 import com.judamie_user.android.firebase.service.ProductService
 import com.judamie_user.android.firebase.service.UserService
+import com.judamie_user.android.util.tools.Companion.formatToComma
 import com.judamie_user.android.viewmodel.fragmentviewmodel.WishListViewModel
 import com.judamie_user.android.viewmodel.rowviewmodel.RowProductListViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -331,8 +332,16 @@ class WishListFragment(val mainFragment: MainFragment) : Fragment() {
                 textViewSearchDiscountRating.visibility =
                     if (discount > 0) View.VISIBLE else View.GONE
 
-                rowProductListViewModel?.textViewSearchProductPriceText?.value =
-                    productModelImageList[position].first.productPrice.toString()
+
+                if(discount>0){
+                    val realPrice = productModelImageList[position].first.productPrice - ((discount.toFloat()/100)*productModelImageList[position].first.productPrice)
+                    Log.d("realPrice","${realPrice}, ${productModelImageList[position].first.productPrice}")
+                    holder.rowProductListBinding.rowProductListViewModel?.textViewSearchProductPriceText?.value =
+                        realPrice.toInt().formatToComma()
+                }else{
+                    holder.rowProductListBinding.rowProductListViewModel?.textViewSearchProductPriceText?.value =
+                        productModelImageList[position].first.productPrice.formatToComma()
+                }
 
                 val reviewSize = productModelImageList[position].first.productReview.size
                 rowProductListViewModel?.textViewSearchProductReviewText?.value = if (reviewSize > 0) "리뷰 ($reviewSize)" else ""
