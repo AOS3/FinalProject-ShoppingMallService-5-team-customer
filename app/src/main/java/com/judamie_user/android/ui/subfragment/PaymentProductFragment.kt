@@ -147,14 +147,14 @@ class PaymentProductFragment(val mainFragment: MainFragment) : Fragment() {
 
                     val userDocumentId = shopActivity.userDocumentID
                     val sellerDocumentId = productModel.productSeller ?: ""
-                    val orderTime = System.nanoTime()
+                    val orderTime = System.currentTimeMillis()
                     val productDocumentId = productModel.productDocumentId ?: ""
                     val productPrice = productModel.productPrice ?: 0.0
                     val productDiscountRate = productModel.productDiscountRate ?: 0
                     val orderCount = count
                     val pickupLocDocumentId = userModel.userPickupLoc
                     val orderState = OrderState.ORDER_STATE_PAYMENT_COMPLETE
-                    val orderTimeStamp = System.nanoTime()
+                    val orderTimeStamp = System.currentTimeMillis()
 
                     val orderPriceAmount =
                         ((productPrice * (1 - (productDiscountRate.toDouble() / 100.0))) * orderCount).toInt()
@@ -194,7 +194,7 @@ class PaymentProductFragment(val mainFragment: MainFragment) : Fragment() {
                         it.orderDataList = orderIdList
                         it.orderOwnerId = shopActivity.userDocumentID
                         it.orderPackageState = OrderPackageState.ORDER_PACKAGE_STATE_ENABLE
-                        it.orderPackageDataTimeStamp = System.nanoTime()
+                        it.orderPackageDataTimeStamp = System.currentTimeMillis()
                         it.orderTransactionTime = 0
                         it.orderPickupState = false
                         it.orderDepositState = false
