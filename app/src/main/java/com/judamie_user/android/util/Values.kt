@@ -105,12 +105,9 @@ enum class ReviewState(val num:Int,var str:String){
 // 주문 상태(OrderData)
 enum class OrderState(val num:Int,var str:String) {
     ORDER_STATE_PAYMENT_COMPLETE(1, "주문 완료"),
-    ORDER_STATE_BEFORE_DELIVERY(2, "배송 전"),
-    ORDER_STATE_DELIVERY(3, "배송 완료"),
-    ORDER_STATE_BEFORE_PICKUP(4, "픽업 전"),
-    ORDER_STATE_PICKUP_COMPLETED(5, "픽업 완료"),
-    ORDER_STATE_BEFORE_TRANSFER(6, "입금 처리 전"),
-    ORDER_STATE_TRANSFER_COMPLETED(7, "입금 처리 완료")
+    ORDER_STATE_DELIVERY(2, "배송 완료"),
+    ORDER_STATE_PICKUP_COMPLETED(3, "픽업 완료"),
+    ORDER_STATE_TRANSFER_COMPLETED(4, "입금 처리 완료")
 }
 
 // 주문 Package 상태 (OrderPackage)
