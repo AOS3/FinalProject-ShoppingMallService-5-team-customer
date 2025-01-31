@@ -3,11 +3,13 @@ package com.judamie_user.android.firebase.service
 import android.content.Context
 import android.util.Log
 import androidx.core.content.edit
+import com.google.firebase.firestore.FirebaseFirestore
 import com.judamie_user.android.firebase.model.UserModel
 import com.judamie_user.android.firebase.repository.UserRepository
 import com.judamie_user.android.firebase.vo.UserVO
 import com.judamie_user.android.util.LoginResult
 import com.judamie_user.android.util.UserState
+import kotlinx.coroutines.tasks.await
 
 class UserService {
     companion object {
@@ -160,5 +162,16 @@ class UserService {
         suspend fun updateUserState(userDocumentId:String, newState: UserState){
             UserRepository.updateUserState(userDocumentId,newState)
         }
+
+        // 유저 쿠폰 삭제 처리 메서드
+        suspend fun deleteCouponData(userDocumentId: String, couponDocumentId: String) {
+            UserRepository.deleteCouponFromUser(userDocumentId, couponDocumentId)
+        }
+
+        // 사용자 데이터를 수정한다.
+        suspend fun updateUserData(userModel: UserModel){
+            UserRepository.updateUserCoupons(userModel.userDocumentID, userModel.userCoupons)
+        }
+
     }
 }

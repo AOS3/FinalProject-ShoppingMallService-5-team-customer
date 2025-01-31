@@ -2,6 +2,7 @@ package com.judamie_user.android.firebase.repository
 
 
 import android.util.Log
+import com.google.firebase.Timestamp
 import com.judamie_manager.firebase.vo.CouponVO
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.toObject
@@ -39,10 +40,19 @@ class CouponRepository {
                         // Firestore 문서 ID를 productDocumentId로 설정
                         couponModel.couponDocumentID = document.id
                         couponModel.couponName = data["couponName"] as? String ?: ""
-                        // TODO
                         // 판매자 측에서 DiscountRate/Period Type 변경 후, 작업 진행 예정
-                        couponModel.couponDiscountRate = data["couponDiscountRate"] as? String ?: "0" // Int
-                        couponModel.couponPeriod = data["couponPeriod"] as? String ?: "" // TimeStamp
+                        couponModel.couponDiscountRate = when (val discountData = data["couponDiscountRate"]) {
+                            is Long -> discountData.toInt() // Firestore에서 Long으로 저장된 경우
+                            is String -> discountData.toIntOrNull() ?: 0 // String으로 저장된 경우 변환
+                            else -> 0
+                        }
+                        couponModel.couponPeriod = when (val periodData = data["couponPeriod"]) {
+                            is Timestamp -> periodData.toDate().time // Timestamp를 Long으로 변환
+                            is Long -> periodData // 이미 Long이면 그대로 사용
+                            is String -> periodData.toLongOrNull() ?: 0L // String으로 저장된 경우 변환
+                            else -> 0L
+                        }
+
 
                         // productState를 Long으로 가져와서 enum으로 변환
                         val couponStateLong = data["couponState"] as? Long ?: 1L
@@ -57,7 +67,7 @@ class CouponRepository {
                     }
                 }
             }
-            Log.d("test", couponList[0].couponState.toString()) //1
+            // Log.d("test", couponList[0].couponState.toString()) //1
             return couponList
         }
 
