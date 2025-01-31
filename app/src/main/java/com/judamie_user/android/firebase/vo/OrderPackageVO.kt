@@ -4,8 +4,6 @@ import com.judamie_user.android.firebase.model.OrderPackageModel
 import com.judamie_user.android.util.OrderPackageState
 
 class OrderPackageVO {
-    // 주문 패키지 문서 ID
-    var orderPackageDocumentId = ""
     // 주문 목록 (Order 문서 ID 리스트)
     var orderDataList = mutableListOf<String>()
     // 주문자 문서 ID
