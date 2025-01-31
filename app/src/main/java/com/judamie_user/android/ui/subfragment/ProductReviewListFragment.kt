@@ -139,12 +139,23 @@ class ProductReviewListFragment(val mainFragment: MainFragment) : Fragment() {
 
                     toolbarTitle = "${productModel.productName}의 리뷰"
 
-                    reviewsIdList.forEach {
+                    reviewsIdList.forEach { reviewId ->
                         val work2 = async(Dispatchers.IO) {
-                            ReviewService.gettingReviewByID(it)
+                            try {
+                                ReviewService.gettingReviewByID(reviewId) // 리뷰 가져오기
+                            } catch (e: Exception) {
+                                Log.e("ReviewFetchError", "리뷰 불러오기 실패: ID($reviewId), 오류: ${e.message}")
+                                null // 실패 시 null 반환
+                            }
                         }
-                        reviewsModelList.add(work2.await())
+                        val reviewModel = work2.await()
+
+                        // reviewModel이 null이 아닐 경우만 리스트에 추가
+                        if (reviewModel != null) {
+                            reviewsModelList.add(reviewModel)
+                        }
                     }
+
 
                     reviewsModelList.forEach {
                         val imagesInOneReview = mutableListOf<Uri>()
