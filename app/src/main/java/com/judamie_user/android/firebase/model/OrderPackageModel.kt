@@ -24,7 +24,6 @@ class OrderPackageModel {
     fun toOrderPackageVO() : OrderPackageVO {
         val orderPackageVO = OrderPackageVO()
 
-        orderPackageVO.orderPackageDocumentId = orderPackageDocumentId
         orderPackageVO.orderDataList = ArrayList(orderDataList)
         orderPackageVO.orderOwnerId = orderOwnerId
         orderPackageVO.orderPackageDataTimeStamp = orderPackageDataTimeStamp
