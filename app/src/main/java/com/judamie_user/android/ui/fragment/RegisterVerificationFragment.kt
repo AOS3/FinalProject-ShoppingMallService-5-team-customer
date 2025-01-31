@@ -116,6 +116,8 @@ class RegisterVerificationFragment : Fragment() {
     // 인증 코드 확인 버튼
     fun verificationCheck() {
         val authCode = fragmentRegisterVerificationBinding.registerVerificationViewModel?.textFieldRegisterVerificationVerificationNoEditTextText?.value!!
+        // 에러메시지 초기화
+        fragmentRegisterVerificationBinding.textFieldRegisterVerificationFragmentVerificationNo.error = null
         if (authCode.isNotEmpty()) {
             val credential = PhoneAuthProvider.getCredential(verificationId, authCode)
             signInWithPhoneAuthCredential(credential)
@@ -124,12 +126,14 @@ class RegisterVerificationFragment : Fragment() {
             // 소프트 키보드 표시
             loginActivity.showSoftInput(fragmentRegisterVerificationBinding.textFieldRegisterVerificationFragmentVerificationNo)
             // 2초 뒤에 에러 메시지 제거
-            clearErrorAfterDelay(fragmentRegisterVerificationBinding.textFieldRegisterVerificationFragmentVerificationNo, 2000)
+            // clearErrorAfterDelay(fragmentRegisterVerificationBinding.textFieldRegisterVerificationFragmentVerificationNo, 2000)
         }
     }
 
     // 인증 코드 확인 메서드
     fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential) {
+        // 기존 에러 메시지 초기화
+        fragmentRegisterVerificationBinding.textFieldRegisterVerificationFragmentVerificationNo.error = null
         auth.signInWithCredential(credential)
             .addOnCompleteListener(requireActivity()) { task ->
                 if (task.isSuccessful) {
@@ -141,7 +145,7 @@ class RegisterVerificationFragment : Fragment() {
                     // 소프트 키보드 표시
                     loginActivity.showSoftInput(fragmentRegisterVerificationBinding.textFieldRegisterVerificationFragmentVerificationNo)
                     // 2초 뒤에 에러 메시지 제거
-                    clearErrorAfterDelay(fragmentRegisterVerificationBinding.textFieldRegisterVerificationFragmentVerificationNo, 2000)
+                    // clearErrorAfterDelay(fragmentRegisterVerificationBinding.textFieldRegisterVerificationFragmentVerificationNo, 2000)
                 }
             }
     }
