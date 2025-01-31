@@ -28,8 +28,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:textSize="34sp"
-            android:text="@{cartViewModel.cartTitleText}" />
+            android:text="@{cartViewModel.cartTitleText}"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            tools:text="CU 서강대점" />
 
         <Space
             android:layout_width="match_parent"
@@ -43,15 +45,16 @@
             android:inputType="textMultiLine"
             android:minHeight="5dp"
             android:text="@{cartViewModel.cartDetailText}"
-            android:textSize="18sp" />
+            android:textSize="16.6sp"
+            tools:text="CU 서강대점" />
 
         <Space
             android:layout_width="match_parent"
             android:layout_height="5dp" />
 
         <LinearLayout
-            android:layout_width="150dp"
-            android:layout_height="40dp"
+            android:layout_width="87dp"
+            android:layout_height="50dp"
             android:layout_marginTop="10dp"
             android:orientation="horizontal">
 
@@ -59,10 +62,11 @@
                 android:id="@+id/pickupLocationClose"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/dialog_close_button"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                android:textColor="@color/black"
-                android:onClick="@{(view) -> cartViewModel.closeOnClick()}"/>
+                android:background="@drawable/button_round_deactivated"
+                android:onClick="@{(view) -> cartViewModel.closeOnClick()}"
+                android:text="닫기"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="@color/black" />
 
         </LinearLayout>
 
