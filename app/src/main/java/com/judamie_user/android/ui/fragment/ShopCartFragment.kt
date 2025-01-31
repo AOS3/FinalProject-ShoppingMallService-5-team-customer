@@ -112,7 +112,7 @@ class ShopCartFragment(val mainFragment: MainFragment) : Fragment() {
         val selectedTotalPrice = checkBoxStates.value?.mapIndexedNotNull { index, isChecked ->
             if (isChecked) {
                 // val price = recyclerViewList[index].productPrice
-                val price = recyclerViewList.getOrNull(index)?.productPrice ?: 0
+                val price = recyclerViewList.getOrNull(index)?.productPrice ?: 0.0
                 val discountRate = recyclerViewList.getOrNull(index)?.productDiscountRate ?: 0
                 val quantity = productCountList.value?.get(index) ?: 1
                 // 소수점 내림 처리 후 정수로 변환

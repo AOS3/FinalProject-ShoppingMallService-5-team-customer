@@ -34,6 +34,7 @@ import com.judamie_user.android.util.CouponUsableType
 import com.judamie_user.android.util.OrderPackageState
 import com.judamie_user.android.util.OrderState
 import com.judamie_user.android.util.tools.Companion.formatToComma
+import com.judamie_user.android.util.tools.Companion.toFormattedDate
 import com.judamie_user.android.viewmodel.fragmentviewmodel.PaymentProductViewModel
 import com.judamie_user.android.viewmodel.rowviewmodel.RowPaymentProductListViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -130,6 +131,13 @@ class PaymentProductFragment(val mainFragment: MainFragment) : Fragment() {
 
                 val orderIdList = mutableListOf<String>() // 생성된 주문 ID 리스트
 
+                // 선택된 쿠폰 가져오기
+                val selectedCoupon = if (selectedCouponIndex > 0) {
+                    userModel.userCoupons.getOrNull(selectedCouponIndex - 1)
+                } else {
+                    null
+                }
+
                 // 주문 데이터 저장 (순차적으로 실행)
                 for ((product, count) in recyclerViewPaymentList) {
                     val productInfo = async(Dispatchers.IO) {
@@ -141,7 +149,7 @@ class PaymentProductFragment(val mainFragment: MainFragment) : Fragment() {
                     val sellerDocumentId = productModel.productSeller ?: ""
                     val orderTime = System.nanoTime()
                     val productDocumentId = productModel.productDocumentId ?: ""
-                    val productPrice = productModel.productPrice ?: 0
+                    val productPrice = productModel.productPrice ?: 0.0
                     val productDiscountRate = productModel.productDiscountRate ?: 0
                     val orderCount = count
                     val pickupLocDocumentId = userModel.userPickupLoc
@@ -156,7 +164,7 @@ class PaymentProductFragment(val mainFragment: MainFragment) : Fragment() {
                         it.pickupLocDocumentId = pickupLocDocumentId
                         it.sellerDocumentID = sellerDocumentId
                         it.productDocumentId = productDocumentId
-                        it.productPrice = productPrice
+                        it.productPrice = productPrice.toInt()
                         it.productDiscountRate = productDiscountRate
                         it.orderCount = orderCount
                         it.orderTime = orderTime
@@ -198,15 +206,24 @@ class PaymentProductFragment(val mainFragment: MainFragment) : Fragment() {
                     }
                     work2.await()
 
-                    Log.d("test100", "OrderPackageModel 저장 완료")
+                    // Log.d("test100", "OrderPackageModel 저장 완료")
                 } else {
-                    Log.e("test100", "OrderIdList가 비어 있음. OrderPackageModel 생성되지 않음.")
+
+                }
+
+                // 쿠폰 사용 시 삭제 처리
+                selectedCoupon?.let { couponDocumentId ->
+                    val work3 = async(Dispatchers.IO) {
+                        UserService.deleteCouponData(userModel.userDocumentID, couponDocumentId)
+                    }
+                    work3.await()
                 }
 
                 // 프로그래스바 숨기기
                 progressBarPaymentProduct.visibility = View.GONE
 
                 // 결제 확인 화면으로 이동
+                parentFragmentManager.popBackStack()
                 mainFragment.replaceFragment(
                     ShopSubFragmentName.COMPLETE_PAYMENT_FRAGMENT,
                     true,
@@ -254,32 +271,47 @@ class PaymentProductFragment(val mainFragment: MainFragment) : Fragment() {
     // 상품 목록을 갱신하는 메서드
     private fun refreshPaymentRecyclerView() {
 
+        // 제품 상세 화면에서 상품 정보를 받아온다.
+        val productDocumentId = arguments?.getString("productDocumentId")
+        val productCount = arguments?.getString("productCount")?.toIntOrNull()
+        // 장바구니에서 상품 정보들을 받아온다.
         val selectedItemList = arguments?.getParcelableArrayList<CartItem>("selectedProducts")
 
         CoroutineScope(Dispatchers.Main).launch {
-            // 상품 정보 - 수량 매핑
-            val productsWithCounts = selectedItemList?.map { cartItem ->
-                async(Dispatchers.IO) {
-                    val product = ProductService.selectProductDataOneById(cartItem.productId)
-                    product to cartItem.count
+            recyclerViewPaymentList.clear() // ✅ 리스트 초기화 먼저 수행
+
+            if (selectedItemList != null) {
+                // ✅ 장바구니에서 넘어온 경우
+                val productsWithCounts = selectedItemList.map { cartItem ->
+                    async(Dispatchers.IO) {
+                        val product = ProductService.selectProductDataOneById(cartItem.productId)
+                        product to cartItem.count
+                    }
+                }.awaitAll()
+                recyclerViewPaymentList.addAll(productsWithCounts)
+            }
+            else if (productDocumentId != null && productCount != null) {
+                // ✅ 제품 상세에서 바로 구매한 경우
+                val productWithCount = withContext(Dispatchers.IO) {
+                    val product = ProductService.selectProductDataOneById(productDocumentId)
+                    listOf(product to productCount) // 리스트로 감싸서 addAll()과 호환되도록 변환
                 }
-            }?.awaitAll()
+                recyclerViewPaymentList.addAll(productWithCount)
+            }
 
-            recyclerViewPaymentList.clear()
-            productsWithCounts?.let { recyclerViewPaymentList.addAll(it) }
-
-            fragmentPaymentProductBinding.recyclerViewPaymentProduct.adapter?.notifyDataSetChanged()
-
-            // 결제 금액 계산 메서드 호출
-            settingTotalPrice()
-
+            // ✅ UI 갱신
             fragmentPaymentProductBinding.paymentProductViewModel?.textViewPaymentProductCountText?.value =
                 "${recyclerViewPaymentList.size}건"
+            fragmentPaymentProductBinding.recyclerViewPaymentProduct.adapter?.notifyDataSetChanged()
+
+            // ✅ 결제 금액 계산 메서드 호출
+            settingTotalPrice()
         }
     }
 
+
     // 결제 상품 RecyclerView 구성 메서드
-    fun settingPaymentRecyclerView(){
+    fun     settingPaymentRecyclerView(){
         fragmentPaymentProductBinding.apply {
             recyclerViewPaymentProduct.adapter = PaymentRecyclerViewAdapter()
             recyclerViewPaymentProduct.layoutManager = LinearLayoutManager(shopActivity)
@@ -308,7 +340,7 @@ class PaymentProductFragment(val mainFragment: MainFragment) : Fragment() {
 
             val (product, count) = recyclerViewPaymentList[position]
             val discount = product.productDiscountRate
-            val productPrice = product.productPrice * discount/100
+            val productPrice = (product.productPrice * (1 - product.productDiscountRate/100.0))
 
             holder.rowPaymentProductListBinding.rowPaymentProductListViewModel?.textViewCartProductNameText?.value =
                 product.productName
@@ -346,7 +378,6 @@ class PaymentProductFragment(val mainFragment: MainFragment) : Fragment() {
         }
     }
 
-
     // 유저 쿠폰 정보를 불러오는 메서드
     fun settingUserCoupons() {
         // 유저 데이터를 받아온다.
@@ -364,14 +395,12 @@ class PaymentProductFragment(val mainFragment: MainFragment) : Fragment() {
                 val couponList = work2.await()
 
                 // TODO
-                // 쿠폰 날짜가 만료되면 안보이도록 작업
-
-                // CouponUsableType이 2가 아닌 쿠폰만 필터링
-                val filteredCouponList = couponList.filter { coupon ->
+                // CouponUsableType이 2가 아닌 쿠폰과 Period가 지나면 안보이도록 필터링
+                val filteredStateCouponList = couponList.filter { coupon ->
                     coupon.couponState != CouponUsableType.fromNumber(2)
                 }
                 // 다이얼로그 표시
-                settingCouponDialog(filteredCouponList)
+                settingCouponDialog(filteredStateCouponList)
             } catch (e:Exception) {
 
             }
@@ -388,7 +417,7 @@ class PaymentProductFragment(val mainFragment: MainFragment) : Fragment() {
             addAll(couponList.map { coupon ->
                 "${coupon.couponName}\n" +
                         "${coupon.couponDiscountRate}% 할인\n" +
-                        "사용 기한: ${coupon.couponPeriod}까지"
+                        "사용 기한: ${coupon.couponPeriod.toFormattedDate()}까지"
             })
         }
 
@@ -426,11 +455,11 @@ class PaymentProductFragment(val mainFragment: MainFragment) : Fragment() {
     fun settingTotalPrice(selectedCoupon: CouponModel? = null) {
         // 총 상품 가격
         val totalProductPrice = recyclerViewPaymentList.sumOf { (product, count) ->
-            (product.productPrice * product.productDiscountRate/100) * count
+            (product.productPrice * (1 - product.productDiscountRate/100.0)) * count
         }
         // 쿠폰 할인 금액
-        val couponDiscountRate = selectedCoupon?.couponDiscountRate?.toIntOrNull() ?: 0
-        val discountCouponAmount = totalProductPrice * couponDiscountRate/100
+        val couponDiscountRate = selectedCoupon?.couponDiscountRate?: 0
+        val discountCouponAmount = totalProductPrice * couponDiscountRate/100.0
         // 최종 결제 금액
         val totalPaymentPrice = totalProductPrice - discountCouponAmount
 

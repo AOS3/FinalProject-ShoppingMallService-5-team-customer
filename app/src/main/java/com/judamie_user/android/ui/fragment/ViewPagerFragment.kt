@@ -322,9 +322,9 @@ class ViewPagerFragment(val mainFragment: MainFragment) : Fragment() {
 
             if (discount > 0) {
                 val realPrice =
-                    recyclerViewCategoryList[position].productPrice - ((discount.toFloat() / 100) * recyclerViewCategoryList[position].productPrice)
+                    recyclerViewCategoryList[position].productPrice - ((discount.toFloat() / 100.0) * recyclerViewCategoryList[position].productPrice)
                 holder.rowSearchListBinding.rowSearchListViewModel?.textViewSearchProductPriceText?.value =
-                    realPrice.toInt().formatToComma()
+                    realPrice.formatToComma()
             } else {
                 holder.rowSearchListBinding.rowSearchListViewModel?.textViewSearchProductPriceText?.value =
                     recyclerViewCategoryList[position].productPrice.formatToComma()
@@ -358,10 +358,9 @@ class ViewPagerFragment(val mainFragment: MainFragment) : Fragment() {
                     e.printStackTrace()
                 }
             }
-            // TODO
             // 판매자
-//            holder.rowSearchListBinding.rowSearchListViewModel?.textViewSearchProductSellerText?.value =
-//                "${recyclerViewCategoryList[position].productSeller}%"
+            holder.rowSearchListBinding.rowSearchListViewModel?.textViewSearchProductSellerText?.value =
+                "${recyclerViewCategoryList[position].productSeller}"
 
 
         }

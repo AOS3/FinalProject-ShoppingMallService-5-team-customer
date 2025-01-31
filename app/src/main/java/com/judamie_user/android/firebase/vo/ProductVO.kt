@@ -6,7 +6,7 @@ import com.judamie_user.android.util.ProductState
 class ProductVO {
     var productName	= ""
     var productCategory = ""
-    var productPrice = 0
+    var productPrice = 0.0
     var productDiscountRate	= 0
     var productStock = 0
     var productDescription = ""

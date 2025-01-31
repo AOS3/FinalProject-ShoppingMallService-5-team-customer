@@ -18,6 +18,7 @@ import com.judamie_user.android.databinding.RowOrderListBinding
 import com.judamie_user.android.firebase.service.CouponService
 import com.judamie_user.android.ui.fragment.MainFragment
 import com.judamie_user.android.ui.fragment.ShopSubFragmentName
+import com.judamie_user.android.util.tools.Companion.toFormattedDate
 import com.judamie_user.android.viewmodel.fragmentviewmodel.ShowUserCouponListViewModel
 import com.judamie_user.android.viewmodel.rowviewmodel.RowCouponViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -108,7 +109,7 @@ class ShowUserCouponListFragment(val mainFragment: MainFragment) : Fragment() {
 
         override fun onBindViewHolder(holder: RecyclerViewHolder, position: Int) {
             holder.rowCouponBinding.rowCouponViewModel?.textViewRowCouponNameText?.value = couponList[position].couponName
-            holder.rowCouponBinding.rowCouponViewModel?.textViewRowCouponExpireDateText?.value = couponList[position].couponPeriod
+            holder.rowCouponBinding.rowCouponViewModel?.textViewRowCouponExpireDateText?.value = "${couponList[position].couponPeriod.toFormattedDate()}"
             holder.rowCouponBinding.rowCouponViewModel?.textViewRowCouponDiscountRateText?.value = "${couponList[position].couponDiscountRate}%"
             holder.rowCouponBinding.rowCouponViewModel?.textViewRowCouponStateText?.value = couponList[position].couponState.str
         }

@@ -281,5 +281,27 @@ class UserRepository {
             documentReference.update(updateMap).await()
         }
 
+        // 서버에서 쿠폰을 삭제하는 메서드
+        suspend fun deleteCouponFromUser(userDocumentId: String, couponDocumentId: String) {
+            // 유저 데이터 가져오기
+            val userVO = selectUserDataByUserDocumentIdOne(userDocumentId)
+
+            // userCoupons 리스트에서 해당 쿠폰 ID 삭제
+            val updatedCoupons = userVO.userCoupons.toMutableList().apply {
+                remove(couponDocumentId)
+            }
+
+            // Firestore 업데이트
+            updateUserCoupons(userDocumentId, updatedCoupons)
+        }
+
+        // 쿠폰 목록 업데이트(수정) 메서드
+        suspend fun updateUserCoupons(userDocumentId: String, updatedCoupons: List<String>) {
+            val firestore = FirebaseFirestore.getInstance()
+            val userRef = firestore.collection("UserData").document(userDocumentId)
+
+            userRef.update("userCoupons", updatedCoupons).await()
+        }
+
     }
 }

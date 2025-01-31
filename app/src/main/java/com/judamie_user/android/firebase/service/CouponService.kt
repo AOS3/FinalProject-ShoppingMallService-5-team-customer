@@ -5,6 +5,7 @@ import com.judamie_manager.firebase.vo.CouponVO
 import com.judamie_user.android.firebase.model.ProductModel
 import com.judamie_user.android.firebase.repository.CouponRepository
 import com.judamie_user.android.firebase.repository.ProductRepository
+import com.judamie_user.android.firebase.repository.UserRepository
 
 class CouponService {
     companion object{
