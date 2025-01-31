@@ -1,5 +1,6 @@
 package com.judamie_user.android.ui.fragment
 
+import android.graphics.Rect
 import android.net.Uri
 import android.os.Bundle
 import android.os.Parcel
@@ -468,8 +469,11 @@ class ShopCartFragment(val mainFragment: MainFragment) : Fragment() {
         fragmentShopCartBinding.apply {
             recyclerViewShopCart.adapter = CartRecyclerViewAdapter()
             recyclerViewShopCart.layoutManager = LinearLayoutManager(shopActivity)
-            val deco = MaterialDividerItemDecoration(shopActivity, MaterialDividerItemDecoration.VERTICAL)
-            recyclerViewShopCart.addItemDecoration(deco)
+//            val deco = MaterialDividerItemDecoration(shopActivity, MaterialDividerItemDecoration.VERTICAL)
+//            recyclerViewShopCart.addItemDecoration(deco)
+
+            // 항목끼리 좀 띄우기..
+            recyclerViewShopCart.addItemDecoration(SpaceItemDecoration(33))
         }
     }
 
@@ -602,5 +606,13 @@ data class CartItem(val productId: String, val count: Int) : Parcelable {
         override fun newArray(size: Int): Array<CartItem?> {
             return arrayOfNulls(size)
         }
+    }
+}
+
+class SpaceItemDecoration(private val space: Int) : RecyclerView.ItemDecoration() {
+    override fun getItemOffsets(
+        outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State
+    ) {
+        outRect.top = space // 각 아이템 위쪽에 간격 추가
     }
 }

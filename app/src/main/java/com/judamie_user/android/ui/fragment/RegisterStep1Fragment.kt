@@ -76,6 +76,10 @@ class RegisterStep1Fragment : Fragment() {
         // 사용자가 입력한 이름
         val userName = fragmentRegisterStep1Binding.registerStep1ViewModel?.textFieldRegisterStep1FragmentNameEditTextText?.value!!
 
+        // 기존 에러 메시지 초기화
+        fragmentRegisterStep1Binding.textFieldRegisterStep1Id.error = null
+        fragmentRegisterStep1Binding.textFieldRegisterStep1FragmentName.error = null
+
         // 사용할 수 있는 아이디인지 검사
         CoroutineScope(Dispatchers.Main).launch {
             val work1 = async(Dispatchers.IO){
@@ -99,7 +103,7 @@ class RegisterStep1Fragment : Fragment() {
                 // 소프트 키보드 표시
                 loginActivity.showSoftInput(fragmentRegisterStep1Binding.textFieldRegisterStep1Id)
                 // 2초 뒤에 에러 메시지 제거
-                clearErrorAfterDelay(fragmentRegisterStep1Binding.textFieldRegisterStep1Id, 2000)
+                // clearErrorAfterDelay(fragmentRegisterStep1Binding.textFieldRegisterStep1Id, 2000)
             }
 
             // 이름 중복 여부 처리
@@ -112,7 +116,7 @@ class RegisterStep1Fragment : Fragment() {
                 // 소프트 키보드 표시
                 loginActivity.showSoftInput(fragmentRegisterStep1Binding.textFieldRegisterStep1FragmentName)
                 // 2초 뒤에 에러 메시지 제거
-                clearErrorAfterDelay(fragmentRegisterStep1Binding.textFieldRegisterStep1FragmentName, 2000)
+                // clearErrorAfterDelay(fragmentRegisterStep1Binding.textFieldRegisterStep1FragmentName, 2000)
             }
 
             // 아이디와 이름이 모두 사용 가능한 경우에만 다음 화면으로 이동
@@ -122,10 +126,10 @@ class RegisterStep1Fragment : Fragment() {
         }
     }
 
-    // 에러 메시지 제거 메서드
-    fun clearErrorAfterDelay(textField: TextInputLayout, delayMillis: Long) {
-        Handler().postDelayed({
-            textField.error = null
-        }, delayMillis)
-    }
+//    // 에러 메시지 제거 메서드
+//    fun clearErrorAfterDelay(textField: TextInputLayout, delayMillis: Long) {
+//        Handler().postDelayed({
+//            textField.error = null
+//        }, delayMillis)
+//    }
 }

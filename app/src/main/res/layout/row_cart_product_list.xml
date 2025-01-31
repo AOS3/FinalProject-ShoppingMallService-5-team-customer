@@ -74,10 +74,11 @@
             android:id="@+id/imageViewCartProduct"
             android:layout_width="134dp"
             android:layout_height="134dp"
+            android:background="@drawable/picture_rounded_corners"
+            android:clipToOutline="true"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/checkBoxCartProduct"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/liquor_24px"
-            android:layout_marginBottom="8dp" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <LinearLayout
             android:layout_width="100dp"
