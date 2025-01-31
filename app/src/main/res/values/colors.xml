@@ -9,5 +9,8 @@
     <color name="pickupDone">#FCA607</color>
     <color name="gray">#838383</color>
     <color name="shimmer_placeholder">#B3B3B3</color>
+    <color name="colorPrimary">#FFFFFF</color>
+    <color name="colorBackground">#FFFFFF</color>
+
 </resources>
 

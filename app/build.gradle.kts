@@ -89,5 +89,6 @@ dependencies {
     implementation ("com.facebook.shimmer:shimmer:0.5.0")
     implementation(kotlin("script-runtime"))
 
+    implementation("androidx.core:core-splashscreen:1.0.1")
 
 }
