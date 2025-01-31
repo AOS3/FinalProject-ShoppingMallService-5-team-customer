@@ -97,7 +97,7 @@ class ProductRepository {
 
                         productModel.productName = data["productName"] as? String ?: ""
                         productModel.productDiscountRate = (data["productDiscountRate"] as? Long)?.toInt() ?: 0
-                        productModel.productPrice = (data["productPrice"] as? Long)?.toInt() ?: 0
+                        productModel.productPrice = (data["productPrice"] as? Number)?.toDouble() ?: 0.0
                         productModel.productMainImage = data["productMainImage"].toString()
                         productModel.productStock = (data["productStock"] as? Long)?.toInt() ?: 0
 

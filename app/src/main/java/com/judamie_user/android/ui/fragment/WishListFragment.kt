@@ -343,7 +343,7 @@ class WishListFragment(val mainFragment: MainFragment) : Fragment() {
                     val realPrice = productModelImageList[position].first.productPrice - ((discount.toFloat()/100)*productModelImageList[position].first.productPrice)
                     Log.d("realPrice","${realPrice}, ${productModelImageList[position].first.productPrice}")
                     holder.rowProductListBinding.rowProductListViewModel?.textViewSearchProductPriceText?.value =
-                        realPrice.toInt().formatToComma()
+                        realPrice.formatToComma()
                 }else{
                     holder.rowProductListBinding.rowProductListViewModel?.textViewSearchProductPriceText?.value =
                         productModelImageList[position].first.productPrice.formatToComma()
