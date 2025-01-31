@@ -16,10 +16,14 @@ import com.judamie_user.android.R
 import com.judamie_user.android.activity.ShopActivity
 import com.judamie_user.android.databinding.FragmentPaymentProductBinding
 import com.judamie_user.android.databinding.RowPaymentProductListBinding
+import com.judamie_user.android.firebase.model.OrderModel
+import com.judamie_user.android.firebase.model.OrderPackageModel
 import com.judamie_user.android.firebase.model.PickupLocationModel
 import com.judamie_user.android.firebase.model.ProductModel
 import com.judamie_user.android.firebase.model.UserModel
 import com.judamie_user.android.firebase.service.CouponService
+import com.judamie_user.android.firebase.service.OrderPackageService
+import com.judamie_user.android.firebase.service.OrderService
 import com.judamie_user.android.firebase.service.PickupLocationService
 import com.judamie_user.android.firebase.service.ProductService
 import com.judamie_user.android.firebase.service.UserService
@@ -27,6 +31,8 @@ import com.judamie_user.android.ui.fragment.CartItem
 import com.judamie_user.android.ui.fragment.MainFragment
 import com.judamie_user.android.ui.fragment.ShopSubFragmentName
 import com.judamie_user.android.util.CouponUsableType
+import com.judamie_user.android.util.OrderPackageState
+import com.judamie_user.android.util.OrderState
 import com.judamie_user.android.util.tools.Companion.formatToComma
 import com.judamie_user.android.viewmodel.fragmentviewmodel.PaymentProductViewModel
 import com.judamie_user.android.viewmodel.rowviewmodel.RowPaymentProductListViewModel
@@ -117,10 +123,100 @@ class PaymentProductFragment(val mainFragment: MainFragment) : Fragment() {
 
     // 결제 처리 메서드
     fun proPayment() {
-        // TODO
-        // 결제 API 연동
-        // 결제 확인 화면으로 이동
+        fragmentPaymentProductBinding.apply {
+            CoroutineScope(Dispatchers.Main).launch {
+                // 프로그래스바 보이게 하기
+                progressBarPaymentProduct.visibility = View.VISIBLE
+
+                val orderIdList = mutableListOf<String>() // 생성된 주문 ID 리스트
+
+                // 주문 데이터 저장 (순차적으로 실행)
+                for ((product, count) in recyclerViewPaymentList) {
+                    val productInfo = async(Dispatchers.IO) {
+                        ProductService.selectProductDataOneById(product.productDocumentId ?: "")
+                    }
+                    val productModel = productInfo.await()
+
+                    val userDocumentId = shopActivity.userDocumentID
+                    val sellerDocumentId = productModel.productSeller ?: ""
+                    val orderTime = System.nanoTime()
+                    val productDocumentId = productModel.productDocumentId ?: ""
+                    val productPrice = productModel.productPrice ?: 0
+                    val productDiscountRate = productModel.productDiscountRate ?: 0
+                    val orderCount = count
+                    val pickupLocDocumentId = userModel.userPickupLoc
+                    val orderState = OrderState.ORDER_STATE_PAYMENT_COMPLETE
+                    val orderTimeStamp = System.nanoTime()
+
+                    val orderPriceAmount =
+                        ((productPrice * (1 - (productDiscountRate.toDouble() / 100.0))) * orderCount).toInt()
+
+                    val orderModel = OrderModel().also {
+                        it.userDocumentId = userDocumentId
+                        it.pickupLocDocumentId = pickupLocDocumentId
+                        it.sellerDocumentID = sellerDocumentId
+                        it.productDocumentId = productDocumentId
+                        it.productPrice = productPrice
+                        it.productDiscountRate = productDiscountRate
+                        it.orderCount = orderCount
+                        it.orderTime = orderTime
+                        it.orderState = orderState
+                        it.orderPriceAmount = orderPriceAmount.toDouble()
+                        it.orderTimeStamp = orderTimeStamp
+                    }
+
+                    // OrderData를 서버에 저장하고 ID를 반환받음
+                    val work1 = async(Dispatchers.IO) {
+                        OrderService.addOrderData(orderModel)
+                    }
+                    val orderDocumentId = work1.await()
+
+                    if (!orderDocumentId.isNullOrEmpty()) {
+                        orderIdList.add(orderDocumentId)
+                    } else {
+
+                    }
+                }
+
+                Log.d("test100", "최종 OrderIdList: $orderIdList")
+
+                // 모든 주문 데이터가 저장된 후 OrderPackageModel 생성
+                if (orderIdList.isNotEmpty()) {
+                    val orderPackageModel = OrderPackageModel().also {
+                        it.orderDataList = orderIdList
+                        it.orderOwnerId = shopActivity.userDocumentID
+                        it.orderPackageState = OrderPackageState.ORDER_PACKAGE_STATE_ENABLE
+                        it.orderPackageDataTimeStamp = System.nanoTime()
+                        it.orderTransactionTime = 0
+                        it.orderPickupState = false
+                        it.orderDepositState = false
+                    }
+
+                    // OrderPackage 저장
+                    val work2 = async(Dispatchers.IO) {
+                        OrderPackageService.addOrderPackageData(orderPackageModel)
+                    }
+                    work2.await()
+
+                    Log.d("test100", "OrderPackageModel 저장 완료")
+                } else {
+                    Log.e("test100", "OrderIdList가 비어 있음. OrderPackageModel 생성되지 않음.")
+                }
+
+                // 프로그래스바 숨기기
+                progressBarPaymentProduct.visibility = View.GONE
+
+                // 결제 확인 화면으로 이동
+                mainFragment.replaceFragment(
+                    ShopSubFragmentName.COMPLETE_PAYMENT_FRAGMENT,
+                    true,
+                    true,
+                    null
+                )
+            }
+        }
     }
+
 
     // 유저의 정보를 가져오는 메서드
     fun settingUserInfo() {
@@ -211,16 +307,16 @@ class PaymentProductFragment(val mainFragment: MainFragment) : Fragment() {
         override fun onBindViewHolder(holder: PaymentViewHolder, position: Int) {
 
             val (product, count) = recyclerViewPaymentList[position]
+            val discount = product.productDiscountRate
+            val productPrice = product.productPrice * discount/100
 
             holder.rowPaymentProductListBinding.rowPaymentProductListViewModel?.textViewCartProductNameText?.value =
                 product.productName
             holder.rowPaymentProductListBinding.rowPaymentProductListViewModel?.rowTextViewPaymentProductPriceText?.value =
-                "${product.productPrice.formatToComma()}"
+                "${productPrice.formatToComma()}"
             holder.rowPaymentProductListBinding.rowPaymentProductListViewModel?.rowTextViewPaymentProductCountText?.value = "${count}개"
             holder.rowPaymentProductListBinding.rowPaymentProductListViewModel?.rowTextViewPaymentStoreNameText?.value = product.productSeller
 
-            // 할인률
-            val discount = product.productDiscountRate
             holder.rowPaymentProductListBinding.rowPaymentProductListViewModel?.rowTextViewPaymentProductPercentText?.value =
                 if (discount > 0) "${discount}%" else ""
             holder.rowPaymentProductListBinding.rowTextViewPaymentProductPercent.visibility =
@@ -268,7 +364,8 @@ class PaymentProductFragment(val mainFragment: MainFragment) : Fragment() {
                 val couponList = work2.await()
 
                 // TODO
-                // 쿠폰 날짜가 만료되면 안보이도록 한다.
+                // 쿠폰 날짜가 만료되면 안보이도록 작업
+
                 // CouponUsableType이 2가 아닌 쿠폰만 필터링
                 val filteredCouponList = couponList.filter { coupon ->
                     coupon.couponState != CouponUsableType.fromNumber(2)
@@ -329,7 +426,7 @@ class PaymentProductFragment(val mainFragment: MainFragment) : Fragment() {
     fun settingTotalPrice(selectedCoupon: CouponModel? = null) {
         // 총 상품 가격
         val totalProductPrice = recyclerViewPaymentList.sumOf { (product, count) ->
-            product.productPrice * count
+            (product.productPrice * product.productDiscountRate/100) * count
         }
         // 쿠폰 할인 금액
         val couponDiscountRate = selectedCoupon?.couponDiscountRate?.toIntOrNull() ?: 0

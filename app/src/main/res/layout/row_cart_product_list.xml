@@ -96,8 +96,8 @@
 
             <ImageButton
                 android:id="@+id/buttonCartProductCntMinus"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:backgroundTint="@android:color/transparent"
                 android:src="@drawable/remove_24px"
                 android:text="-"
@@ -114,8 +114,8 @@
 
             <ImageButton
                 android:id="@+id/buttonCartProductCntPlus"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:backgroundTint="@android:color/transparent"
                 android:src="@drawable/add_24px"
                 android:text="-"

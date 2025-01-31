@@ -64,7 +64,7 @@ data class PaymentProductViewModel(val paymentProductFragment: PaymentProductFra
     // 결제하기 버튼
     // buttonPaymentPay - onClick
     fun buttonPaymentPayOnClick() {
-
+        paymentProductFragment.proPayment()
     }
 
     companion object{
