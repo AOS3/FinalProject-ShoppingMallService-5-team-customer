@@ -37,14 +37,19 @@ class ReviewRepository {
                 .await()
         }
 
-        //리뷰 documentID로 리뷰를 가져오는 메서드
-        suspend fun gettingReviewByID(reviewDocumentID:String):ReviewVO{
+        // 리뷰 documentID로 리뷰를 가져오는 메서드
+        suspend fun gettingReviewByID(reviewDocumentID: String): ReviewVO {
             val firestore = FirebaseFirestore.getInstance()
             val collectionReference = firestore.collection("ReviewData")
             val documentReference = collectionReference.document(reviewDocumentID)
-            val documentSnapShot = documentReference.get().await()
-            val reviewVO = documentSnapShot.toObject(ReviewVO::class.java)!!
-            return reviewVO
+
+            return try {
+                val documentSnapShot = documentReference.get().await()
+                documentSnapShot.toObject(ReviewVO::class.java)
+                    ?: throw NoSuchElementException("해당 ID($reviewDocumentID)에 대한 리뷰를 찾을 수 없습니다.")
+            } catch (e: Exception) {
+                throw Exception("리뷰를 불러오는 중 오류 발생: ${e.message}", e)
+            }
         }
 
         //이미지 데이터를 가져온다
