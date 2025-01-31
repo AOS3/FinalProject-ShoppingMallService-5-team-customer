@@ -47,11 +47,8 @@ class OrderVO {
 
         when (orderState){
             OrderState.ORDER_STATE_PAYMENT_COMPLETE.num -> orderModel.orderState = OrderState.ORDER_STATE_PAYMENT_COMPLETE
-            OrderState.ORDER_STATE_BEFORE_DELIVERY.num -> orderModel.orderState = OrderState.ORDER_STATE_BEFORE_DELIVERY
             OrderState.ORDER_STATE_DELIVERY.num -> orderModel.orderState = OrderState.ORDER_STATE_DELIVERY
-            OrderState.ORDER_STATE_BEFORE_PICKUP.num -> orderModel.orderState = OrderState.ORDER_STATE_BEFORE_PICKUP
             OrderState.ORDER_STATE_PICKUP_COMPLETED.num -> orderModel.orderState = OrderState.ORDER_STATE_PICKUP_COMPLETED
-            OrderState.ORDER_STATE_BEFORE_TRANSFER.num -> orderModel.orderState = OrderState.ORDER_STATE_BEFORE_TRANSFER
             OrderState.ORDER_STATE_TRANSFER_COMPLETED.num -> orderModel.orderState = OrderState.ORDER_STATE_TRANSFER_COMPLETED
         }
 
