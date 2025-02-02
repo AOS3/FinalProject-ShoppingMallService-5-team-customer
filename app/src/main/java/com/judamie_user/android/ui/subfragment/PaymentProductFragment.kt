@@ -155,6 +155,7 @@ class PaymentProductFragment(val mainFragment: MainFragment) : Fragment() {
                     val pickupLocDocumentId = userModel.userPickupLoc
                     val orderState = OrderState.ORDER_STATE_PAYMENT_COMPLETE
                     val orderTimeStamp = System.currentTimeMillis()
+                    val orderTransactionTime = 0L
 
                     val orderPriceAmount =
                         ((productPrice * (1 - (productDiscountRate.toDouble() / 100.0))) * orderCount).toInt()
@@ -171,6 +172,7 @@ class PaymentProductFragment(val mainFragment: MainFragment) : Fragment() {
                         it.orderState = orderState
                         it.orderPriceAmount = orderPriceAmount.toDouble()
                         it.orderTimeStamp = orderTimeStamp
+                        it.orderTransactionTime = orderTransactionTime
                     }
 
                     // OrderData를 서버에 저장하고 ID를 반환받음
@@ -195,9 +197,7 @@ class PaymentProductFragment(val mainFragment: MainFragment) : Fragment() {
                         it.orderOwnerId = shopActivity.userDocumentID
                         it.orderPackageState = OrderPackageState.ORDER_PACKAGE_STATE_ENABLE
                         it.orderPackageDataTimeStamp = System.currentTimeMillis()
-                        it.orderTransactionTime = 0
                         it.orderPickupState = false
-                        it.orderDepositState = false
                     }
 
                     // OrderPackage 저장
