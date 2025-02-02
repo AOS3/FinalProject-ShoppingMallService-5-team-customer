@@ -130,6 +130,8 @@ class PaymentProductFragment(val mainFragment: MainFragment) : Fragment() {
                 progressBarPaymentProduct.visibility = View.VISIBLE
 
                 val orderIdList = mutableListOf<String>() // 생성된 주문 ID 리스트
+                // 장바구니에서 결제한 경우인지 확인
+                val isFromCart = arguments?.getBoolean("fromCart", false) ?: false
 
                 // 선택된 쿠폰 가져오기
                 val selectedCoupon = if (selectedCouponIndex > 0) {
@@ -217,6 +219,15 @@ class PaymentProductFragment(val mainFragment: MainFragment) : Fragment() {
                         UserService.deleteCouponData(userModel.userDocumentID, couponDocumentId)
                     }
                     work3.await()
+                }
+
+                if (isFromCart) {
+                    for ((product, _) in recyclerViewPaymentList) {
+                        val work4 = async(Dispatchers.IO) {
+                            UserService.deleteCartItem(userModel.userDocumentID, product.productDocumentId ?: "")
+                        }
+                        work4.await()
+                    }
                 }
 
                 // 프로그래스바 숨기기
