@@ -29,6 +29,8 @@ class OrderModel {
     var orderTimeStamp = 0L
     // 주문 상태
     var orderState = OrderState.ORDER_STATE_PAYMENT_COMPLETE
+    // 거래 입금 시간
+    var orderTransactionTime = 0L
 
     fun toOrderVO() : OrderVO {
         val orderVO = OrderVO()
@@ -44,6 +46,7 @@ class OrderModel {
         orderVO.pickupLocDocumentId = pickupLocDocumentId
         orderVO.orderTimeStamp = orderTimeStamp
         orderVO.orderState = orderState.num
+        orderTransactionTime = orderTransactionTime
 
         return orderVO
     }
