@@ -98,8 +98,9 @@
             android:layout_marginBottom="5dp"
             android:background="@drawable/button_round_activated"
             android:onClick="@{(view)->showUserOrderInfoViewModel.buttonShowUserOrderInfoPickupDoneOnclick()}"
-            android:text="픽업 완료"
-            android:textColor="@color/white"
+            android:enabled="@{showUserOrderInfoViewModel.buttonShowUserOrderInfoPickupDoneEnabled}"
+            bind:backgroundDrawable="@{showUserOrderInfoViewModel.buttonShowUserOrderInfoPickupDoneBackground}"
+            bind:textColorInt="@{showUserOrderInfoViewModel.buttonShowUserOrderInfoPickupDoneTextColor}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />

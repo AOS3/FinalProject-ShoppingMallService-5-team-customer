@@ -101,6 +101,8 @@ class ShowUserOrderInfoFragment(val mainFragment: MainFragment) : Fragment() {
                 // 픽업지 설정(상세 주소)
                 textViewShowUserOrderInfoPickupLocationAddressDetailText?.value =
                     pickUpLocationModel.pickupLocAddressDetail
+
+
             }
             settingRecyclerView()
 
