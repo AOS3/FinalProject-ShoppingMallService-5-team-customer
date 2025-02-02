@@ -1,6 +1,7 @@
 package com.judamie_user.android.ui.fragment
 
 import android.content.res.ColorStateList
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -13,6 +14,9 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.target.Target
 import com.judamie_user.android.R
 import com.judamie_user.android.activity.ShopActivity
 import com.judamie_user.android.databinding.FragmentViewPagerBinding
@@ -27,6 +31,7 @@ import com.judamie_user.android.viewmodel.rowviewmodel.RowSearchListViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -101,8 +106,17 @@ class ViewPagerFragment(val mainFragment: MainFragment) : Fragment() {
         dropMenuAdapter()
         // 데이터를 가져와 RecyclerView 갱신 메서드 호출
         refreshMainRecyclerView()
-
+        // 찜 목록을 가져오는 메서드 호출
         settingSearchUserWishList()
+
+        // 이미 리사이클러뷰 목록을 가져온 경우 프로그래스바가 표시되지 않도록 한다.
+        if (recyclerViewCategoryList.isEmpty()) {
+            CoroutineScope(Dispatchers.Main).launch {
+                ProductService.gettingProductList(productCategory)
+            }
+        }else{
+            fragmentViewPagerBinding.progressViewPagerProduct.visibility = View.GONE
+        }
 
         return fragmentViewPagerBinding.root
     }
@@ -140,11 +154,25 @@ class ViewPagerFragment(val mainFragment: MainFragment) : Fragment() {
     // RecyclerView를 갱신하는 메서드
     private fun refreshMainRecyclerView() {
         CoroutineScope(Dispatchers.Main).launch {
+
+            // 프로그레스바 표시
+            fragmentViewPagerBinding.progressViewPagerProduct.visibility = View.VISIBLE
+            fragmentViewPagerBinding.recyclerViewHome.visibility = View.GONE
+
+            // 상품 목록을 가져온다.
             val work1 = async(Dispatchers.IO) {
                 ProductService.gettingProductList(productCategory)
             }
             recyclerViewCategoryList.clear()
             recyclerViewCategoryList.addAll(work1.await())
+
+            // 모든 이미지 로드가 끝날 때까지 대기
+            val imageLoadJobs = recyclerViewCategoryList.map { product ->
+                async(Dispatchers.IO) {
+                    ProductService.gettingImage(product.productMainImage)
+                }
+            }
+            imageLoadJobs.awaitAll()
 
             fragmentViewPagerBinding.recyclerViewHome.adapter?.notifyDataSetChanged()
 
@@ -156,6 +184,10 @@ class ViewPagerFragment(val mainFragment: MainFragment) : Fragment() {
                 // 결과가 있으면 리사이클러뷰 표시
                 fragmentViewPagerBinding.textViewHomeEmptyProduct.visibility = View.GONE
             }
+
+            // 모든 이미지 로드가 완료된 후 ProgressBar 숨김
+            fragmentViewPagerBinding.progressViewPagerProduct.visibility = View.GONE
+            fragmentViewPagerBinding.recyclerViewHome.visibility = View.VISIBLE
 
             // product 개수 업데이트
             fragmentViewPagerBinding.viewPagerViewModel?.textViewHomeProductCountText?.value =
@@ -173,7 +205,7 @@ class ViewPagerFragment(val mainFragment: MainFragment) : Fragment() {
 
     // 유저의 위시리스트를 가져온다
     private fun settingSearchUserWishList() {
-        // 1. 유저 컬렉션에서 유저의 제품 ID가 담긴 리스트를 가져온다
+        // 유저 컬렉션에서 유저의 제품 ID가 담긴 리스트를 가져온다
         CoroutineScope(Dispatchers.Main).launch {
             var work = async(Dispatchers.IO) {
                 UserService.gettingWishListByUserID(shopActivity.userDocumentID)
@@ -353,6 +385,7 @@ class ViewPagerFragment(val mainFragment: MainFragment) : Fragment() {
                         .placeholder(R.drawable.liquor_24px)
                         .error(R.drawable.liquor_24px)
                         .into(holder.rowSearchListBinding.imageViewSearchProduct)
+
 
                 } catch (e: Exception) {
                     e.printStackTrace()
