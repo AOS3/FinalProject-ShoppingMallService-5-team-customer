@@ -1,6 +1,9 @@
 package com.judamie_user.android.util
 
+import android.graphics.drawable.Drawable
 import android.net.Uri
+import android.view.View
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.ColorRes
@@ -59,6 +62,23 @@ class tools {
                 textView.setTextColor(ContextCompat.getColor(textView.context, colorRes))
             }
         }
+
+        @JvmStatic
+        @BindingAdapter("bind:backgroundDrawable")
+        fun setBackgroundDrawable(view: View, drawable: Drawable?) {
+            drawable?.let {
+                view.background = it
+            }
+        }
+
+        @JvmStatic
+        @BindingAdapter("bind:textColorInt")
+        fun setTextColor(button: Button, color: Int?) {
+            color?.let {
+                button.setTextColor(it)
+            }
+        }
+
     }
 
 }

@@ -47,6 +47,9 @@ class ShowUserOrderListFragment(val mainFragment: MainFragment) : Fragment() {
     //  주문목록RecyclerView를 구성하기 위해 사용할 리스트
     var gettingUserOrderPackageList = mutableListOf<OrderPackageModel>()
 
+    // 주문 패키지에있는 모든 주문리스트가 담겨있는 리스트
+    var wholeOrderModelList = mutableListOf(mutableListOf<OrderModel>())
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -157,11 +160,17 @@ class ShowUserOrderListFragment(val mainFragment: MainFragment) : Fragment() {
             RecyclerView.ViewHolder(rowOrderListBinding.root) {
             init {
                 rowOrderListBinding.root.setOnClickListener {
+                    var dataBundle = Bundle()
+                    dataBundle.putStringArrayList(
+                        "orderDataList",
+                        ArrayList(gettingUserOrderPackageList[adapterPosition].orderDataList)
+                    )
+
                     mainFragment.replaceFragment(
                         ShopSubFragmentName.SHOW_USER_ORDER_INFO_FRAGMENT,
                         true,
                         true,
-                        null
+                        dataBundle
                     )
                 }
             }
@@ -193,12 +202,12 @@ class ShowUserOrderListFragment(val mainFragment: MainFragment) : Fragment() {
                 var packageTotalPrice: Double = 0.0
 
                 CoroutineScope(Dispatchers.Main).launch {
-                    val orders =
-                        gettingUserOrderPackageList[position].orderDataList.map { orderId ->
+                    val orders = gettingUserOrderPackageList[position].orderDataList.map { orderId ->
                             async(Dispatchers.IO) { OrderService.gettingOrderData(orderId) }
                         }.awaitAll()
 
                     orderModelList.addAll(orders)
+                    wholeOrderModelList.add(orderModelList)
 
                     // 총 가격 계산
                     packageTotalPrice = orderModelList.sumOf { it.orderPriceAmount }
@@ -236,7 +245,7 @@ class ShowUserOrderListFragment(val mainFragment: MainFragment) : Fragment() {
                         )
                     ) {
                         textViewPickupState?.value = context?.getString(R.string.orderDone)//주문완료
-                        textViewPickupStateColor?.value = R.color.black
+                        textViewPickupStateColor?.value = R.color.gray
                     }
                     //배달된 상품도 있고 아닌상품도있음
                     if (checkDeliveryState.contains(OrderState.ORDER_STATE_PAYMENT_COMPLETE) && checkDeliveryState.contains(
@@ -244,7 +253,7 @@ class ShowUserOrderListFragment(val mainFragment: MainFragment) : Fragment() {
                         )
                     ) {
                         textViewPickupState?.value = context?.getString(R.string.onDelivery)//배송중
-                        textViewPickupStateColor?.value = R.color.gray
+                        textViewPickupStateColor?.value = R.color.black
                     }
                     //모든 상품이 배송완료
                     if (!checkDeliveryState.contains(OrderState.ORDER_STATE_PAYMENT_COMPLETE) && checkDeliveryState.contains(
@@ -253,6 +262,12 @@ class ShowUserOrderListFragment(val mainFragment: MainFragment) : Fragment() {
                     ) {
                         textViewPickupState?.value = context?.getString(R.string.deliveryDone)//배송완료
                         textViewPickupStateColor?.value = R.color.deliveryDone
+                    }
+                    //모든 상품이 픽업완료&
+                    if (checkDeliveryState.contains(OrderState.ORDER_STATE_PICKUP_COMPLETED) || checkDeliveryState.contains(
+                            OrderState.ORDER_STATE_TRANSFER_COMPLETED)){
+                        textViewPickupState?.value = context?.getString(R.string.pickupDone)//픽업완료
+                        textViewPickupStateColor?.value = R.color.pickupDone
                     }
 
                     // 날짜 및 가격 설정

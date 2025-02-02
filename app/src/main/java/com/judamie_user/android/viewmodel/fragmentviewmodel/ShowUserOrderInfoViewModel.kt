@@ -24,10 +24,13 @@ class ShowUserOrderInfoViewModel(val showUserOrderInfoFragment: ShowUserOrderInf
 
 
     //textViewShowUserOrderInfoDate
-    val textViewShowUserOrderInfoDateText = MutableLiveData("textViewShowUserOrderInfoDate")
+    val textViewShowUserOrderInfoDateText = MutableLiveData("")
 
-    //textViewShowUserOrderInfoPickupLocation
-    val textViewShowUserOrderInfoPickupLocationText = MutableLiveData("textViewShowUserOrderInfoPickupLocation")
+    //textViewShowUserOrderInfoPickupLocationStreetAddress
+    val textViewShowUserOrderInfoPickupLocationStreetAddressText = MutableLiveData("")
+
+    //textViewShowUserOrderInfoPickupLocationAddressDetail
+    val textViewShowUserOrderInfoPickupLocationAddressDetailText = MutableLiveData("")
 
     //buttonShowUserOrderInfoPickupDone
     fun buttonShowUserOrderInfoPickupDoneOnclick(){

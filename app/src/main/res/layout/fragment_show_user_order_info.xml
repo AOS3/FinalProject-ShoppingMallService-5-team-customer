@@ -45,20 +45,30 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
             android:text="픽업지"
-            app:layout_constraintBottom_toTopOf="@+id/divider2"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textViewShowUserOrderInfoDate" />
 
         <TextView
-            android:id="@+id/textViewShowUserOrderInfoPickupLocation"
+            android:id="@+id/textViewShowUserOrderInfoPickupLocationStreetAddress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="50dp"
-            android:text="@{showUserOrderInfoViewModel.textViewShowUserOrderInfoPickupLocationText}"
-            app:layout_constraintBottom_toTopOf="@+id/divider2"
+            android:layout_marginTop="10dp"
+            android:text="@{showUserOrderInfoViewModel.textViewShowUserOrderInfoPickupLocationStreetAddressText}"
             app:layout_constraintStart_toEndOf="@+id/textView7"
             app:layout_constraintTop_toBottomOf="@+id/textViewShowUserOrderInfoDate" />
+
+        <TextView
+            android:id="@+id/textViewShowUserOrderInfoPickupLocationAddressDetail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="50dp"
+            android:layout_marginTop="10dp"
+            android:text="@{showUserOrderInfoViewModel.textViewShowUserOrderInfoPickupLocationAddressDetailText}"
+            app:layout_constraintStart_toEndOf="@+id/textView7"
+            app:layout_constraintTop_toBottomOf="@+id/textViewShowUserOrderInfoPickupLocationStreetAddress" />
 
         <View
             android:id="@+id/divider2"

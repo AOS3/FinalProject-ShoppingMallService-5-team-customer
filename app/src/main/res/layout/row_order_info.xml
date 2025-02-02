@@ -22,7 +22,7 @@
             android:layout_marginTop="20dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/liquor_24px" />
+            bind:imageUri="@{rowOrderInfoViewModel.imageViewRowOrderInfoProductImageUri}" />
 
         <TextView
             android:id="@+id/textViewRowOrderInfoProductName"
@@ -97,13 +97,15 @@
             android:layout_marginStart="5dp"
             android:layout_marginEnd="5dp"
             android:layout_marginBottom="5dp"
-            android:background="@drawable/button_round_activated"
             android:onClick="@{(view)->rowOrderInfoViewModel.buttonRowOrderInfoWriteReviewOnClick()}"
             android:text="리뷰작성"
-            android:textColor="@color/white"
+            android:enabled="@{rowOrderInfoViewModel.buttonRowOrderInfoWriteReviewEnabled}"
+            bind:backgroundDrawable="@{rowOrderInfoViewModel.buttonRowOrderInfoWriteReviewBackground}"
+            bind:textColorInt="@{rowOrderInfoViewModel.buttonRowOrderInfoWriteReviewTextColor}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"/>
+
         <!-- android:visibility="gone" -->
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
