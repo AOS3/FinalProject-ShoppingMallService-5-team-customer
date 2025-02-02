@@ -17,6 +17,31 @@ class UserRepository {
             collectionReference.add(userVO)
         }
 
+        // 유저의 장바구니 리스트 삭제하는 메서드
+        suspend fun deleteCartItem(userDocumentId: String, productDocumentId: String) {
+            try {
+                val cartRef = FirebaseFirestore.getInstance()
+                    .collection("UserData")
+                    .document(userDocumentId)
+
+
+                val snapshot = cartRef.get().await()
+                if (snapshot.exists()) {
+                    val cartItems = snapshot.get("userCartList") as? MutableList<String>
+                    if (cartItems != null) {
+                        // productDocumentId와 일치하는 아이템 삭제
+                        val updatedCartItems = cartItems.filterNot { it == productDocumentId }
+
+                        cartRef.update("userCartList", updatedCartItems).await()
+                        Log.d("CartService", "장바구니에서 상품 삭제 완료: $productDocumentId")
+                    }
+                }
+
+            } catch (e: Exception) {
+                Log.e("CartService", "장바구니 상품 삭제 오류: ${e.message}")
+            }
+        }
+
         // 장바구이에 상품 추가하는 메서드
         suspend fun addCartData(userVO: UserVO, userDocumentID:String){
             val firestore = FirebaseFirestore.getInstance()

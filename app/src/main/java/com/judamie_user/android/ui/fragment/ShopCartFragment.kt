@@ -58,7 +58,6 @@ class ShopCartFragment(val mainFragment: MainFragment) : Fragment() {
     var bundle : HashMap<String, Int>? = null
 
 
-
     // 체크된 상품 정보를 담을 리스트
     val selectedProducts = mutableListOf<CartItem>()
 
@@ -261,6 +260,9 @@ class ShopCartFragment(val mainFragment: MainFragment) : Fragment() {
                     selectedProducts.add(CartItem(productId, productCount))
                 }
             }
+
+
+
             if (isStockSufficient) {
                 if (selectedProducts.isEmpty()) {
                     // 선택된 상품이 없을 경우
@@ -270,12 +272,14 @@ class ShopCartFragment(val mainFragment: MainFragment) : Fragment() {
                     activity?.let { dialog.show(it.supportFragmentManager, "CartDialog")}
                     // showNoSelectionBuyDialog()
                 } else {
+
                     // 선택된 상품 정보를 담아 다음 화면으로 이동
                     val dataBundle = Bundle()
                     dataBundle.putParcelableArrayList(
                         "selectedProducts",
                         ArrayList(selectedProducts)
                     )
+                    dataBundle.putBoolean("fromCart", true)
                     selectedProducts.forEach { product ->
                         Log.d(
                             "SelectedProduct",
@@ -309,78 +313,6 @@ class ShopCartFragment(val mainFragment: MainFragment) : Fragment() {
         fragmentShopCartBinding.recyclerViewShopCart.adapter?.notifyDataSetChanged()
     }
 
-
-//    fun selectionDelete() {
-//        var selectedIds = mutableListOf<String>()
-//
-//        // 체크된 항목들의 ID를 selectedIds에 추가
-//        checkBoxStates.value?.forEachIndexed { index, isChecked ->
-//            if (isChecked) {
-//                val productId = recyclerViewList.getOrNull(index)?.productDocumentId
-//                if (productId != null) {
-//                    selectedIds.add(productId)
-//                    Log.d("ShopCartFragment", "Added ID: $productId, Selected IDs: $selectedIds")
-//                }
-//            }
-//        }
-//
-//        if (selectedIds.isNotEmpty()) {
-//            // 선택된 ID를 가지고 삭제 작업을 수행
-//            CoroutineScope(Dispatchers.Main).launch {
-//                val deleteWork = async(Dispatchers.IO) {
-//                    // 서버에서 삭제
-//                    selectedIds.forEach { selectedId ->
-//                        // 유저의 cartList에서 해당 상품을 삭제
-//                        UserService.deleteUserCartData(shopActivity.userDocumentID, selectedId)
-//                    }
-//                }
-//                deleteWork.await()
-//
-//
-//                // 삭제할 항목들의 인덱스를 추적
-//                val indicesToRemove = mutableListOf<Int>()
-//
-//                selectedIds.forEach { selectedId ->
-//                    val indexToRemove = recyclerViewList.indexOfFirst { it.productDocumentId == selectedId }
-//                    if (indexToRemove != -1) {
-//                        indicesToRemove.add(indexToRemove)
-//                    }
-//                }
-//
-//                // 인덱스를 내림차순으로 정렬하여 삭제 순서를 역순으로 변경
-//                indicesToRemove.sortDescending()
-//
-//                // 인덱스를 처리하면서 삭제
-//                indicesToRemove.forEach { indexToRemove ->
-//                    if (indexToRemove < recyclerViewList.size) {
-//                        // 해당 인덱스에 해당하는 항목들을 삭제
-//                        recyclerViewList.removeAt(indexToRemove)  // 상품 삭제
-//                        imageUris.value?.removeAt(indexToRemove)  // 이미지 리스트에서 항목 삭제
-//                        checkBoxStates.value?.removeAt(indexToRemove)  // 체크박스 상태 삭제
-//                        productCountList.value?.removeAt(indexToRemove)  // 수량 리스트에서 항목 삭제
-//
-//                        // 리사이클러뷰 갱신
-//                        fragmentShopCartBinding.recyclerViewShopCart.adapter?.notifyItemRemoved(indexToRemove)
-//                    }
-//                }
-//
-//
-//                // 장바구니가 비어있는 경우
-//                if (recyclerViewList.isEmpty()) {
-//                    fragmentShopCartBinding.textViewShopCartEmpty.visibility = View.VISIBLE
-//                    fragmentShopCartBinding.buttonShopCartEmpty.visibility = View.VISIBLE
-//                }
-//
-//                // 장바구니 가격 계산 다시 하기
-//                calculateSelectedTotalPrice()
-//            }
-//        } else {
-//            // 아무것도 체크 안되어있으면 다이얼로그 띄움
-//            val dialog = CartDialogFragment("선택 삭제하기", "선택된 항목이 없습니다")
-//            dialog.isCancelable = false
-//            activity?.let { dialog.show(it.supportFragmentManager, "CartDialog") }
-//        }
-//    }
 
     fun selectionDelete() {
         var selectedIds = mutableListOf<String>()
