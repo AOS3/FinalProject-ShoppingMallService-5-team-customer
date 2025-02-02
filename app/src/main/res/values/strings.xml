@@ -10,7 +10,10 @@
 
     <!-- 주문 상태 입력을 위한 문자열 -->
     <string name="orderDone">주문 완료</string>
+    <string name="onDelivery">배송중</string>
     <string name="deliveryDone">배송 완료</string>
+
+
     <string name="pickupDone">픽업 완료</string>
 
     <!-- 상품 목록 정렬을 위한 리스트 -->

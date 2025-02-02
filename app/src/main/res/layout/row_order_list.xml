@@ -34,7 +34,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textViewOrderDate"
-            app:srcCompat="@drawable/liquor_24px" />
+            bind:imageUri="@{rowOrderListViewModel.imageViewOrderImageUri}" />
 
         <LinearLayout
             android:id="@+id/linearLayout"
@@ -57,8 +57,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
+                android:ellipsize="end"
+                android:singleLine="true"
                 android:text="@{rowOrderListViewModel.textViewOrderNameText}"
-                tools:text="더 발베니 14년 캐리비안 캐스크 피.." />
+                android:textSize="20sp"
+                tools:text="대표이름" />
 
             <TextView
                 android:id="@+id/textViewCountMore"
@@ -101,6 +104,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+            app:textColorRes="@{rowOrderListViewModel.textViewPickupStateColor}"
             tools:text="@string/deliveryDone"
             tools:textColor="@color/deliveryDone" />
 

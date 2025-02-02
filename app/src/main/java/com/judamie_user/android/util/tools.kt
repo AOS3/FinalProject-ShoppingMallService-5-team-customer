@@ -1,9 +1,15 @@
 package com.judamie_user.android.util
 
+import android.net.Uri
 import android.widget.ImageView
+import android.widget.TextView
+import androidx.annotation.ColorRes
+import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
 import androidx.lifecycle.LiveData
+import com.bumptech.glide.Glide
 import com.google.firebase.Timestamp
+import com.judamie_user.android.R
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -30,6 +36,27 @@ class tools {
         fun setImageSrcCompat(imageView: ImageView, imageRes: LiveData<Int>?) {
             imageRes?.value?.let { resId ->
                 imageView.setImageResource(resId)
+            }
+        }
+
+
+        @JvmStatic
+        @BindingAdapter("bind:imageUri")
+        fun setImageUri(imageView: ImageView, imageUri: LiveData<Uri>?) {
+            imageUri?.observeForever { uri ->
+                Glide.with(imageView.context)
+                    .load(uri)
+                    .placeholder(R.drawable.liquor_24px) // 로딩 중 표시할 이미지
+                    .error(R.drawable.liquor_24px) // 에러 발생 시 표시할 이미지
+                    .into(imageView)
+            }
+        }
+
+        @JvmStatic
+        @BindingAdapter("app:textColorRes")
+        fun setTextColorRes(textView: TextView, @ColorRes colorRes: Int?) {
+            if (colorRes != null) {
+                textView.setTextColor(ContextCompat.getColor(textView.context, colorRes))
             }
         }
     }

@@ -159,9 +159,7 @@ class WishListFragment(val mainFragment: MainFragment) : Fragment() {
     private suspend fun gettingUserWishList() {
         fragmentWishListBinding.apply {
             // 1. 유저 컬렉션에서 유저의 제품 ID가 담긴 리스트를 가져온다
-            userWishListProductID = withContext(Dispatchers.IO) {
-                UserService.gettingWishListByUserID(shopActivity.userDocumentID)
-            }
+            userWishListProductID = UserService.gettingWishListByUserID(shopActivity.userDocumentID)
 
             // 2. 제품 ID 리스트를 기반으로 제품 모델 리스트를 가져온다
             userWishListProductID.forEach {
@@ -180,12 +178,6 @@ class WishListFragment(val mainFragment: MainFragment) : Fragment() {
             }
 
             productModelImageList = productModelImageMap.toList().toMutableList()
-
-            productModelImageList.forEach {
-                Log.d("test", it.first.productDocumentId)
-                Log.d("test", it.second.toString())
-                Log.d("test", it.first.productName)
-            }
 
             // 찜 목록이 비어 있을 경우 UI 업데이트
             withContext(Dispatchers.Main) {

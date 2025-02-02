@@ -57,7 +57,7 @@ class UserProductReviewListFragment(val mainFragment: MainFragment) : Fragment()
     var reviewImagesMap = mutableMapOf<String, MutableList<Uri>>()
 
     //유저 id
-    var userDocumentID = "iElD58FO0PGqugxA8NpS"
+    var userDocumentID=""
 
     //툴바 타이틀
     var toolbarTitle = ""
@@ -101,8 +101,15 @@ class UserProductReviewListFragment(val mainFragment: MainFragment) : Fragment()
             }
         }
 
+        // 유저 id를 가져온다
+        gettingProductID()
+
 
         return fragmentUserProductReviewListBinding.root
+    }
+    // 유저 id를 가져온다
+    fun gettingProductID(){
+        userDocumentID = arguments?.getString("userDocumentId")!!
     }
 
     // 툴바 구성 메서드

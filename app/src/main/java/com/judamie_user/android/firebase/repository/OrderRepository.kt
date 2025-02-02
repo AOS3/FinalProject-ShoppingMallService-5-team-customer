@@ -13,5 +13,18 @@ class OrderRepository {
             val documentReference = collectionReference.add(orderVO).await()
             return documentReference.id // 새로 생성된 문서의 ID 반환
         }
+
+        // 주문정보를 가져오는 메서드
+        suspend fun gettingOrderData(orderDocumentID:String):OrderVO{
+            val firestore = FirebaseFirestore.getInstance()
+            val collectionReference = firestore.collection("OrderData")
+            val documentReference = collectionReference
+                .document(orderDocumentID)
+                .get()
+                .await()
+
+            val orderVO = documentReference.toObject(OrderVO::class.java)!!
+            return orderVO
+        }
     }
 }

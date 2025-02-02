@@ -16,7 +16,7 @@ class UserProductReviewListViewModel(val userProductReviewListFragment: UserProd
     val toolbarUserProductReviewNavigationIcon = MutableLiveData<Int>()
 
     // textViewUserProductReviewCnt - text
-    val textViewUserProductReviewCntText = MutableLiveData("")
+    val textViewUserProductReviewCntText = MutableLiveData("임시데이터")
 
     companion object{
         // toolbarUserProductReview - onNavigationClickUserProductReviewList
