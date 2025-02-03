@@ -30,7 +30,7 @@ class ReviewRepository {
         //리뷰의 documentID를 productData에 넣는 메서드
         suspend fun addReviewDataInProduct(reviewDocumentID:String,productDocumentID:String){
             val firestore = FirebaseFirestore.getInstance()
-            val collectionReference = firestore.collection("productData")
+            val collectionReference = firestore.collection("ProductData")
             val documentReference = collectionReference.document(productDocumentID)
 
             documentReference.update("productReview", FieldValue.arrayUnion(reviewDocumentID))
