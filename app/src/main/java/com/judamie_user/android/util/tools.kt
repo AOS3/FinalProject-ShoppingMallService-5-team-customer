@@ -17,6 +17,11 @@ class tools {
             return formatter.format(this)
         }
 
+        fun Int.formatToComma(): String {
+            val formatter = DecimalFormat("#,###원")
+            return formatter.format(this)
+        }
+
         fun Long.toFormattedDate(): String {
             val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()) // 원하는 형식 지정
             return formatter.format(Date(this)) // Long을 Date로 변환 후 포맷 적용

@@ -158,14 +158,14 @@
 
             <Button
                 android:id="@+id/buttonHomePickupLoc"
-                android:layout_width="262dp"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:backgroundTint="@android:color/transparent"
                 android:drawableEnd="@drawable/arrow_forward_ios_24px"
                 android:ellipsize="end"
-                android:text="@{homeViewModel.buttonHomePickupLocText}"
                 android:onClick="@{()->homeViewModel.buttonHomePickupLocOnClick()}"
                 android:singleLine="true"
+                android:text="@{homeViewModel.buttonHomePickupLocText}"
                 android:textAlignment="textStart"
                 android:textColor="#0D0C0C"
                 android:textSize="20sp" />

@@ -27,7 +27,7 @@ data class RowCartProductListViewModel(val shopCartFragment: ShopCartFragment) :
 
     // 상품 선택 체크박스
     // checkBoxCartProduct - checked
-    val checkBoxCartProductChecked = MutableLiveData(false)
+    val checkBoxCartProductChecked = MutableLiveData(true)
 
      // 수량 버튼
     // buttonCartProductCntMinus - OnClick

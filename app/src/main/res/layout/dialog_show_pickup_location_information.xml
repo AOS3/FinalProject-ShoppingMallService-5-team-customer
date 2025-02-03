@@ -19,13 +19,13 @@
             android:id="@+id/textViewDialogShowPickupLocationInformationName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="20dp"
             android:ellipsize="end"
             android:maxLength="30"
             android:maxLines="1"
             android:text="@{showPickupLocationInformationDialogViewModel.textViewDialogShowPickupLocationInformationNameText}"
             android:textColor="@color/mainColor"
-            android:textSize="20sp"
+            android:textSize="25sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -34,21 +34,23 @@
 
         <TextView
             android:id="@+id/textView13"
-            android:layout_width="wrap_content"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="30dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="20dp"
             android:text="주소 :"
+            android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/buttonSettingPickupLocationCall" />
 
         <TextView
             android:id="@+id/textView14"
-            android:layout_width="wrap_content"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="30dp"
             android:layout_marginTop="10dp"
             android:text="전화번호 :"
+            android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/textViewDialogSettingPickupLocationAddressDetail" />
 
@@ -61,6 +63,8 @@
             android:onClick="@{(view) -> showPickupLocationInformationDialogViewModel.buttonPickupLocationCallOnClick()}"
             android:textAppearance="@style/TextAppearance.AppCompat.Small"
             android:textColor="@color/black"
+            android:textSize="16sp"
+            android:paddingStart="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textViewDialogShowPickupLocationInformationName" />
@@ -74,20 +78,21 @@
             android:layout_marginEnd="10dp"
             android:ellipsize="end"
             android:text="@{showPickupLocationInformationDialogViewModel.textViewDialogShowPickupLocationInformationDetailText}"
-            android:textSize="12sp"
+            android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView14" />
 
         <android.widget.Button
             android:id="@+id/DialogSettingPickupLocationClose"
-            android:layout_width="wrap_content"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="30dp"
             android:background="@drawable/button_round_deactivated"
             android:onClick="@{()->showPickupLocationInformationDialogViewModel.DialogShowPickupLocationInformationCloseOnClick()}"
             android:text="닫기"
+            android:textSize="16sp"
             android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -103,7 +108,7 @@
             android:layout_marginEnd="10dp"
             android:ellipsize="end"
             android:text="@{showPickupLocationInformationDialogViewModel.textViewDialogShowPickupLocationInformationAddressDetailText}"
-            android:textSize="12sp"
+            android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/textView13"
             app:layout_constraintTop_toBottomOf="@id/textViewDialogSettingPickupLocationStreetAddress" />
@@ -117,7 +122,7 @@
             android:layout_marginEnd="10dp"
             android:ellipsize="end"
             android:text="@{showPickupLocationInformationDialogViewModel.textViewDialogShowPickupLocationInformationPhoneNumberText}"
-            android:textSize="12sp"
+            android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/textView14"
             app:layout_constraintTop_toBottomOf="@id/textViewDialogSettingPickupLocationAddressDetail" />
@@ -127,14 +132,14 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="20dp"
             android:layout_marginEnd="10dp"
             android:ellipsize="end"
             android:text="@{showPickupLocationInformationDialogViewModel.textViewDialogShowPickupLocationInformationStreetAddressText}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/textView13"
             app:layout_constraintTop_toBottomOf="@+id/buttonSettingPickupLocationCall"
-            android:textSize="12sp" />
+            android:textSize="16sp" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

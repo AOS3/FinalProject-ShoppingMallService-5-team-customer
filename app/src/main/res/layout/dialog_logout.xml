@@ -19,7 +19,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:textSize="24sp" />
+            android:textSize="20dp"
+            android:textStyle="bold"/>
 
 
         <android.widget.Button
@@ -33,6 +34,7 @@
             android:layout_weight="1"
             android:background="@drawable/button_round_deactivated"
             android:text="닫기"
+            android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@id/buttonLogout"
             app:layout_constraintHorizontal_bias="0.303"
@@ -48,8 +50,11 @@
             android:layout_marginEnd="20dp"
             android:layout_marginBottom="40dp"
             android:layout_weight="1"
+            android:paddingStart="15dp"
+            android:paddingEnd="15dp"
             android:background="@drawable/button_round_activated"
             android:text="로그아웃 하기"
+            android:textSize="16sp"
             android:textColor="#FFFFFF"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
