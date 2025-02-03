@@ -28,8 +28,22 @@ class UserNotificationListViewModel(val userNotificationListFragment: UserNotifi
     // TextView visibility
     val textViewNoNotificationVisibleVisibility = MutableLiveData(View.GONE)
 
+    //progressbar visibility
+    val progressBarUserNotificationVisibleVisibility = MutableLiveData(View.VISIBLE)
+
+    //recyclerViewUserNotificationList visibility
+    val recyclerViewUserNotificationListVisibleVisibility = MutableLiveData(View.GONE)
+
     // visibility 변경
     fun setNoNotificationVisibility(visible: Boolean) {
         textViewNoNotificationVisibleVisibility.value = if (visible) View.VISIBLE else View.GONE
+    }
+
+    fun setProgressBarUserNotificationVisibleVisibility(visible: Boolean){
+        progressBarUserNotificationVisibleVisibility.value = if (visible) View.VISIBLE else View.GONE
+    }
+
+    fun setRecyclerViewUserNotificationListVisibleVisibility(visible: Boolean){
+        recyclerViewUserNotificationListVisibleVisibility.value = if (visible)View.VISIBLE else View.GONE
     }
 }

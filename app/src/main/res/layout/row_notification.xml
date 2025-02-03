@@ -59,6 +59,6 @@
             android:layout_marginEnd="5dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/img" />
+            bind:imageUri="@{rowNotificationViewModel.imageViewRowNotificationProductImageUri}" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
