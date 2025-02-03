@@ -216,9 +216,11 @@ class ShowUserOrderInfoFragment(val mainFragment: MainFragment) : Fragment() {
                 rowOrderInfoBinding.buttonRowOrderInfoWriteReview.setOnClickListener {
                     if (wholeOrderModelList[adapterPosition].reviewDocumentID !=""){
                         //리뷰 보기로 이동한다
-
-
+                        val dataBundle = Bundle()
+                        dataBundle.putString("productDocumentId",wholeOrderModelList[adapterPosition].productDocumentId)
+                        mainFragment.replaceFragment(ShopSubFragmentName.PRODUCT_REVIEW_LIST_FRAGMENT,true,true,dataBundle)
                     }else{
+                        //리뷰작성페이지로 이동한다
                         val dataBundle = Bundle()
                         dataBundle.putString("productDocumentID",wholeOrderModelList[adapterPosition].productDocumentId)
                         dataBundle.putString("orderDocumentID",wholeOrderModelList[adapterPosition].orderDocumentId)
