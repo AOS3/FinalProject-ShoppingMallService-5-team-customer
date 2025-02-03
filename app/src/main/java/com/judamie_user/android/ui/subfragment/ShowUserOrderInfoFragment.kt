@@ -214,10 +214,16 @@ class ShowUserOrderInfoFragment(val mainFragment: MainFragment) : Fragment() {
         inner class ViewHolder(val rowOrderInfoBinding: RowOrderInfoBinding):RecyclerView.ViewHolder(rowOrderInfoBinding.root){
             init {
                 rowOrderInfoBinding.buttonRowOrderInfoWriteReview.setOnClickListener {
-                    val dataBundle = Bundle()
-                    dataBundle.putString("productDocumentID",wholeOrderModelList[adapterPosition].productDocumentId)
-                    dataBundle.putString("orderDocumentID",wholeOrderModelList[adapterPosition].orderDocumentId)
-                    mainFragment.replaceFragment(ShopSubFragmentName.WRITE_PRODUCT_REVIEW_FRAGMENT,true,true,dataBundle)
+                    if (wholeOrderModelList[adapterPosition].reviewDocumentID !=""){
+                        //리뷰 보기로 이동한다
+
+                    }else{
+                        val dataBundle = Bundle()
+                        dataBundle.putString("productDocumentID",wholeOrderModelList[adapterPosition].productDocumentId)
+                        dataBundle.putString("orderDocumentID",wholeOrderModelList[adapterPosition].orderDocumentId)
+                        mainFragment.replaceFragment(ShopSubFragmentName.WRITE_PRODUCT_REVIEW_FRAGMENT,true,true,dataBundle)
+                    }
+
                 }
             }
         }
