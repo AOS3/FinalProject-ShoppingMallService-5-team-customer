@@ -21,7 +21,7 @@ class ProductRepository {
         suspend fun gettingProductList(productCategory: ProductCategory): MutableList<Map<String, *>> {
             val firestore = FirebaseFirestore.getInstance()
             // TODO (change collection name : productData -> ProductData)
-            val collectionReference = firestore.collection("productData")
+            val collectionReference = firestore.collection("ProductData")
             val result = if (productCategory == ProductCategory.PRODUCT_CATEGORY_DEFAULT) {
                 collectionReference.orderBy("productTimeStamp", Query.Direction.DESCENDING).get()
                     .await()
@@ -82,7 +82,7 @@ class ProductRepository {
 
         suspend fun gettingCartList(productIds: List<String>): List<ProductModel> {
             val productList = mutableListOf<ProductModel>()
-            val productRef = FirebaseFirestore.getInstance().collection("productData")
+            val productRef = FirebaseFirestore.getInstance().collection("ProductData")
 
             productIds.forEach { id ->
                 val document = productRef.document(id).get().await()
@@ -122,7 +122,7 @@ class ProductRepository {
         // 상품 문서 id를 통해 글 데이터를 가져온다.
         suspend fun selectProductDataOneById(documentId:String) : ProductVO{
             val firestore = FirebaseFirestore.getInstance()
-            val collectionReference = firestore.collection("productData")
+            val collectionReference = firestore.collection("ProductData")
             val documentReference = collectionReference.document(documentId)
             val documentSnapShot = documentReference.get().await()
             val productVO = documentSnapShot.toObject(ProductVO::class.java)!!
@@ -146,7 +146,7 @@ class ProductRepository {
                 val db = FirebaseFirestore.getInstance()
 
                 // Firestore에서 productDocumentId에 해당하는 문서를 가져옴
-                val documentSnapshot = db.collection("productData")
+                val documentSnapshot = db.collection("ProductData")
                     .document(productDocumentId)  // productDocumentId에 해당하는 문서
                     .get()
                     .await()  // 비동기적으로 기다림
@@ -164,7 +164,7 @@ class ProductRepository {
         // 제품 하나의 정보를 가져오는 메서드
         suspend fun gettingProductOne(documentID:String) : ProductVO{
             val firestore = FirebaseFirestore.getInstance()
-            val collectionReference = firestore.collection("productData")
+            val collectionReference = firestore.collection("ProductData")
             val documentReference = collectionReference.document(documentID)
             val documentSnapShot = documentReference.get().await()
             val productVO = documentSnapShot.toObject(ProductVO::class.java)!!
@@ -174,7 +174,7 @@ class ProductRepository {
         // 제품 하나의 정보를 가져오는 메서드 (특정 필드만 가져오기)
         suspend fun gettingProductName(documentID: String): String? {
             val firestore = FirebaseFirestore.getInstance()
-            val collectionReference = firestore.collection("productData")
+            val collectionReference = firestore.collection("ProductData")
             val documentReference = collectionReference.document(documentID)
 
             val documentSnapShot = documentReference.get().await()

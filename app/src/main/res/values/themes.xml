@@ -15,7 +15,7 @@
     </style>
 
     <!-- Splash Screen용 테마 -->
-    <style name="Theme.App.Starting" parent="Theme.SplashScreen">
+    <style name="Theme.App.Starting" parent="Base.Theme.FinalProjectShoppingMallService5teamcustomer">
         <item name="windowSplashScreenBackground">@color/white</item>
 
         <item name="windowSplashScreenAnimatedIcon">@mipmap/judamie_logo</item>
