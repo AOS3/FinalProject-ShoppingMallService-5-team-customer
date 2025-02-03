@@ -118,7 +118,12 @@ class HomeFragment(val mainFragment:MainFragment) : Fragment() {
             toolbarHome.setOnMenuItemClickListener {
                 when (it.itemId) {
                     R.id.menuItemHomeNotification -> {
-
+                        mainFragment.replaceFragment(
+                            ShopSubFragmentName.USER_NOTIFICATION_LIST_FRAGMENT,
+                            true,
+                            true,
+                            null
+                        )
                     }
 
                     R.id.menuItemHomeShoppingCart -> {
