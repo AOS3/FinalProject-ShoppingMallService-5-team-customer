@@ -1,5 +1,6 @@
 package com.judamie_user.android.viewmodel.fragmentviewmodel
 
+import android.graphics.drawable.Drawable
 import androidx.databinding.BindingAdapter
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -24,14 +25,29 @@ class ShowUserOrderInfoViewModel(val showUserOrderInfoFragment: ShowUserOrderInf
 
 
     //textViewShowUserOrderInfoDate
-    val textViewShowUserOrderInfoDateText = MutableLiveData("textViewShowUserOrderInfoDate")
+    val textViewShowUserOrderInfoDateText = MutableLiveData("")
 
-    //textViewShowUserOrderInfoPickupLocation
-    val textViewShowUserOrderInfoPickupLocationText = MutableLiveData("textViewShowUserOrderInfoPickupLocation")
+    //textViewShowUserOrderInfoPickupLocationStreetAddress
+    val textViewShowUserOrderInfoPickupLocationStreetAddressText = MutableLiveData("")
+
+    //textViewShowUserOrderInfoPickupLocationAddressDetail
+    val textViewShowUserOrderInfoPickupLocationAddressDetailText = MutableLiveData("")
 
     //buttonShowUserOrderInfoPickupDone
     fun buttonShowUserOrderInfoPickupDoneOnclick(){
-
+        showUserOrderInfoFragment.settingButtonShowUserOrderInfoPickupDone()
     }
+
+    //버튼상태
+    // buttonShowUserOrderInfoPickupDone background
+    val buttonShowUserOrderInfoPickupDoneBackground = MutableLiveData<Drawable>()
+
+    //버튼텍스트 색상
+    // buttonShowUserOrderInfoPickupDone textColor
+    val buttonShowUserOrderInfoPickupDoneTextColor = MutableLiveData<Int>()
+
+    //버튼 활성화 상태
+    // buttonShowUserOrderInfoPickupDone enabled
+    val buttonShowUserOrderInfoPickupDoneEnabled = MutableLiveData<Boolean>()
 
 }

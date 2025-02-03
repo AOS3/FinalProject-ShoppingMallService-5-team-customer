@@ -115,3 +115,9 @@ enum class OrderPackageState(val num:Int,var str:String) {
     ORDER_PACKAGE_STATE_ENABLE(1,"활성화"),
     ORDER_PACKAGE_STATE_DISABLE(2,"비활성화")
 }
+
+// 리뷰 작성 유무(OrderData)
+enum class OrderIsReview(val num:Int,var str:String){
+    ORDER_REVIEW_NOT_YET(1,"미작성"),
+    ORDER_REVIEW_DONE(2,"작성")
+}

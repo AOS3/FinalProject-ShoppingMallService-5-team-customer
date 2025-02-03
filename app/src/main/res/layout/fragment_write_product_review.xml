@@ -66,7 +66,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/img" />
+                    bind:imageUri="@{writeProductReviewViewModel.imageViewWriteProductReviewProductImageUri}" />
 
                 <TextView
                     android:id="@+id/textView8"

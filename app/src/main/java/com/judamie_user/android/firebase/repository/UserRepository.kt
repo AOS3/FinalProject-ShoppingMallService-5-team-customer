@@ -232,14 +232,14 @@ class UserRepository {
 
         suspend fun gettingWishListByUserID(userDocumentID: String): List<String> {
             val db = FirebaseFirestore.getInstance()
-
+            //System.currentTimeMillis()
             // Step 1: User's wish list 가져오기
             val document = db.collection("UserData")
                 .document(userDocumentID)
                 .get()
                 .await()
             val wishList = document.get("userWishList") as? MutableList<String> ?: emptyList()
-
+            //System.currentTimeMillis()
             return wishList
         }
 

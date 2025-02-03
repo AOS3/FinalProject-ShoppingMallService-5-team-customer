@@ -28,6 +28,8 @@ import com.judamie_user.android.activity.ShopActivity
 import com.judamie_user.android.databinding.FragmentWriteProductReviewBinding
 import com.judamie_user.android.databinding.ItemPhotoBinding
 import com.judamie_user.android.firebase.model.ReviewModel
+import com.judamie_user.android.firebase.service.OrderService
+import com.judamie_user.android.firebase.service.ProductService
 import com.judamie_user.android.firebase.service.ReviewService
 import com.judamie_user.android.ui.fragment.MainFragment
 import com.judamie_user.android.ui.fragment.ShopSubFragmentName
@@ -66,7 +68,13 @@ class WriteProductReviewFragment(val mainFragment: MainFragment) : Fragment() {
     private lateinit var photoFilePath: String
 
     //제품 ID
-    var productDocumentID = "8DynxD5PPXsWOYPXQFmF"
+    var productDocumentID = ""
+
+    //해당 주문의 ID
+    var orderDocumentID = ""
+
+    //제품 사진
+    lateinit var imageUri:Uri
 
     // PictureHandler 인스턴스
     private lateinit var pictureHandler: PictureHandler
@@ -92,8 +100,8 @@ class WriteProductReviewFragment(val mainFragment: MainFragment) : Fragment() {
         setupRecyclerView()
         initializeLaunchers()
 
-        //제품 아이디를 받는다
-        gettingProductDocumentID()
+        //리뷰 화면 세팅
+        settingProductInfo()
 
         return fragmentWriteProductReviewBinding.root
     }
@@ -101,6 +109,43 @@ class WriteProductReviewFragment(val mainFragment: MainFragment) : Fragment() {
     //제품 아이디를 받는다
     fun gettingProductDocumentID() {
         productDocumentID = arguments?.getString("productDocumentID").toString()
+        orderDocumentID = arguments?.getString("orderDocumentID").toString()
+        Log.d("test","productDocumentID:${productDocumentID}")
+
+        Log.d("test","orderDocumentID:${orderDocumentID}")
+    }
+
+    //리뷰 화면 세팅
+    fun settingProductInfo(){
+        fragmentWriteProductReviewBinding.writeProductReviewViewModel?.apply {
+            CoroutineScope(Dispatchers.Main).launch {
+                //제품 아이디를 받는다
+                gettingProductDocumentID()
+
+                Log.d("test",productDocumentID)
+
+                val work1 = async(Dispatchers.IO) {
+                    ProductService.gettingProductOne(productDocumentID)
+                }
+                val productModel = work1.await()
+
+                val work2 = async(Dispatchers.IO) {
+                    ProductService.gettingImage(productModel.productMainImage)
+                }
+                imageUri = work2.await()
+
+                //제품 사진을 세팅한다
+                imageViewWriteProductReviewProductImageUri?.value = imageUri
+
+                //제품 이름을 세팅한다
+                textViewWriteProductReviewProductNameText?.value = productModel.productName
+
+                //제품 판매자를 세팅한다
+                textViewWriteProductReviewProductSellerText?.value = productModel.productSeller
+
+            }
+        }
+
     }
 
     private fun setupRecyclerView() {
@@ -224,12 +269,12 @@ class WriteProductReviewFragment(val mainFragment: MainFragment) : Fragment() {
             val reviewRating = writeProductReviewViewModel?.ratingBarWriteProductReviewRate?.value
             val reviewContent =
                 writeProductReviewViewModel?.textInputLayoutWriteProductReviewContentText?.value
-            val reviewerName = "채수범"
+            val reviewerName = shopActivity.userName
             val reviewTimestamp = System.currentTimeMillis()
             val reviewDate = getCurrentDate()
             val productDocumentID = productDocumentID
             //val userDocumentID = shopActivity.userDocumentID
-            val userDocumentID = "iElD58FO0PGqugxA8NpS"
+            val userDocumentID = shopActivity.userDocumentID
 
             if (reviewContent.isNullOrEmpty() || reviewContent.length < 10) {
                 showToast("리뷰를 최소 10자 이상 작성해주세요")
@@ -315,12 +360,25 @@ class WriteProductReviewFragment(val mainFragment: MainFragment) : Fragment() {
         }
 
         CoroutineScope(Dispatchers.IO).launch {
-            val reviewDocumentID = ReviewService.addReviewData(reviewModel)
+            var reviewDocumentID = ""
 
-            val work = async {
+            val work1 = async (Dispatchers.IO){
+                ReviewService.addReviewData(reviewModel)
+            }
+            reviewDocumentID = work1.await()
+
+            //프로덕트에 리뷰아이디를 넣는다
+            val work2 = async(Dispatchers.IO) {
                 ReviewService.addReviewDataInProduct(reviewDocumentID, productDocumentID)
             }
-            work.join()
+            work2.join()
+
+            //오더데이터에 해당 데이터의 ID를 넣는다
+            val work3 = async(Dispatchers.IO) {
+                OrderService.addReviewDocumentID("${orderDocumentID}",reviewDocumentID)
+            }
+            work3.join()
+
 
             withContext(Dispatchers.Main) {
                 showToast("리뷰가 저장되었습니다.")

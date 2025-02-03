@@ -59,6 +59,9 @@ class ProductReviewListFragment(val mainFragment: MainFragment) : Fragment() {
     //툴바 타이틀을 전역으로사용한다
     var toolbarTitle = ""
 
+    // 리뷰의 개수를 전역으로 사용한다
+    var reviewCnt = ""
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -99,11 +102,20 @@ class ProductReviewListFragment(val mainFragment: MainFragment) : Fragment() {
                 shimmerFrameLayout.stopShimmer()
                 shimmerFrameLayout.visibility = View.GONE
                 recyclerViewProductReview.visibility = View.VISIBLE
+                productReviewListViewModel?.textViewProductReviewCntText?.value = reviewCnt
+                textViewProductReviewCnt.visibility = View.VISIBLE
             }
         }
 
+        // 프로덕트 id를 가져온다
+        gettingProductID()
+
 
         return fragmentProductReviewListBinding.root
+    }
+    // 프로덕트 id를 가져온다
+    fun gettingProductID(){
+        productDocumentID = arguments?.getString("productDocumentId")!!
     }
 
     // 툴바 구성 메서드
@@ -126,8 +138,7 @@ class ProductReviewListFragment(val mainFragment: MainFragment) : Fragment() {
             shimmerFrameLayout.startShimmer()
             shimmerFrameLayout.visibility = View.VISIBLE
             recyclerViewProductReview.visibility = View.GONE
-
-
+            textViewProductReviewCnt.visibility = View.GONE
 
             CoroutineScope(Dispatchers.Main).launch {
                 try {
@@ -156,6 +167,9 @@ class ProductReviewListFragment(val mainFragment: MainFragment) : Fragment() {
                         }
                     }
 
+                    reviewCnt = "총 ${reviewsModelList.size}개의 리뷰"
+                    productReviewListViewModel?.textViewProductReviewCntText?.value = reviewCnt
+                    textViewProductReviewCnt.visibility = View.VISIBLE
 
                     reviewsModelList.forEach {
                         val imagesInOneReview = mutableListOf<Uri>()
@@ -206,15 +220,6 @@ class ProductReviewListFragment(val mainFragment: MainFragment) : Fragment() {
         }
     }
 
-    // 사용자 리뷰 화면으로 이동하는 메서드
-    fun moveToUserProductReviewFragment() {
-        mainFragment.replaceFragment(
-            ShopSubFragmentName.USER_PRODUCT_REVIEW_FRAGMENT,
-            true,
-            true,
-            null
-        )
-    }
 
     // 상품 리뷰 목록 RecyclerView 구성 메서드
     fun settingProductReviewRecyclerView() {
@@ -277,7 +282,14 @@ class ProductReviewListFragment(val mainFragment: MainFragment) : Fragment() {
 
             // 클릭 이벤트 설정
             holder.rowProductReviewListBinding.rowTextViewProductReviewName.setOnClickListener {
-                moveToUserProductReviewFragment()
+                val dataBundle = Bundle()
+                dataBundle.putString("userDocumentId",reviewModel.reviewerUserDocumentID)
+                mainFragment.replaceFragment(
+                    ShopSubFragmentName.USER_PRODUCT_REVIEW_FRAGMENT,
+                    true,
+                    true,
+                    dataBundle
+                )
             }
         }
 

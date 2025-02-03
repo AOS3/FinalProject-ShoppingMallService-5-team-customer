@@ -121,6 +121,7 @@ class ProductInfoFragment(val mainFragment: MainFragment) : Fragment() {
     fun moveToReviewList() {
         fragmentProductInfoBinding.apply {
             val dataBundle = Bundle()
+            dataBundle.putString("productDocumentId",productDocumentId)
             mainFragment.replaceFragment(
                 ShopSubFragmentName.PRODUCT_REVIEW_LIST_FRAGMENT,
                 true,
@@ -130,7 +131,7 @@ class ProductInfoFragment(val mainFragment: MainFragment) : Fragment() {
         }
 
     }
-    // ✅ Firebase에서 찜 상태 가져오고 ViewModel에 설정
+    // Firebase에서 찜 상태 가져오고 ViewModel에 설정
     private fun checkWishListStatus() {
         CoroutineScope(Dispatchers.Main).launch {
             val work = async(Dispatchers.IO) {
@@ -139,12 +140,12 @@ class ProductInfoFragment(val mainFragment: MainFragment) : Fragment() {
             val userWishProductIDList = work.await()
             val isWishListed = userWishProductIDList.contains(productDocumentId)
 
-            // ✅ ViewModel에 초기 상태 설정
+            // ViewModel에 초기 상태 설정
             fragmentProductInfoBinding.productInfoViewModel?.setWishListStatus(isWishListed)
         }
     }
 
-    // ✅ Firebase 업데이트 개선 (UI가 즉시 반영되도록 수정)
+    // Firebase 업데이트 개선 (UI가 즉시 반영되도록 수정)
     fun updateWishListInFirebase(isWishListed: Boolean) {
         CoroutineScope(Dispatchers.IO).launch {
             if (isWishListed) {
@@ -154,39 +155,6 @@ class ProductInfoFragment(val mainFragment: MainFragment) : Fragment() {
             }
         }
     }
-
-
-//    //찜목록에 추가하고 삭제하는 메서드
-//    fun addAndDeleteWishList() {
-//        fragmentProductInfoBinding.apply {
-//            // 1. 유저 컬렉션에서 유저의 제품 ID가 담긴 리스트를 가져온다
-//            CoroutineScope(Dispatchers.Main).launch {
-//                var work = async(Dispatchers.IO) {
-//                    UserService.gettingWishListByUserID(shopActivity.userDocumentID)
-//                }
-//                val userWishProductIDList = work.await()
-//
-//
-//                imageButtonProductInfoSetWishList.apply {
-//                    if (userWishProductIDList.isNotEmpty()){
-//                        if (userWishProductIDList.contains(productDocumentId)) {
-//                            setImageResource(R.drawable.bookmark_filled_24px) // 초기 아이콘
-//                            imageTintList = ColorStateList.valueOf(
-//                                ContextCompat.getColor(itemView.context, R.color.mainColor)
-//                            )
-//                            tag = "filled" // 초기 태그
-//                        } else {
-//
-//                        }
-//                    }else{
-//
-//                    }
-//
-//                }
-//
-//            }
-//        }
-//    }
 
     // 화면 구성 메서드
     fun settingData() {

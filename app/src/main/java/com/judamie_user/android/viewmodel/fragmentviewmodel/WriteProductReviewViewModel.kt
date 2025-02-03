@@ -1,5 +1,6 @@
 package com.judamie_user.android.viewmodel.fragmentviewmodel
 
+import android.net.Uri
 import android.widget.RatingBar
 import androidx.databinding.BindingAdapter
 import androidx.lifecycle.MutableLiveData
@@ -32,17 +33,20 @@ class WriteProductReviewViewModel(val writeProductReviewFragment: WriteProductRe
         }
     }
 
+    //imageViewWriteProductReviewProductImage - uri
+    val imageViewWriteProductReviewProductImageUri = MutableLiveData<Uri>()
+
     // LiveData for product name
-    val textViewWriteProductReviewProductNameText = MutableLiveData("textViewWriteProductReviewProductName")
+    val textViewWriteProductReviewProductNameText = MutableLiveData("")
 
     // LiveData for product seller
-    val textViewWriteProductReviewProductSellerText = MutableLiveData("textViewWriteProductReviewProductSeller")
+    val textViewWriteProductReviewProductSellerText = MutableLiveData("")
 
     // LiveData for rating bar value
     val ratingBarWriteProductReviewRate = MutableLiveData<Float>()
 
     // LiveData for review content
-    val textInputLayoutWriteProductReviewContentText = MutableLiveData("textInputLayoutWriteProductReviewContent")
+    val textInputLayoutWriteProductReviewContentText = MutableLiveData("")
 
     // LiveData for add photo button text
     val buttonWriteProductReviewAddPhotoText = MutableLiveData("")
