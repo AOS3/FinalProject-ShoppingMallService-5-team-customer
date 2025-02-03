@@ -22,7 +22,7 @@ data class ShopCartViewModel(val shopCartFragment: ShopCartFragment) : ViewModel
 
     // 상품 선택 체크박스
     // checkBoxCartProductAll - checkedBox
-    val checkBoxCartProductAllCheckedState = MutableLiveData(false)
+    val checkBoxCartProductAllCheckedState = MutableLiveData(true)
 
     // 구매 버튼 텍스트
     // buttonCartProductSelected - Text
@@ -31,12 +31,12 @@ data class ShopCartViewModel(val shopCartFragment: ShopCartFragment) : ViewModel
 
     // checkBoxCartProductAll - onClick
     fun checkBoxCartProductAllOnClick(){
-        if (checkBoxCartProductAllCheckedState.value == false){
-            val isChecked = true
+        if (checkBoxCartProductAllCheckedState.value == true){
+            val isChecked = false
             shopCartFragment.updateAllCheckBoxes(isChecked)
         }
         else {
-            val isChecked = false
+            val isChecked = true
             shopCartFragment.updateAllCheckBoxes(isChecked)
         }
     }

@@ -28,6 +28,7 @@ import com.judamie_user.android.firebase.model.UserModel
 import com.judamie_user.android.firebase.service.ProductService
 import com.judamie_user.android.firebase.service.UserService
 import com.judamie_user.android.ui.component.CartDialogFragment
+import com.judamie_user.android.util.tools.Companion.formatToComma
 import com.judamie_user.android.viewmodel.componentviewmodel.CartIdCountViewModel
 import com.judamie_user.android.viewmodel.fragmentviewmodel.ShopCartViewModel
 import com.judamie_user.android.viewmodel.rowviewmodel.RowCartProductListViewModel
@@ -125,7 +126,7 @@ class ShopCartFragment(val mainFragment: MainFragment) : Fragment() {
         // 선택된 상품이 없을 경우 기본값 "0원"
         fragmentShopCartBinding.shopCartViewModel?.buttonCartProductSelectedText?.value =
             if (selectedTotalPrice > 0) {
-                "${selectedTotalPrice}원 방문 픽업 구매하기"
+                "${selectedTotalPrice.formatToComma()} 방문 픽업 구매하기"
             } else {
                 "0원 방문 픽업 구매하기"
             }
@@ -159,6 +160,8 @@ class ShopCartFragment(val mainFragment: MainFragment) : Fragment() {
 
             // 장바구니가 비어있는 경우
             if (productList.isEmpty()) {
+                fragmentShopCartBinding.checkBoxCartProductAll.visibility = View.GONE
+                fragmentShopCartBinding.buttonCartDelete.visibility = View.GONE
                 fragmentShopCartBinding.textViewShopCartEmpty.visibility = View.VISIBLE
                 fragmentShopCartBinding.buttonShopCartEmpty.visibility = View.VISIBLE
             } else{
@@ -177,7 +180,7 @@ class ShopCartFragment(val mainFragment: MainFragment) : Fragment() {
             imageUris.postValue(uris.await())
 
             // checkBoxStates 초기화
-            checkBoxStates.value = MutableList(recyclerViewList.size) { false }
+            checkBoxStates.value = MutableList(recyclerViewList.size) { true }
 
                 val cartMap = cartIdCountViewModel.cartMap.value
 
@@ -445,7 +448,7 @@ class ShopCartFragment(val mainFragment: MainFragment) : Fragment() {
 
             holder.rowCartProductListBinding.rowCartProductListViewModel?.textViewCartProductNameText?.value = recyclerViewList[position].productName
             holder.rowCartProductListBinding.rowCartProductListViewModel?.textViewCartProductPriceText?.value =
-                productSalePrice.toString()
+                "${productSalePrice.formatToComma()}"
             holder.rowCartProductListBinding.rowCartProductListViewModel?.textViewCartProductPercentText?.value =
                 recyclerViewList[position].productDiscountRate.toString()
 

@@ -30,7 +30,7 @@
             app:title="@{shopCartViewModel.toolbarShopCartTitle}"
             app:titleCentered="true" />
 
-        <CheckBox
+        <com.google.android.material.checkbox.MaterialCheckBox
             android:id="@+id/checkBoxCartProductAll"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -39,11 +39,12 @@
             android:visibility="visible"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/toolbarShopCart"
+            app:buttonTint="@color/mainColor"
             android:checked="@{shopCartViewModel.checkBoxCartProductAllCheckedState}"
             android:onClick="@{(view)->shopCartViewModel.checkBoxCartProductAllOnClick()}"/>
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/buttonCartDelete"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:backgroundTint="@android:color/transparent"
@@ -98,13 +99,13 @@
             android:id="@+id/textViewShopCartEmpty"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="299dp"
+            android:layout_marginBottom="100dp"
             android:text="@{shopCartViewModel.textViewShopCartEmpty}"
             android:visibility="gone"
             app:layout_constraintBottom_toTopOf="@+id/linearLayout"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/recyclerViewShopCart" />
+            app:layout_constraintTop_toTopOf="@+id/recyclerViewShopCart" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/buttonShopCartEmpty"
@@ -113,6 +114,7 @@
             android:layout_marginTop="20dp"
             android:background="@drawable/button_round_activated"
             android:backgroundTint="#56B4B6"
+            android:onClick="@{(view) -> shopCartViewModel.buttonShopCartEmptyOnClick()}"
             android:shadowColor="#56B4B6"
             android:text="상품 보러가기"
             android:textColor="#00696B"
@@ -121,8 +123,7 @@
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textViewShopCartEmpty"
-            android:onClick="@{(view) -> shopCartViewModel.buttonShopCartEmptyOnClick()}"/>
+            app:layout_constraintTop_toBottomOf="@+id/textViewShopCartEmpty" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
