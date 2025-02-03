@@ -166,6 +166,14 @@ class ViewPagerFragment(val mainFragment: MainFragment) : Fragment() {
             recyclerViewCategoryList.clear()
             recyclerViewCategoryList.addAll(work1.await())
 
+            // 모든 이미지 로드가 끝날 때까지 대기
+            val imageLoadJobs = recyclerViewCategoryList.map { product ->
+                async(Dispatchers.IO) {
+                    ProductService.gettingImage(product.productMainImage)
+                }
+            }
+            imageLoadJobs.awaitAll()
+
             fragmentViewPagerBinding.recyclerViewHome.adapter?.notifyDataSetChanged()
 
             // 검색에 결과가 없으면
