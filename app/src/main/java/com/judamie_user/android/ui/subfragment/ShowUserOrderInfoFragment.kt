@@ -8,11 +8,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.divider.MaterialDividerItemDecoration
 import com.judamie_user.android.R
 import com.judamie_user.android.databinding.FragmentShowUserOrderInfoBinding
@@ -41,6 +43,8 @@ class ShowUserOrderInfoFragment(val mainFragment: MainFragment) : Fragment() {
     var recyclerViewShowUserOrderInfoList = Array(5, {
         "항목 ${it + 1}"
     })
+
+    var orderPackageDocumentID = ""
 
     var orderDataList = mutableListOf<String>()
 
@@ -89,6 +93,7 @@ class ShowUserOrderInfoFragment(val mainFragment: MainFragment) : Fragment() {
             }
             val pickUpLocationModel = work2.await()
 
+
             fragmentShowUserOrderInfoBinding.showUserOrderInfoViewModel?.apply {
                 // 주문 날짜 설정
                 textViewShowUserOrderInfoDateText?.value =
@@ -102,6 +107,27 @@ class ShowUserOrderInfoFragment(val mainFragment: MainFragment) : Fragment() {
                 textViewShowUserOrderInfoPickupLocationAddressDetailText?.value =
                     pickUpLocationModel.pickupLocAddressDetail
 
+                //모든 주문의 진행상태를 가져온다 // 배송 상태 확인
+                val checkDeliveryState = wholeOrderModelList.map { it.orderState }
+                checkDeliveryState.forEach {
+                    Log.d("checkDeliveryState", it.toString())
+                }
+                // 배송상태를 중복제거하고 배송상태에따라 분기한다
+                checkDeliveryState.distinct()
+
+                Log.d("test",checkDeliveryState.toString())
+
+                if (checkDeliveryState.contains(OrderState.ORDER_STATE_PAYMENT_COMPLETE)){
+                    buttonShowUserOrderInfoPickupDoneEnabled?.value = false
+                    buttonShowUserOrderInfoPickupDoneBackground?.value = ContextCompat.getDrawable(requireContext(), R.drawable.button_round_deactivated)
+                    buttonShowUserOrderInfoPickupDoneTextColor?.value = Color.GRAY
+                }
+                if (!!checkDeliveryState.contains(OrderState.ORDER_STATE_PAYMENT_COMPLETE) &&
+                    checkDeliveryState.contains(OrderState.ORDER_STATE_DELIVERY)){
+                    buttonShowUserOrderInfoPickupDoneEnabled?.value = true
+                    buttonShowUserOrderInfoPickupDoneBackground?.value = ContextCompat.getDrawable(requireContext(), R.drawable.button_round_activated)
+                    buttonShowUserOrderInfoPickupDoneTextColor?.value = Color.WHITE
+                }
 
             }
             settingRecyclerView()
@@ -109,9 +135,46 @@ class ShowUserOrderInfoFragment(val mainFragment: MainFragment) : Fragment() {
         }
     }
 
+    //픽업완료버튼의 동작을 구성한다
+    fun settingButtonShowUserOrderInfoPickupDone(){
+
+        val dialogView = layoutInflater.inflate(R.layout.dialog_pickupdone, null)
+
+        val buttonPickupCancel = dialogView.findViewById<Button>(R.id.buttonPickupCancel)
+        val buttonPickupDone = dialogView.findViewById<Button>(R.id.buttonPickupDone)
+
+        val dialog = MaterialAlertDialogBuilder(requireContext())
+            .setView(dialogView)
+            .create()
+
+        //취소
+        buttonPickupCancel.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        // 픽업처리
+        buttonPickupDone.setOnClickListener {
+            CoroutineScope(Dispatchers.Main).launch {
+                wholeOrderModelList.forEach {
+                    val work1 = async (Dispatchers.IO){
+                        OrderService.updateOrderData(it.orderDocumentId,OrderState.ORDER_STATE_PICKUP_COMPLETED)
+                    }
+                    work1.await()
+                }
+
+                wholeOrderModelList.clear()
+                gettingOrderModelList()
+                dialog.dismiss()
+            }
+        }
+
+        dialog.show()
+    }
+
     // orderDataList를 받아온다
     fun gettingOrderDataList(){
         orderDataList = arguments?.getStringArrayList("orderDataList")!!.toMutableList()
+        orderPackageDocumentID = arguments?.getString("orderPackageDocumentID")!!
     }
 
 

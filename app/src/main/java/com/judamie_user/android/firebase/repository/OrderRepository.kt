@@ -2,6 +2,7 @@ package com.judamie_user.android.firebase.repository
 
 import com.google.firebase.firestore.FirebaseFirestore
 import com.judamie_user.android.firebase.vo.OrderVO
+import com.judamie_user.android.util.OrderState
 import kotlinx.coroutines.tasks.await
 
 class OrderRepository {
@@ -25,6 +26,19 @@ class OrderRepository {
 
             val orderVO = documentReference.toObject(OrderVO::class.java)!!
             return orderVO
+        }
+
+        // 픽업완료를 눌러 orderData의 state를 변경한다
+        suspend fun updateOrderData(orderDocumentID:String,orderState: OrderState){
+            val firestore = FirebaseFirestore.getInstance()
+            val collectionReference = firestore.collection("OrderData")
+            val documentReference = collectionReference.document(orderDocumentID)
+
+            val updateMap = mapOf(
+                "orderState" to orderState.num
+            )
+
+            documentReference.update(updateMap).await()
         }
     }
 }

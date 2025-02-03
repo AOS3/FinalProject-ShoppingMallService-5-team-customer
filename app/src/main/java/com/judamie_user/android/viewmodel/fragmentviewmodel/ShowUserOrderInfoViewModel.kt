@@ -35,7 +35,7 @@ class ShowUserOrderInfoViewModel(val showUserOrderInfoFragment: ShowUserOrderInf
 
     //buttonShowUserOrderInfoPickupDone
     fun buttonShowUserOrderInfoPickupDoneOnclick(){
-
+        showUserOrderInfoFragment.settingButtonShowUserOrderInfoPickupDone()
     }
 
     //버튼상태

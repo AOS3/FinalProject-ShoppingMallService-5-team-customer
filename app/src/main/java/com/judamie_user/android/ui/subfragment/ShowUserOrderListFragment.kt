@@ -165,6 +165,10 @@ class ShowUserOrderListFragment(val mainFragment: MainFragment) : Fragment() {
                         "orderDataList",
                         ArrayList(gettingUserOrderPackageList[adapterPosition].orderDataList)
                     )
+                    dataBundle.putString(
+                        "orderPackageDocumentID",
+                        gettingUserOrderPackageList[adapterPosition].orderPackageDocumentId
+                    )
 
                     mainFragment.replaceFragment(
                         ShopSubFragmentName.SHOW_USER_ORDER_INFO_FRAGMENT,
@@ -236,7 +240,7 @@ class ShowUserOrderListFragment(val mainFragment: MainFragment) : Fragment() {
                         Log.d("checkDeliveryState", it.toString())
                     }
 
-                    // 배송상태를 중복제하고 배송상태에따라 분기한다
+                    // 배송상태를 중복제거하고 배송상태에따라 분기한다
                     checkDeliveryState.distinct()
 
                     // 모든 상품이 배달되지않음

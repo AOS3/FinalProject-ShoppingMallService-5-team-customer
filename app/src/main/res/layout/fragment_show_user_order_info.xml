@@ -97,6 +97,8 @@
             android:layout_marginEnd="5dp"
             android:layout_marginBottom="5dp"
             android:background="@drawable/button_round_activated"
+            android:textColor="@color/white"
+            android:text="픽업완료"
             android:onClick="@{(view)->showUserOrderInfoViewModel.buttonShowUserOrderInfoPickupDoneOnclick()}"
             android:enabled="@{showUserOrderInfoViewModel.buttonShowUserOrderInfoPickupDoneEnabled}"
             bind:backgroundDrawable="@{showUserOrderInfoViewModel.buttonShowUserOrderInfoPickupDoneBackground}"
