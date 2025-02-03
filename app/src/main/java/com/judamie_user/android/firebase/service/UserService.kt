@@ -173,11 +173,14 @@ class UserService {
             UserRepository.updateUserCoupons(userModel.userDocumentID, userModel.userCoupons)
         }
 
+<<<<<<< HEAD
         // 유저 장바구니 리스트 삭제 처리 메서드
         suspend fun deleteCartItem(userDocumentId: String, productDocumentId: String) {
             UserRepository.deleteCartItem(userDocumentId, productDocumentId)
         }
 
 
+=======
+>>>>>>> 462dd94 (쿠폰 및 가격 관련 작업)
     }
 }

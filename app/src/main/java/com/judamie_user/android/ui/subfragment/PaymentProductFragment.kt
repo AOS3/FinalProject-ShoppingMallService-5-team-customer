@@ -140,6 +140,13 @@ class PaymentProductFragment(val mainFragment: MainFragment) : Fragment() {
                     null
                 }
 
+                // 선택된 쿠폰 가져오기
+                val selectedCoupon = if (selectedCouponIndex > 0) {
+                    userModel.userCoupons.getOrNull(selectedCouponIndex - 1)
+                } else {
+                    null
+                }
+
                 // 주문 데이터 저장 (순차적으로 실행)
                 for ((product, count) in recyclerViewPaymentList) {
                     val productInfo = async(Dispatchers.IO) {
@@ -219,6 +226,7 @@ class PaymentProductFragment(val mainFragment: MainFragment) : Fragment() {
                         UserService.deleteCouponData(userModel.userDocumentID, couponDocumentId)
                     }
                     work3.await()
+<<<<<<< HEAD
                 }
 
                 if (isFromCart) {
@@ -228,6 +236,8 @@ class PaymentProductFragment(val mainFragment: MainFragment) : Fragment() {
                         }
                         work4.await()
                     }
+=======
+>>>>>>> 462dd94 (쿠폰 및 가격 관련 작업)
                 }
 
                 // 프로그래스바 숨기기
