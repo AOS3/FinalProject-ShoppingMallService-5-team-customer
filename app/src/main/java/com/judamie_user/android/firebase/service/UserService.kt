@@ -178,6 +178,5 @@ class UserService {
             UserRepository.deleteCartItem(userDocumentId, productDocumentId)
         }
 
-
     }
 }

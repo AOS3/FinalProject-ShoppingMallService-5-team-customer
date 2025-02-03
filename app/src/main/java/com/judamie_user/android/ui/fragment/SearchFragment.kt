@@ -380,14 +380,6 @@ class SearchFragment(val mainFragment: MainFragment) : Fragment() {
             recyclerViewSearchList.clear()
             recyclerViewSearchList.addAll((productList.filter { it.productName.contains(searchKeyword, ignoreCase = true) }))
 
-            // 모든 이미지 로드가 끝날 때까지 대기
-            val imageLoadJobs = recyclerViewSearchList.map { product ->
-                async(Dispatchers.IO) {
-                    ProductService.gettingImage(product.productMainImage)
-                }
-            }
-            imageLoadJobs.awaitAll()
-
             // 검색 결과에 맞는 RecyclerView의 어댑터를 갱신
             fragmentSearchBinding.recyclerViewSearch.adapter?.notifyDataSetChanged()
 

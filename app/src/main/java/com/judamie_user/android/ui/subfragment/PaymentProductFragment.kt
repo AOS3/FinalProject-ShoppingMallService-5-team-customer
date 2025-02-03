@@ -228,6 +228,7 @@ class PaymentProductFragment(val mainFragment: MainFragment) : Fragment() {
                         }
                         work4.await()
                     }
+
                 }
 
                 // 프로그래스바 숨기기
