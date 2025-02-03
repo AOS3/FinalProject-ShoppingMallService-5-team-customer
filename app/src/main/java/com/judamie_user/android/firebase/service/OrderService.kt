@@ -33,6 +33,7 @@ class OrderService {
             OrderRepository.addReviewDocumentID(orderDocumentID,reviewDocumentId)
         }
 
+
         // 유저 아이디를 통해 오더데이터 가져오기
         suspend fun gettingOrdersByUserID(userDocumentId: String): MutableList<OrderModel>{
             val map = OrderRepository.gettingOrdersByUserID(userDocumentId)
@@ -45,5 +46,6 @@ class OrderService {
             return returnList
 
         }
+
     }
 }
