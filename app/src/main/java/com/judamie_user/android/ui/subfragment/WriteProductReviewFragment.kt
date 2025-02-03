@@ -110,6 +110,9 @@ class WriteProductReviewFragment(val mainFragment: MainFragment) : Fragment() {
     fun gettingProductDocumentID() {
         productDocumentID = arguments?.getString("productDocumentID").toString()
         orderDocumentID = arguments?.getString("orderDocumentID").toString()
+        Log.d("test","productDocumentID:${productDocumentID}")
+
+        Log.d("test","orderDocumentID:${orderDocumentID}")
     }
 
     //리뷰 화면 세팅
@@ -372,7 +375,7 @@ class WriteProductReviewFragment(val mainFragment: MainFragment) : Fragment() {
 
             //오더데이터에 해당 데이터의 ID를 넣는다
             val work3 = async(Dispatchers.IO) {
-                OrderService.addReviewDocumentID(reviewDocumentID,orderDocumentID)
+                OrderService.addReviewDocumentID("${orderDocumentID}",reviewDocumentID)
             }
             work3.join()
 

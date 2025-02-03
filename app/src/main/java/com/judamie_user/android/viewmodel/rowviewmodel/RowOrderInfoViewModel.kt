@@ -37,6 +37,11 @@ class RowOrderInfoViewModel(showUserOrderInfoFragment: ShowUserOrderInfoFragment
     // buttonRowOrderInfoWriteReview enabled
     val buttonRowOrderInfoWriteReviewEnabled = MutableLiveData<Boolean>()
 
+    //버튼 텍스트
+    //buttonRowOrderInfoWriteReview text
+    val buttonRowOrderInfoWriteReviewText = MutableLiveData("리뷰 작성")
+
+
     //buttonRowOrderInfoWriteReview
     fun buttonRowOrderInfoWriteReviewOnClick(){
 

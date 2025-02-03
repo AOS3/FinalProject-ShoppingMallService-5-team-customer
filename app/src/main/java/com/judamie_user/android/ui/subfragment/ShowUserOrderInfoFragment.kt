@@ -217,6 +217,7 @@ class ShowUserOrderInfoFragment(val mainFragment: MainFragment) : Fragment() {
                     if (wholeOrderModelList[adapterPosition].reviewDocumentID !=""){
                         //리뷰 보기로 이동한다
 
+
                     }else{
                         val dataBundle = Bundle()
                         dataBundle.putString("productDocumentID",wholeOrderModelList[adapterPosition].productDocumentId)
@@ -275,23 +276,23 @@ class ShowUserOrderInfoFragment(val mainFragment: MainFragment) : Fragment() {
                         OrderState.ORDER_STATE_TRANSFER_COMPLETED -> ""
                     }.toString()
 
-
-                    if (wholeOrderModelList[position].orderState == OrderState.ORDER_STATE_PICKUP_COMPLETED ||
-                        wholeOrderModelList[position].orderState == OrderState.ORDER_STATE_TRANSFER_COMPLETED){
+                    //해당주문에대해 리뷰가 이미있다면 리뷰작성 버튼을 리뷰 보기버튼으로 변경한다
+                    if (wholeOrderModelList[position].reviewDocumentID !="") {
                         buttonRowOrderInfoWriteReviewBackground?.value = ContextCompat.getDrawable(context!!, R.drawable.button_round_activated)
                         buttonRowOrderInfoWriteReviewEnabled?.value = true
                         buttonRowOrderInfoWriteReviewTextColor?.value = Color.WHITE
+                        buttonRowOrderInfoWriteReviewText?.value = "리뷰보기"
                     }else{
-                        buttonRowOrderInfoWriteReviewBackground?.value = ContextCompat.getDrawable(context!!, R.drawable.button_round_deactivated)
-                        buttonRowOrderInfoWriteReviewEnabled?.value = false
-                        buttonRowOrderInfoWriteReviewTextColor?.value = Color.GRAY
-                    }
-
-                    //해당주문에대해 리뷰가 이미있다면 리뷰작성 버튼을 리뷰 보기버튼으로 변경한다
-                    if (wholeOrderModelList[position].reviewDocumentID !=""){
-                        buttonRowOrderInfoWriteReviewBackground?.value = ContextCompat.getDrawable(context!!, R.drawable.button_round_deactivated)
-                        buttonRowOrderInfoWriteReviewEnabled?.value = false
-                        buttonRowOrderInfoWriteReviewTextColor?.value = Color.GRAY
+                        if (wholeOrderModelList[position].orderState == OrderState.ORDER_STATE_PICKUP_COMPLETED ||
+                            wholeOrderModelList[position].orderState == OrderState.ORDER_STATE_TRANSFER_COMPLETED){
+                            buttonRowOrderInfoWriteReviewBackground?.value = ContextCompat.getDrawable(context!!, R.drawable.button_round_activated)
+                            buttonRowOrderInfoWriteReviewEnabled?.value = true
+                            buttonRowOrderInfoWriteReviewTextColor?.value = Color.WHITE
+                        }else{
+                            buttonRowOrderInfoWriteReviewBackground?.value = ContextCompat.getDrawable(context!!, R.drawable.button_round_deactivated)
+                            buttonRowOrderInfoWriteReviewEnabled?.value = false
+                            buttonRowOrderInfoWriteReviewTextColor?.value = Color.GRAY
+                        }
                     }
                 }
             }
