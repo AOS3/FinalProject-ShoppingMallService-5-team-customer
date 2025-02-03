@@ -132,6 +132,7 @@ class ShowUserOrderListFragment(val mainFragment: MainFragment) : Fragment() {
                     recyclerViewShowUserOrderList.adapter?.notifyDataSetChanged()
                 } else {
                     showUserOrderListViewModel?.textViewNothingOrderVisibility?.value = View.VISIBLE
+                    showUserOrderListViewModel?.progressBarShowUserOrderListVisibility?.value = View.GONE
                 }
 
             }

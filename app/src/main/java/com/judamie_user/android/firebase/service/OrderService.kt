@@ -27,5 +27,10 @@ class OrderService {
         suspend fun updateOrderData(orderDocumentID:String,orderState: OrderState){
             OrderRepository.updateOrderData(orderDocumentID,orderState)
         }
+
+        //리뷰를 작성하면 orderData에 리뷰 아이디를 넣어준다
+        suspend fun addReviewDocumentID(orderDocumentID: String,reviewDocumentId: String){
+            OrderRepository.addReviewDocumentID(orderDocumentID,reviewDocumentId)
+        }
     }
 }

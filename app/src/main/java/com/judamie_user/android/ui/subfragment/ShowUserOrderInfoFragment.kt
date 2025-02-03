@@ -61,11 +61,16 @@ class ShowUserOrderInfoFragment(val mainFragment: MainFragment) : Fragment() {
         //리사이클러뷰세팅
         //settingRecyclerView()
 
-        if(orderDataList.isEmpty()){
-            gettingOrderModelList()
-        }else{
-            //리사이클러뷰를 다시표시함
-        }
+//        if(orderDataList.isEmpty()){
+//            gettingOrderModelList()
+//        }else{
+//            //리사이클러뷰를 다시표시함
+//            settingRecyclerView()
+//        }
+
+        orderDataList.clear()
+        wholeOrderModelList.clear()
+        gettingOrderModelList()
 
 
         return fragmentShowUserOrderInfoBinding.root
@@ -114,6 +119,7 @@ class ShowUserOrderInfoFragment(val mainFragment: MainFragment) : Fragment() {
                 }
                 // 배송상태를 중복제거하고 배송상태에따라 분기한다
                 checkDeliveryState.distinct()
+                buttonShowUserOrderInfoPickupDoneEnabled?.value = true
 
                 Log.d("test",checkDeliveryState.toString())
 
@@ -122,12 +128,20 @@ class ShowUserOrderInfoFragment(val mainFragment: MainFragment) : Fragment() {
                     buttonShowUserOrderInfoPickupDoneBackground?.value = ContextCompat.getDrawable(requireContext(), R.drawable.button_round_deactivated)
                     buttonShowUserOrderInfoPickupDoneTextColor?.value = Color.GRAY
                 }
-                if (!!checkDeliveryState.contains(OrderState.ORDER_STATE_PAYMENT_COMPLETE) &&
+                if (!checkDeliveryState.contains(OrderState.ORDER_STATE_PAYMENT_COMPLETE) &&
                     checkDeliveryState.contains(OrderState.ORDER_STATE_DELIVERY)){
                     buttonShowUserOrderInfoPickupDoneEnabled?.value = true
                     buttonShowUserOrderInfoPickupDoneBackground?.value = ContextCompat.getDrawable(requireContext(), R.drawable.button_round_activated)
                     buttonShowUserOrderInfoPickupDoneTextColor?.value = Color.WHITE
                 }
+                if (checkDeliveryState.contains(OrderState.ORDER_STATE_PICKUP_COMPLETED)||
+                    checkDeliveryState.contains(OrderState.ORDER_STATE_TRANSFER_COMPLETED)){
+                    buttonShowUserOrderInfoPickupDoneEnabled?.value = false
+                    buttonShowUserOrderInfoPickupDoneBackground?.value = ContextCompat.getDrawable(requireContext(), R.drawable.button_round_deactivated)
+                    buttonShowUserOrderInfoPickupDoneTextColor?.value = Color.GRAY
+                }
+
+                Log.d("test",buttonShowUserOrderInfoPickupDoneEnabled.value.toString())
 
             }
             settingRecyclerView()
@@ -200,11 +214,12 @@ class ShowUserOrderInfoFragment(val mainFragment: MainFragment) : Fragment() {
         inner class ViewHolder(val rowOrderInfoBinding: RowOrderInfoBinding):RecyclerView.ViewHolder(rowOrderInfoBinding.root){
             init {
                 rowOrderInfoBinding.buttonRowOrderInfoWriteReview.setOnClickListener {
-                    mainFragment.replaceFragment(ShopSubFragmentName.WRITE_PRODUCT_REVIEW_FRAGMENT,true,true,null)
+                    val dataBundle = Bundle()
+                    dataBundle.putString("productDocumentID",wholeOrderModelList[adapterPosition].productDocumentId)
+                    dataBundle.putString("orderDocumentID",wholeOrderModelList[adapterPosition].orderDocumentId)
+                    mainFragment.replaceFragment(ShopSubFragmentName.WRITE_PRODUCT_REVIEW_FRAGMENT,true,true,dataBundle)
                 }
-
             }
-
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -254,12 +269,20 @@ class ShowUserOrderInfoFragment(val mainFragment: MainFragment) : Fragment() {
                         OrderState.ORDER_STATE_TRANSFER_COMPLETED -> ""
                     }.toString()
 
+
                     if (wholeOrderModelList[position].orderState == OrderState.ORDER_STATE_PICKUP_COMPLETED ||
                         wholeOrderModelList[position].orderState == OrderState.ORDER_STATE_TRANSFER_COMPLETED){
                         buttonRowOrderInfoWriteReviewBackground?.value = ContextCompat.getDrawable(context!!, R.drawable.button_round_activated)
                         buttonRowOrderInfoWriteReviewEnabled?.value = true
                         buttonRowOrderInfoWriteReviewTextColor?.value = Color.WHITE
                     }else{
+                        buttonRowOrderInfoWriteReviewBackground?.value = ContextCompat.getDrawable(context!!, R.drawable.button_round_deactivated)
+                        buttonRowOrderInfoWriteReviewEnabled?.value = false
+                        buttonRowOrderInfoWriteReviewTextColor?.value = Color.GRAY
+                    }
+
+                    //해당주문에대해 리뷰가 이미있다면 리뷰작성 버튼을 리뷰 보기버튼으로 변경한다
+                    if (wholeOrderModelList[position].reviewDocumentID !=""){
                         buttonRowOrderInfoWriteReviewBackground?.value = ContextCompat.getDrawable(context!!, R.drawable.button_round_deactivated)
                         buttonRowOrderInfoWriteReviewEnabled?.value = false
                         buttonRowOrderInfoWriteReviewTextColor?.value = Color.GRAY

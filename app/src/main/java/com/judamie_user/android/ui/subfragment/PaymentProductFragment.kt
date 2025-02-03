@@ -158,6 +158,7 @@ class PaymentProductFragment(val mainFragment: MainFragment) : Fragment() {
                     val orderState = OrderState.ORDER_STATE_PAYMENT_COMPLETE
                     val orderTimeStamp = System.currentTimeMillis()
                     val orderTransactionTime = 0L
+                    val reviewDocumentID = ""
 
                     val orderPriceAmount =
                         ((productPrice * (1 - (productDiscountRate.toDouble() / 100.0))) * orderCount).toInt()
@@ -175,6 +176,7 @@ class PaymentProductFragment(val mainFragment: MainFragment) : Fragment() {
                         it.orderPriceAmount = orderPriceAmount.toDouble()
                         it.orderTimeStamp = orderTimeStamp
                         it.orderTransactionTime = orderTransactionTime
+                        it.reviewDocumentID = reviewDocumentID
                     }
 
                     // OrderData를 서버에 저장하고 ID를 반환받음
@@ -323,7 +325,7 @@ class PaymentProductFragment(val mainFragment: MainFragment) : Fragment() {
 
 
     // 결제 상품 RecyclerView 구성 메서드
-    fun     settingPaymentRecyclerView(){
+    fun settingPaymentRecyclerView(){
         fragmentPaymentProductBinding.apply {
             recyclerViewPaymentProduct.adapter = PaymentRecyclerViewAdapter()
             recyclerViewPaymentProduct.layoutManager = LinearLayoutManager(shopActivity)

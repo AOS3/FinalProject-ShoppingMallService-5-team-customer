@@ -1,6 +1,7 @@
 package com.judamie_user.android.firebase.model
 
 import com.judamie_user.android.firebase.vo.OrderVO
+import com.judamie_user.android.util.OrderIsReview
 import com.judamie_user.android.util.OrderState
 
 class OrderModel {
@@ -31,6 +32,8 @@ class OrderModel {
     var orderState = OrderState.ORDER_STATE_PAYMENT_COMPLETE
     // 거래 입금 시간
     var orderTransactionTime = 0L
+    //이 주문에 들어와있는 리뷰 ID
+    var reviewDocumentID = ""
 
     fun toOrderVO() : OrderVO {
         val orderVO = OrderVO()
@@ -46,7 +49,9 @@ class OrderModel {
         orderVO.pickupLocDocumentId = pickupLocDocumentId
         orderVO.orderTimeStamp = orderTimeStamp
         orderVO.orderState = orderState.num
-        orderTransactionTime = orderTransactionTime
+        orderVO.orderTransactionTime = orderTransactionTime
+        orderVO.reviewDocumentID = reviewDocumentID
+
 
         return orderVO
     }

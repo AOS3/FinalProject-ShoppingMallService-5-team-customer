@@ -1,5 +1,6 @@
 package com.judamie_user.android.firebase.repository
 
+import com.google.firebase.firestore.DocumentId
 import com.google.firebase.firestore.FirebaseFirestore
 import com.judamie_user.android.firebase.vo.OrderVO
 import com.judamie_user.android.util.OrderState
@@ -36,6 +37,19 @@ class OrderRepository {
 
             val updateMap = mapOf(
                 "orderState" to orderState.num
+            )
+
+            documentReference.update(updateMap).await()
+        }
+
+        //리뷰를 작성하면 orderData에 리뷰 아이디를 넣어준다
+        suspend fun addReviewDocumentID(orderDocumentID: String,reviewDocumentId: String){
+            val firestore = FirebaseFirestore.getInstance()
+            val collectionReference = firestore.collection("OrderData")
+            val documentReference = collectionReference.document(orderDocumentID)
+
+            val updateMap = mapOf(
+                "reviewDocumentID" to reviewDocumentId
             )
 
             documentReference.update(updateMap).await()
