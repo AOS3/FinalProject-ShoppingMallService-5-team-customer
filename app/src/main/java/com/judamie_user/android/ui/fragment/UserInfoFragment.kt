@@ -8,11 +8,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import com.judamie_user.android.R
+import com.judamie_user.android.activity.ShopActivity
 import com.judamie_user.android.databinding.FragmentUserInfoBinding
 import com.judamie_user.android.viewmodel.fragmentviewmodel.UserInfoViewModel
 
 class UserInfoFragment(val mainFragment: MainFragment) : Fragment() {
     lateinit var fragmentUserInfoBinding: FragmentUserInfoBinding
+    lateinit var shopActivity: ShopActivity
 
 
     override fun onCreateView(
@@ -22,10 +24,12 @@ class UserInfoFragment(val mainFragment: MainFragment) : Fragment() {
         fragmentUserInfoBinding = DataBindingUtil.inflate(inflater,R.layout.fragment_user_info,container,false)
         fragmentUserInfoBinding.userInfoViewModel = UserInfoViewModel(this)
         fragmentUserInfoBinding.lifecycleOwner = this
+        shopActivity = activity as ShopActivity
 
         //툴바설정
         settingMaterialToolbarWishList()
 
+        fragmentUserInfoBinding.userInfoViewModel?.textViewUserNameText?.value = "${shopActivity.userName}님"
 
         return fragmentUserInfoBinding.root
     }

@@ -7,7 +7,7 @@ import com.judamie_user.android.ui.fragment.UserInfoFragment
 
 class UserInfoViewModel(val userInfoFragment: UserInfoFragment) : ViewModel() {
     //textViewUserName
-    val textViewUserNameText = MutableLiveData("___ 님")
+    val textViewUserNameText = MutableLiveData("")
 
     //imageButtonGoSetting
     fun imageButtonGoSettingOnClick() {
