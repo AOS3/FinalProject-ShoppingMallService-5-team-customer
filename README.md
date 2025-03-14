@@ -68,42 +68,21 @@
 
 ## 📺 화면 구성
 
-1. 로그인 화면
+| 로그인 화면 | 홈 화면 |
+| --- | --- |
+| ![image1](app/src/main/res/drawable/image1.png) | ![image2](app/src/main/res/drawable/image2.png) |
 
-1. 그룹 화면
+| 픽업지 선택화면 | 픽업지 정보보기 |
+| --- | --- |
+| ![image1](app/src/main/res/drawable/image4.png) | ![image2](app/src/main/res/drawable/image5.png) |
 
-1. 홈 화면
+| 상품보기 | 장바구니 | 결제하기 |
+| --- | --- | --- |
+| ![image1](app/src/main/res/drawable/memories.jpg) | ![image2](app/src/main/res/drawable/image8.png) | ![image3](app/src/main/res/drawable/image9.png) |
 
-![image.png](image.png)
-
-![image.png](image%201.png)
-
-![image.png](image%202.png)
-
-1. 오늘의 질문 화면
-
-1. 요청하기 화면
-
-1. 요청 보기 화면
-
-![image.png](image%203.png)
-
-![image.png](image%204.png)
-
-![image.png](image%205.png)
-
-1. 추억들 화면
-
-1. 질문 답변하기 화면
-
-1. 마이페이지 화면
-
-![image.png](image%206.png)
-
-![image.png](image%207.png)
-
-![image.png](image%208.png)
-
+| 리뷰작성 | 리뷰보기 |
+| --- | --- |
+| ![image1](app/src/main/res/drawable/memories.jpg) | ![image2](app/src/main/res/drawable/image8.png) |
 ## 🔔 주요 기능
 
 ❗카테고리별 주류 진열 & 검색
