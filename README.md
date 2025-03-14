@@ -68,21 +68,19 @@
 
 ## 📺 화면 구성
 
-| 로그인 화면 | 홈 화면 |
-| --- | --- |
-| ![image1](app/src/main/res/drawable/screenshot_20250314_172929.png) | ![image2](app/src/main/res/drawable/screenshot_20250314_180155.png) |
+| 로그인 화면 | 홈 화면 | 픽업지 선택화면 | 픽업지 정보보기 |
+| --- | --- | --- | --- |
+| <img src="app/src/main/res/drawable/screenshot_20250314_172929.png" width="200"> | <img src="app/src/main/res/drawable/screenshot_20250314_180155.png" width="200"> |<img src="app/src/main/res/drawable/screenshot_20250314_173412.png" width="200"> | <img src="app/src/main/res/drawable/screenshot_20250314_173340.png" width="200"> |
 
-| 픽업지 선택화면 | 픽업지 정보보기 |
-| --- | --- |
-| ![image1](app/src/main/res/drawable/image4.png) | ![image2](app/src/main/res/drawable/image5.png) |
 
-| 상품보기 | 장바구니 | 결제하기 |
-| --- | --- | --- |
-| ![image1](app/src/main/res/drawable/memories.jpg) | ![image2](app/src/main/res/drawable/image8.png) | ![image3](app/src/main/res/drawable/image9.png) |
+
+| 검색하기 | 상품보기 | 장바구니 | 결제하기 |
+| --- | --- | --- | --- |
+| <img src="app/src/main/res/drawable/screenshot_20250314_173740.png" width="200"> | <img src="app/src/main/res/drawable/screenshot_20250314_175112.png" width="200"> | <img src="app/src/main/res/drawable/screenshot_20250314_173927.png" width="200"> | <img src="app/src/main/res/drawable/screenshot_20250314_174043.png" width="200"> |
 
 | 리뷰작성 | 리뷰보기 |
 | --- | --- |
-| ![image1](app/src/main/res/drawable/memories.jpg) | ![image2](app/src/main/res/drawable/image8.png) |
+| <img src="app/src/main/res/drawable/screenshot_20250314_174816.png" width="200"> | <img src="app/src/main/res/drawable/screenshot_20250314_175027.png" width="200"> |
 ## 🔔 주요 기능
 
 ❗카테고리별 주류 진열 & 검색
