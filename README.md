@@ -127,4 +127,4 @@
 
 ❗흐름
 
-![image1](app/src/main/res/drawable/architecture_ggiriggiri.png)
+![image1](app/src/main/res/drawable/judamie_architecture.png)
