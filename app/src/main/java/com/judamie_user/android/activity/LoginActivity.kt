@@ -1,5 +1,6 @@
 package com.judamie_user.android.activity
 
+import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Rect
@@ -21,9 +22,14 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.transition.MaterialSharedAxis
 import com.judamie_user.android.R
 import com.judamie_user.android.databinding.ActivityLoginBinding
+import com.judamie_user.android.firebase.service.UserService
 import com.judamie_user.android.ui.fragment.LoginFragment
 import com.judamie_user.android.ui.fragment.RegisterStep1Fragment
 import com.judamie_user.android.ui.fragment.RegisterVerificationFragment
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import kotlin.concurrent.thread
 
 class LoginActivity : AppCompatActivity() {
@@ -47,19 +53,11 @@ class LoginActivity : AppCompatActivity() {
             insets
         }
 
-//        val shopIntent = Intent(this@LoginActivity, ShopActivity::class.java)
-//        startActivity(shopIntent)
-//        Log.d("test","로그인")
-//        overridePendingTransition(0,0)
-//        finish()
-
         // 자동 로그인 처리 메서드 호출
-        //userAutoLoginProcessing()
+        userAutoLoginProcessing()
 
         // 첫번째 Fragment를 설정한다.
-        replaceFragment(FragmentName.LOGIN_FRAGMENT, false, false, null)
-
-
+        //replaceFragment(FragmentName.LOGIN_FRAGMENT, false, false, null)
     }
 
 
@@ -167,40 +165,40 @@ class LoginActivity : AppCompatActivity() {
         return super.dispatchTouchEvent(ev)
     }
 
-//    // 자동 로그인 처리 메서드
-//    // 자동 로그인에 실패하면 LoginFragment를 띄우고
-//    // 자동 로그인에 성공하면 현재 Activity를 종료하고 BoardActivity를 실행킨다.
-//    fun userAutoLoginProcessing(){
-//        // Preference에 login token이 있는지 확인한다.
-//        val pref = getSharedPreferences("LoginToken", Context.MODE_PRIVATE)
-//        val loginToken = pref.getString("token", null)
-//        // Log.d("test100", "$loginToken")
-//
-//        CoroutineScope(Dispatchers.Main).launch {
-//            if(loginToken != null){
-//                // 사용자 정보를 가져온다.
-//                val work1 = async(Dispatchers.IO){
-//                    UserService.selectUserDataByLoginToken(loginToken)
-//                }
-//                val loginUserModel = work1.await()
-//                // 가져온 사용자 데이터가 있다면
-//                if(loginUserModel != null){
-//                    // BoardActivity를 실행하고 현재 Activity를 종료한다.
-//                    val boardIntent = Intent(this@UserActivity, BoardActivity::class.java)
-//                    boardIntent.putExtra("user_document_id", loginUserModel.userDocumentId)
-//                    boardIntent.putExtra("user_nick_name", loginUserModel.userNickName)
-//                    startActivity(boardIntent)
-//                    finish()
-//                } else {
-//                    // 첫번째 Fragment를 설정한다.
-//                    replaceFragment(UserFragmentName.USER_LOGIN_FRAGMENT, false, false, null)
-//                }
-//            } else {
-//                // 첫번째 Fragment를 설정한다.
-//                replaceFragment(UserFragmentName.USER_LOGIN_FRAGMENT, false, false, null)
-//            }
-//        }
-//    }
+    // 자동 로그인 처리 메서드
+    // 자동 로그인에 실패하면 LoginFragment를 띄우고
+    // 자동 로그인에 성공하면 현재 Activity를 종료하고 ShopActivity를 실행시킨다.
+    fun userAutoLoginProcessing(){
+        // Preference에 login token이 있는지 확인한다.
+        val pref = getSharedPreferences("LoginToken", Context.MODE_PRIVATE)
+        val loginToken = pref.getString("token", null)
+        // Log.d("test100", "$loginToken")
+
+        CoroutineScope(Dispatchers.Main).launch {
+            if(loginToken != null){
+                // 사용자 정보를 가져온다.
+                val work1 = async(Dispatchers.IO){
+                    UserService.selectUserDataByLoginToken(loginToken)
+                }
+                val loginUserModel = work1.await()
+                // 가져온 사용자 데이터가 있다면
+                if(loginUserModel != null){
+                    // ShopActivity 실행하고 현재 Activity를 종료한다.
+                    val shopIntent = Intent(this@LoginActivity, ShopActivity::class.java)
+                    shopIntent.putExtra("user_document_id", loginUserModel.userDocumentID)
+                    shopIntent.putExtra("user_name", loginUserModel.userName)
+                    startActivity(shopIntent)
+                    finish()
+                } else {
+                    // 첫번째 Fragment를 설정한다.
+                    replaceFragment(FragmentName.LOGIN_FRAGMENT, false, false, null)
+                }
+            } else {
+                // 첫번째 Fragment를 설정한다.
+                replaceFragment(FragmentName.LOGIN_FRAGMENT, false, false, null)
+            }
+        }
+    }
 }
 
 // 프래그먼트들을 나타내는 값들

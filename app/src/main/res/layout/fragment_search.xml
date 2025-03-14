@@ -55,26 +55,28 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:visibility="gone"
+            android:padding="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textViewSearchProductCount"
+            app:layout_constraintTop_toBottomOf="@+id/textViewSearchResultProductCount"
             app:layout_constraintVertical_bias="0.0" />
 
         <TextView
-            android:id="@+id/textViewSearchProductCount"
+            android:id="@+id/textViewSearchResultProductCount"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginTop="10dp"
-            android:text="총 4개"
+            android:text="@{searchViewModel.textViewSearchResultProductCountText}"
             android:textSize="16sp"
             android:textStyle="bold"
-            android:visibility="gone"
+            android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/editTextSearchInput" />
+
 
         <TextView
             android:id="@+id/textViewSearchEmptyProduct"
@@ -84,16 +86,29 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textViewSearchProductCount" />
+            app:layout_constraintTop_toBottomOf="@+id/textViewSearchResultProductCount" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewSearchSuggestion"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginTop="10dp"
+            android:padding="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/editTextSearchInput" />
+
+        <ProgressBar
+            android:id="@+id/progressSearchProduct"
+            style="?android:attr/progressBarStyleLargeInverse"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/recyclerViewSearchSuggestion" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

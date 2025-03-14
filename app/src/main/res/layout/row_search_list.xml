@@ -12,8 +12,9 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
         android:padding="10dp"
+        android:clipToOutline="true"
+        android:background="@drawable/picture_rounded_corners"
         android:transitionGroup="true">
 
         <!-- 드라이브에 아이콘-->
@@ -29,10 +30,10 @@
             <ImageView
                 android:id="@+id/imageViewSearchProduct"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
-                android:scaleType="centerCrop"
-                app:srcCompat="@drawable/sampleproductimage_gp18" />
+                android:layout_height="match_parent"
+                android:background="@drawable/picture_rounded_corners"
+                android:clipToOutline="true"
+                android:scaleType="fitXY" />
 
             <ImageView
                 android:id="@+id/imageButtonSearchSetWishList"
@@ -43,7 +44,6 @@
                 android:layout_marginBottom="10dp"
                 android:layout_weight="0.5"
                 android:onClick="@{()->rowSearchListViewModel.imageButtonSearchSetWishListOnClick()}"
-                app:srcCompat="@drawable/bookmark_filled_24px"
                 app:tint="@color/mainColor" />
         </FrameLayout>
 
@@ -91,7 +91,7 @@
 
         <TextView
             android:id="@+id/textViewSearchDiscountRating"
-            android:layout_width="0dp"
+            android:layout_width="40dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:layout_weight="0.2"
@@ -100,14 +100,12 @@
             android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/textViewSearchProductName"
-            tools:text="20%" />
+            app:layout_constraintTop_toBottomOf="@id/textViewSearchProductName" />
 
         <TextView
             android:id="@+id/textViewSearchProductPrice"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
             android:layout_marginTop="5dp"
             android:layout_weight="1"
             android:singleLine="true"
@@ -116,20 +114,20 @@
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/textViewSearchDiscountRating"
-            app:layout_constraintTop_toBottomOf="@+id/textViewSearchProductName"
-            tools:text="256,000원" />
+            app:layout_constraintTop_toBottomOf="@+id/textViewSearchProductName" />
 
         <TextView
             android:id="@+id/textViewSearchProductReview"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="10dp"
             android:layout_weight="0.1"
-            android:text="리뷰"
+            android:text="@{rowSearchListViewModel.textViewSearchProductReviewText}"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textSize="14sp"
+            android:visibility="visible"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textViewSearchDiscountRating" />
+            app:layout_constraintTop_toBottomOf="@id/textViewSearchProductPrice" />
 
         <TextView
             android:id="@+id/textViewSearchProductSeller"
@@ -142,23 +140,11 @@
             android:textColor="#876F7979"
             android:textSize="14sp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/textViewSearchProductReview"
-            tools:text="판매자" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/textViewSearchProductReview"
+            app:layout_constraintStart_toStartOf="@id/textViewSearchProductReview"
+            app:layout_constraintTop_toBottomOf="@id/textViewSearchProductReview" />
 
-        <TextView
-            android:id="@+id/textViewSearchReviewCount"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="5dp"
-            android:text="(8)"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/textViewSearchProductReview"
-            app:layout_constraintTop_toBottomOf="@id/textViewSearchDiscountRating"
-            tools:layout_constraintStart_toEndOf="@id/textViewSearchProductReview"
-            tools:textSize="14sp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

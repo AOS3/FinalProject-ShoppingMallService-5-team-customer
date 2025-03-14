@@ -18,7 +18,9 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:textSize="24sp" />
+            tools:textSize="20sp"
+            android:textStyle="bold"
+            android:textSize="20dp"/>
 
 
         <android.widget.Button
@@ -26,26 +28,29 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="20dp"
             android:layout_marginBottom="40dp"
             android:layout_weight="1"
             android:background="@drawable/button_round_deactivated"
             android:text="탈퇴"
+            android:textSize="16sp"
+
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/buttonCancle"
+            app:layout_constraintEnd_toStartOf="@id/buttonCancel"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/textView3" />
 
         <android.widget.Button
-            android:id="@+id/buttonCancle"
+            android:id="@+id/buttonCancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="20dp"
             android:layout_marginEnd="20dp"
             android:layout_marginBottom="40dp"
             android:layout_weight="1"
             android:background="@drawable/button_round_activated"
             android:text="취소"
+            android:textSize="16sp"
             android:textColor="#FFFFFF"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -57,9 +62,11 @@
             android:id="@+id/textView3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="20dp"
             android:text="탈퇴 버튼 선택 시, 계정은 삭제되며 \n복구되지 않습니다."
+            android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.517"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textViewNoNotification" />
 

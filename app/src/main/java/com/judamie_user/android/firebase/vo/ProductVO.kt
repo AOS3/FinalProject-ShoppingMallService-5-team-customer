@@ -1,37 +1,48 @@
 package com.judamie_user.android.firebase.vo
 
+import com.judamie_user.android.firebase.model.ProductModel
+import com.judamie_user.android.util.ProductState
+
 class ProductVO {
-
-    //productName	String	주류 이름
-    var productName = ""
-
-    //productCategory	String	주류 카테고리 enum class
+    var productName	= ""
     var productCategory = ""
-
-    //productPrice	Int	주류가격
-    var productPrice = ""
-
-    //productDiscountRate	Int	할인율
-    var productDiscountRate = ""
-
-    //productDescription	String	주류설명
+    var productPrice = 0.0
+    var productDiscountRate	= 0
+    var productStock = 0
     var productDescription = ""
-
-    //productInventory	int	재고량
-    var productInventory = ""
-
-    //productMainImage	String	대표이미지
     var productMainImage = ""
+    var productSubImage: List<String> = emptyList()
+    var productReview= mutableListOf<String>()
+    var productSeller = ""
+    var productState = 0
+    var productRegisterDate	= ""
+    var productTimeStamp = 0L
 
-    //productSubImage	List<String> 추가이미지
-    var productSubImage = mutableListOf<String>()
+    fun toProductModel(productDocumentId:String) : ProductModel {
+        val productModel = ProductModel()
 
-    //productState	Int	상품 상태 enum class
-    var productState = ""
+        productModel.productDocumentId = productDocumentId
+        productModel.productName = productName
+        productModel.productCategory = productCategory
+        productModel.productPrice = productPrice
+        productModel.productDiscountRate = productDiscountRate
+        productModel.productDescription = productDescription
+        productModel.productStock = productStock
+        productModel.productMainImage = productMainImage
+        productModel.productRegisterDate = productRegisterDate
+        productModel.productTimeStamp = productTimeStamp
 
-    //productRegisterDate	String	상품등록날짜
-    var productRegisterDate = ""
+        when (productState){
+            ProductState.PRODUCT_NORMAL.number -> productModel.productState = ProductState.PRODUCT_NORMAL
+            ProductState.PRODUCT_DELETE.number -> productModel.productState = ProductState.PRODUCT_DELETE
+        }
 
-    //productTimeStamp	Int	데이터 들어온시간
-    var productTimeStamp = ""
+        productModel.productSubImage = mutableListOf()
+
+        productModel.productReview = productReview
+
+        productModel.productSeller = productSeller
+
+        return productModel
+    }
 }

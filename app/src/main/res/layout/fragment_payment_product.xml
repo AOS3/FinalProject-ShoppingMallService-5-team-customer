@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:padding="10dp">
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -48,7 +47,7 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="10dp"
+                            android:layout_marginStart="5dp"
                             android:text="구매자 정보"
                             android:textSize="20sp"
                             android:textStyle="bold" />
@@ -72,7 +71,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="0.5"
-                                android:text="젠슨 황" />
+                                android:text="@{paymentProductViewModel.textViewPaymentUserNameText}" />
 
                         </LinearLayout>
 
@@ -96,7 +95,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="0.5"
-                                android:text="01012340000" />
+                                android:text="@{paymentProductViewModel.textViewPaymentUserNoText}" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -107,7 +106,7 @@
                             <TextView
                                 android:layout_width="231dp"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="10dp"
+                                android:layout_marginStart="5dp"
                                 android:text="픽업 상품"
                                 android:textSize="20sp"
                                 android:textStyle="bold" />
@@ -135,10 +134,19 @@
 
                         </androidx.recyclerview.widget.RecyclerView>
 
+
+                        <View
+                            android:id="@+id/divider5"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginTop="10dp"
+                            android:background="?android:attr/listDivider" />
+
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="10dp"
+                            android:layout_marginStart="5dp"
+                            android:layout_marginTop="10dp"
                             android:layout_weight="0.5"
                             android:text="픽업 매장"
                             android:textSize="20sp"
@@ -165,7 +173,32 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="0.5"
-                                android:text="멋쟁이 호랑이 강남점" />
+                                android:text="@{paymentProductViewModel.textViewPaymentPickupLocNameText}" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.5"
+                            android:orientation="horizontal"
+                            android:padding="10dp">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.5"
+                                android:text="매장 주소
+        "
+                                android:textColor="#6F7979"
+                                android:textSize="14sp" />
+
+                            <TextView
+                                android:id="@+id/textViewPaymentPickupLocAddressInfo"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.5"
+                                android:text="@{paymentProductViewModel.textViewPaymentPickupLocAddressInfoText}" />
 
                         </LinearLayout>
 
@@ -173,7 +206,8 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="10dp"
+                            android:layout_marginStart="5dp"
+                            android:layout_marginTop="10dp"
                             android:layout_weight="0.5"
                             android:text="쿠폰 선택"
                             android:textSize="20sp"
@@ -181,9 +215,11 @@
 
                         <androidx.appcompat.widget.AppCompatButton
                             android:id="@+id/buttonPaymentSelectCoupon"
-                            android:layout_width="360dp"
+                            android:layout_width="match_parent"
                             android:layout_height="40dp"
-                            android:layout_marginTop="10dp"
+                            android:layout_marginStart="15dp"
+                            android:layout_marginTop="15dp"
+                            android:layout_marginEnd="15dp"
                             android:background="@drawable/background_shape_round_button"
                             android:backgroundTint="@color/white"
                             android:drawableStart="@drawable/coupon"
@@ -201,7 +237,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
-                            android:layout_marginTop="10dp"
+                            android:layout_marginTop="15dp"
                             android:text="결제정보"
                             android:textSize="20sp"
                             android:textStyle="bold" />
@@ -242,13 +278,14 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:layout_weight="0.5"
-                                        android:text="246,000원" />
+                                        android:text="@{paymentProductViewModel.textViewPaymentAllProductPriceText}" />
                                 </LinearLayout>
 
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_marginStart="10dp"
+                                    android:layout_marginTop="5dp"
                                     android:orientation="horizontal">
 
                                     <TextView
@@ -264,14 +301,14 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:layout_weight="0.5"
-                                        android:text="-3,600원" />
+                                        android:text="@{paymentProductViewModel.textViewPaymentCouponDiscountPriceText}" />
                                 </LinearLayout>
 
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_marginStart="10dp"
-                                    android:layout_marginTop="10dp"
+                                    android:layout_marginTop="13dp"
                                     android:orientation="horizontal">
 
                                     <TextView
@@ -280,7 +317,7 @@
                                         android:layout_weight="0.5"
                                         android:text="총 결제 가격"
                                         android:textColor="#6F7979"
-                                        android:textSize="14sp"
+                                        android:textSize="15sp"
                                         android:textStyle="bold" />
 
                                     <TextView
@@ -288,12 +325,14 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:layout_weight="0.5"
-                                        android:text="243,000원"
+                                        android:textSize="15sp"
+                                        android:text="@{paymentProductViewModel.textViewPaymentTotalPriceText}"
                                         android:textStyle="bold" />
                                 </LinearLayout>
 
                             </LinearLayout>
                         </LinearLayout>
+
                     </LinearLayout>
                 </ScrollView>
             </LinearLayout>
@@ -319,14 +358,29 @@
             android:id="@+id/buttonPaymentPay"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
             android:layout_marginBottom="10dp"
             android:background="@drawable/button_round_activated"
-            android:text="243,000원 결제하기"
+            android:text="@{paymentProductViewModel.buttonPaymentPayText}"
             android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/nestedScrollView" />
+            app:layout_constraintTop_toBottomOf="@+id/nestedScrollView"
+            android:onClick="@{(view)->paymentProductViewModel.buttonPaymentPayOnClick()}"/>
+
+        <ProgressBar
+            android:id="@+id/progressBarPaymentProduct"
+            style="?android:attr/progressBarStyleLargeInverse"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/nestedScrollView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

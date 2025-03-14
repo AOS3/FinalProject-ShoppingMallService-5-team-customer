@@ -45,20 +45,30 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
             android:text="픽업지"
-            app:layout_constraintBottom_toTopOf="@+id/divider2"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textViewShowUserOrderInfoDate" />
 
         <TextView
-            android:id="@+id/textViewShowUserOrderInfoPickupLocation"
+            android:id="@+id/textViewShowUserOrderInfoPickupLocationStreetAddress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="50dp"
-            android:text="@{showUserOrderInfoViewModel.textViewShowUserOrderInfoPickupLocationText}"
-            app:layout_constraintBottom_toTopOf="@+id/divider2"
+            android:layout_marginTop="10dp"
+            android:text="@{showUserOrderInfoViewModel.textViewShowUserOrderInfoPickupLocationStreetAddressText}"
             app:layout_constraintStart_toEndOf="@+id/textView7"
             app:layout_constraintTop_toBottomOf="@+id/textViewShowUserOrderInfoDate" />
+
+        <TextView
+            android:id="@+id/textViewShowUserOrderInfoPickupLocationAddressDetail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="50dp"
+            android:layout_marginTop="10dp"
+            android:text="@{showUserOrderInfoViewModel.textViewShowUserOrderInfoPickupLocationAddressDetailText}"
+            app:layout_constraintStart_toEndOf="@+id/textView7"
+            app:layout_constraintTop_toBottomOf="@+id/textViewShowUserOrderInfoPickupLocationStreetAddress" />
 
         <View
             android:id="@+id/divider2"
@@ -87,9 +97,12 @@
             android:layout_marginEnd="5dp"
             android:layout_marginBottom="5dp"
             android:background="@drawable/button_round_activated"
-            android:onClick="@{(view)->showUserOrderInfoViewModel.buttonShowUserOrderInfoPickupDoneOnclick()}"
-            android:text="픽업 완료"
             android:textColor="@color/white"
+            android:text="픽업완료"
+            android:onClick="@{(view)->showUserOrderInfoViewModel.buttonShowUserOrderInfoPickupDoneOnclick()}"
+            android:enabled="@{showUserOrderInfoViewModel.buttonShowUserOrderInfoPickupDoneEnabled}"
+            bind:backgroundDrawable="@{showUserOrderInfoViewModel.buttonShowUserOrderInfoPickupDoneBackground}"
+            bind:textColorInt="@{showUserOrderInfoViewModel.buttonShowUserOrderInfoPickupDoneTextColor}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />

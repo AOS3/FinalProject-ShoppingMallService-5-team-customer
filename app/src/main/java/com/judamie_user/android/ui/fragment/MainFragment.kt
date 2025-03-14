@@ -1,22 +1,27 @@
 package com.judamie_user.android.ui.fragment
 
+import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.commit
+import com.bumptech.glide.Glide
 import com.google.android.material.transition.MaterialSharedAxis
 import com.judamie_user.android.R
 import com.judamie_user.android.databinding.FragmentMainBinding
 import com.judamie_user.android.ui.component.ShowPickupLocationDialogFragment
+import com.judamie_user.android.ui.subfragment.CompletedPaymentFragment
 import com.judamie_user.android.ui.subfragment.ModifyUserInfoFragment
 import com.judamie_user.android.ui.subfragment.PaymentProductFragment
 import com.judamie_user.android.ui.subfragment.ProductInfoFragment
 import com.judamie_user.android.ui.subfragment.ProductReviewListFragment
+import com.judamie_user.android.ui.subfragment.ReviewImageFragment
 import com.judamie_user.android.ui.subfragment.SetPickUpLocationFragment
 import com.judamie_user.android.ui.subfragment.SettingUserNotificationFragment
 import com.judamie_user.android.ui.subfragment.ShowAppInfoFragment
@@ -148,6 +153,8 @@ class MainFragment() : Fragment() {
             ShopSubFragmentName.SHOW_REVIEW_PHOTO_FRAGMENT -> ShowReviewPhotoFragment(this)
             ShopSubFragmentName.VIEW_PAGER_FRAGMENT -> ViewPagerFragment(this)
             ShopSubFragmentName.USER_PRODUCT_REVIEW_FRAGMENT -> UserProductReviewListFragment(this)
+            ShopSubFragmentName.REVIEW_IMAGE_FRAGMENT -> ReviewImageFragment(this)
+            ShopSubFragmentName.COMPLETE_PAYMENT_FRAGMENT -> CompletedPaymentFragment(this)
         }
 
         // bundle 객체가 null이 아니라면
@@ -193,6 +200,11 @@ class MainFragment() : Fragment() {
             fragmentName.str,
             FragmentManager.POP_BACK_STACK_INCLUSIVE
         )
+    }
+
+    // 서버에 있는 이미지를 가져와 ImageView에 보여준다.
+    fun showServiceImage(imageUri: Uri, imageView: ImageView){
+        Glide.with(this@MainFragment).load(imageUri).into(imageView)
     }
 }
 
@@ -247,7 +259,10 @@ enum class ShopSubFragmentName(var number: Int, var str: String) {
     // Home 화면 상품 목록 (ViewPager)
     VIEW_PAGER_FRAGMENT(23, "ViewPagerFragment"),
     // 사용자 리뷰 목록 화면
-    USER_PRODUCT_REVIEW_FRAGMENT(24, "UserProductReviewFragment")
-
+    USER_PRODUCT_REVIEW_FRAGMENT(24, "UserProductReviewFragment"),
+    // 리뷰 이미지 크게보기
+    REVIEW_IMAGE_FRAGMENT(25,"ReviewImageFragment"),
+    // 결제 완료 화면
+    COMPLETE_PAYMENT_FRAGMENT(26, "CompletePaymentFragment")
 
 }

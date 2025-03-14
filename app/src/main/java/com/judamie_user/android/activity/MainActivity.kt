@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.splashscreen.SplashScreen
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.databinding.DataBindingUtil
@@ -12,9 +14,14 @@ import com.judamie_user.android.R
 import com.judamie_user.android.databinding.ActivityShopBinding
 
 class MainActivity : AppCompatActivity() {
+
+    private  val splashScreen : SplashScreen by lazy { installSplashScreen() }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // enableEdgeToEdge()
+
+        splashScreen
+
+        enableEdgeToEdge()
 
         setContentView(R.layout.activity_main)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
@@ -29,6 +36,5 @@ class MainActivity : AppCompatActivity() {
         // MainActivity를 종료한다.
         finish()
 
-        // 안녕하세요
     }
 }

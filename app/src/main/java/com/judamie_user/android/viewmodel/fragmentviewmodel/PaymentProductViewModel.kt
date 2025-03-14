@@ -31,10 +31,8 @@ data class PaymentProductViewModel(val paymentProductFragment: PaymentProductFra
     // 픽업지 정보
     // textViewPaymentPickupLocName - Text
     val textViewPaymentPickupLocNameText = MutableLiveData("")
-
-    // 판매자 정보
-    // textViewPaymentStoreName - Text
-    val textViewPaymentStoreNameText = MutableLiveData("")
+    // textViewPaymentPickupLocAddressInfo - Text
+    val textViewPaymentPickupLocAddressInfoText = MutableLiveData("")
 
     // 상품 총 가격
     // textViewPaymentAllProductPrice - Text
@@ -52,17 +50,21 @@ data class PaymentProductViewModel(val paymentProductFragment: PaymentProductFra
     // buttonPaymentSelectCoupon - text
     val buttonPaymentSelectCouponText = MutableLiveData("")
 
+    // 결제하기 버튼
+    // buttonPaymentPay - text
+    val buttonPaymentPayText = MutableLiveData("")
+
     // 쿠폰 선택 버튼
     // buttonPaymentSelectCoupon - onClick
     fun buttonPaymentSelectCouponOnClick() {
         // 쿠폰 선택 다이얼로그 띄우는 메서드 호출
-        paymentProductFragment.selectCoupon()
+        paymentProductFragment.settingUserCoupons()
     }
 
     // 결제하기 버튼
     // buttonPaymentPay - onClick
     fun buttonPaymentPayOnClick() {
-
+        paymentProductFragment.proPayment()
     }
 
     companion object{

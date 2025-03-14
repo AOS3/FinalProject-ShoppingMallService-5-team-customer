@@ -20,9 +20,9 @@ data class ProductReviewListViewModel(val productReviewListFragment: ProductRevi
 
     // 리뷰 쓰기
     // buttonProductReviewWrite - onClick
-    fun buttonProductReviewWriteOnClick() {
-        productReviewListFragment.moveToWriteReview()
-    }
+//    fun buttonProductReviewWriteOnClick() {
+//        productReviewListFragment.moveToWriteReview()
+//    }
 
     companion object{
         // toolbarProductReview - onNavigationClickProductReviewList

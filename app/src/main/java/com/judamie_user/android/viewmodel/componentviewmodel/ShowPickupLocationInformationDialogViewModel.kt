@@ -13,9 +13,6 @@ class ShowPickupLocationInformationDialogViewModel:ViewModel() {
         onCallClick?.invoke()
     }
 
-    //textViewDialogShowPickupLocationInformationOpenTime - text
-    val textViewDialogShowPickupLocationInformationOpenTimeText = MutableLiveData("")
-
     //textViewDialogShowPickupLocationInformationStreetAddress - text
     val textViewDialogShowPickupLocationInformationStreetAddressText = MutableLiveData("")
 

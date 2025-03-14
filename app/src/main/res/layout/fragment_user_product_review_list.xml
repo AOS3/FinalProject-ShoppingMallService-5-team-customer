@@ -18,6 +18,7 @@
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbarUserProductReview"
+            onNavigationClickUserProductReviewList="@{userProductReviewViewModel.userProductReviewListFragment}"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="@color/white"
@@ -26,10 +27,9 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:navigationIcon="@{userProductReviewViewModel.toolbarUserProductReviewNavigationIcon}"
+            app:navigationIcon="@drawable/arrow_back_ios_24px"
             app:title="@{userProductReviewViewModel.toolbarUserProductReviewTitle}"
-            app:titleCentered="true"
-            onNavigationClickUserProductReviewList="@{userProductReviewViewModel.userProductReviewListFragment}" />
+            app:titleCentered="true" />
 
         <TextView
             android:id="@+id/textViewUserProductReviewCnt"
@@ -38,7 +38,7 @@
             android:layout_marginStart="10dp"
             android:layout_marginTop="4dp"
             android:layout_marginEnd="10dp"
-            android:text="총 32 개의 리뷰"
+            android:text="@{userProductReviewViewModel.textViewUserProductReviewCntText}"
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -54,14 +54,39 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textViewUserProductReviewCnt" />
 
+
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/shimmerFrameLayout"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/divider4">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="10dp">
+
+                <!-- Shimmer Item Placeholder -->
+                <include layout="@layout/row_user_product_review_list_shimmer" />
+
+            </LinearLayout>
+        </com.facebook.shimmer.ShimmerFrameLayout>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewUserProductReview"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/divider4" />
+            app:layout_constraintTop_toBottomOf="@id/divider4" />
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

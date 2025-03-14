@@ -21,49 +21,43 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:maxLength="10"
+            android:ellipsize="end"
+            android:maxLength="30"
             android:maxLines="1"
             android:text="@{settingPickupLocationDialogViewModel.textViewDialogSettingPickupLocationNameText}"
             android:textColor="@color/mainColor"
-            android:textSize="40sp"
+            android:textSize="25sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="CU 서강대점" />
 
         <TextView
-            android:id="@+id/textView12"
-            android:layout_width="wrap_content"
+            android:id="@+id/textView13"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="30dp"
-            android:layout_marginTop="10dp"
-            android:text="영업시간 :"
+            android:layout_marginTop="20dp"
+            android:text="주소 :"
+            android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/buttonSettingPickupLocationCall" />
 
         <TextView
-            android:id="@+id/textView13"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="30dp"
-            android:layout_marginTop="10dp"
-            android:text="주소 :"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView12" />
-
-        <TextView
             android:id="@+id/textView14"
-            android:layout_width="wrap_content"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="30dp"
             android:layout_marginTop="10dp"
             android:text="전화번호 :"
+            android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/textViewDialogSettingPickupLocationAddressDetail" />
 
         <android.widget.Button
             android:id="@+id/buttonSettingPickupLocationCall"
-            android:layout_width="96dp"
+            android:layout_width="100dp"
             android:layout_height="37dp"
             android:layout_marginTop="10dp"
             android:background="@drawable/dialog_call_button"
@@ -76,11 +70,15 @@
 
         <TextView
             android:id="@+id/textViewDialogSettingPickupLocationDetail"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="30dp"
             android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:ellipsize="end"
             android:text="@{settingPickupLocationDialogViewModel.textViewDialogSettingPickupLocationDetailText}"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView14" />
 
@@ -88,73 +86,76 @@
             android:id="@+id/DialogSettingPickupLocationClose"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="20dp"
             android:background="@drawable/button_round_deactivated"
             android:onClick="@{()->settingPickupLocationDialogViewModel.DialogSettingPickupLocationCloseOnClick()}"
             android:text="닫기"
             android:textColor="@color/black"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@id/DialogSettingPickupLocationChoice"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.25"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textViewDialogSettingPickupLocationDetail"
-            app:layout_constraintVertical_bias="1.0" />
-
-        <TextView
-            android:id="@+id/textViewDialogSettingPickupLocationOpenTime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
-            android:text="@{settingPickupLocationDialogViewModel.textViewDialogSettingPickupLocationOpenTimeText}"
-            app:layout_constraintStart_toEndOf="@+id/textView12"
-            app:layout_constraintTop_toBottomOf="@+id/buttonSettingPickupLocationCall" />
+            app:layout_constraintStart_toEndOf="@id/DialogSettingPickupLocationChoice"
+            app:layout_constraintTop_toTopOf="@+id/DialogSettingPickupLocationChoice" />
 
         <TextView
             android:id="@+id/textViewDialogSettingPickupLocationAddressDetail"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:ellipsize="end"
             android:text="@{settingPickupLocationDialogViewModel.textViewDialogSettingPickupLocationAddressDetailText}"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/textView13"
             app:layout_constraintTop_toBottomOf="@id/textViewDialogSettingPickupLocationStreetAddress" />
 
         <TextView
             android:id="@+id/textViewDialogSettingPickupLocationPhoneNumber"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:ellipsize="end"
             android:text="@{settingPickupLocationDialogViewModel.textViewDialogSettingPickupLocationPhoneNumberText}"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/textView14"
             app:layout_constraintTop_toBottomOf="@id/textViewDialogSettingPickupLocationAddressDetail" />
 
         <TextView
             android:id="@+id/textViewDialogSettingPickupLocationStreetAddress"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="10dp"
+            android:ellipsize="end"
             android:text="@{settingPickupLocationDialogViewModel.textViewDialogSettingPickupLocationStreetAddressText}"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/textView13"
-            app:layout_constraintTop_toBottomOf="@+id/textViewDialogSettingPickupLocationOpenTime" />
+            app:layout_constraintTop_toBottomOf="@+id/buttonSettingPickupLocationCall"
+            android:textSize="16sp" />
 
         <android.widget.Button
             android:id="@+id/DialogSettingPickupLocationChoice"
-            android:layout_width="wrap_content"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="30dp"
             android:background="@drawable/button_round_activated"
             android:onClick="@{()->settingPickupLocationDialogViewModel.DialogSettingPickupLocationChoiceOnClick()}"
             android:padding="10dp"
             android:text="이곳으로 지정하기"
             android:textColor="@color/white"
+            android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.75"
+            app:layout_constraintEnd_toStartOf="@+id/DialogSettingPickupLocationClose"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textViewDialogSettingPickupLocationDetail" />
 

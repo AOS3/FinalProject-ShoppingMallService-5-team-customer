@@ -47,6 +47,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
+                <ProgressBar
+                    android:id="@+id/progressBarInWriteReview"
+                    style="?android:attr/progressBarStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
                 <ImageView
                     android:id="@+id/imageViewWriteProductReviewProductImage"
                     android:layout_width="wrap_content"
@@ -55,7 +66,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/img" />
+                    bind:imageUri="@{writeProductReviewViewModel.imageViewWriteProductReviewProductImageUri}" />
 
                 <TextView
                     android:id="@+id/textView8"
@@ -111,7 +122,9 @@
                     style="@style/ImageRatingBar"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textViewWriteProductReviewProductSeller" />
+                    app:layout_constraintTop_toBottomOf="@+id/textViewWriteProductReviewProductSeller"
+                    app:onRatingChanged="@{writeProductReviewViewModel}" />
+
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/textInputLayoutWriteProductReviewContent"

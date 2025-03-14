@@ -17,9 +17,9 @@ data class SearchViewModel(val searchFragment: SearchFragment) : ViewModel() {
     // editTextSearchInput - Text
     val editTextSearchInputText = MutableLiveData("")
 
-    // 상품 수량
+    // 검색 결과 상품 수량
     // textViewSearchProductCount - Text
-    val textViewSearchProductCountText = MutableLiveData("")
+    val textViewSearchResultProductCountText = MutableLiveData("")
 
     companion object{
         // toolbarSearch - onNavigationClickSearch

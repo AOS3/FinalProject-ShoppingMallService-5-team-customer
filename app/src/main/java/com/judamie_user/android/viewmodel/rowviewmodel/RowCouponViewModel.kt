@@ -7,16 +7,16 @@ import com.judamie_user.android.ui.subfragment.ShowUserCouponListFragment
 class RowCouponViewModel(val showUserCouponListFragment: ShowUserCouponListFragment):ViewModel() {
 
     //textViewRowCouponName
-    val textViewRowCouponNameText = MutableLiveData("textViewRowCouponName")
+    val textViewRowCouponNameText = MutableLiveData("")
 
     //textViewRowCouponDiscountRate
-    val textViewRowCouponDiscountRateText = MutableLiveData("textViewRowCouponDiscountRate%")
+    val textViewRowCouponDiscountRateText = MutableLiveData("")
 
     //textViewRowCouponExpireDate
-    val textViewRowCouponExpireDateText = MutableLiveData("textViewRowCouponExpireDate")
+    val textViewRowCouponExpireDateText = MutableLiveData("")
 
     //textViewRowCouponState
-    val textViewRowCouponStateText = MutableLiveData("textViewRowCouponState")
+    val textViewRowCouponStateText = MutableLiveData("")
 
 
 

@@ -10,5 +10,18 @@
         <!--<item name="android:colorBackground">@color/white</item>-->
     </style>
 
-    <style name="Theme.FinalProjectShoppingMallService5teamcustomer" parent="Base.Theme.FinalProjectShoppingMallService5teamcustomer" />
+    <style name="Theme.FinalProjectShoppingMallService5teamcustomer" parent="Base.Theme.FinalProjectShoppingMallService5teamcustomer">
+
+    </style>
+
+    <!-- Splash Screen용 테마 -->
+    <style name="Theme.App.Starting" parent="Base.Theme.FinalProjectShoppingMallService5teamcustomer">
+        <item name="windowSplashScreenBackground">@color/white</item>
+
+        <item name="windowSplashScreenAnimatedIcon">@mipmap/judamie_logo</item>
+
+        <item name="windowSplashScreenAnimationDuration">1000</item>
+
+        <item name="postSplashScreenTheme">@style/Theme.FinalProjectShoppingMallService5teamcustomer</item>
+    </style>
 </resources>
