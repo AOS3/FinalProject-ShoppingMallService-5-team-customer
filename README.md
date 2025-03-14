@@ -70,7 +70,7 @@
 
 | 로그인 화면 | 홈 화면 |
 | --- | --- |
-| ![image1](app/src/main/res/drawable/image1.png) | ![image2](app/src/main/res/drawable/image2.png) |
+| ![image1](app/src/main/res/drawable/screenshot_20250314_172929.png) | ![image2](app/src/main/res/drawable/screenshot_20250314_180155.png) |
 
 | 픽업지 선택화면 | 픽업지 정보보기 |
 | --- | --- |
