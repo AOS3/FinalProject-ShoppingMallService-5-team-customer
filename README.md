@@ -1,5 +1,7 @@
 # 주류 픽업 서비스 주다미(JUDAMIE)
-![image.png](attachment:f673c33a-e8e0-4f29-ac78-88b702e2e708:image.png)
+
+<img width="800" alt="스크린샷 2025-03-21 오후 3 32 19" src="https://github.com/user-attachments/assets/a1e7bb81-0ae9-4841-9e8e-9f844d39b8c2" />
+
 > 개발 기간 : 2025.01.06 ~ 2025.02.05
 > 
 
