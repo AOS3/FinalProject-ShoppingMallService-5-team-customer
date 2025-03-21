@@ -3,32 +3,25 @@
 <img width="800" alt="스크린샷 2025-03-21 오후 3 32 19" src="https://github.com/user-attachments/assets/a1e7bb81-0ae9-4841-9e8e-9f844d39b8c2" />
 
 <br>
+<br>
 
 ## 📑 프로젝트 소개
 
 ---
-**<주다미>**는 쉽게 구할 수 없는 **희귀한 주류**를
+<**주다미**>는 쉽게 구할 수 없는 **희귀한 주류**를
 구매하여 집 근처 픽업장소에서 **픽업할수있게**
 서비스해주는 플랫폼입니다.
 
-고객은 쉽게 구할 수 없는 주류를 종류별로 골라서 **가까운 픽업지점**에서 **손쉽게 수령**할 수 있고
-흩어져있는 각 종류별 **주류 매니아**들에게 집중적으로 **판매 서비스**를 제공하는 것을 목표로 앱을 만들었습니다.
+고객은 쉽게 구할 수 없는 주류를 종류별로 골라서
+**가까운 픽업지점**에서 **손쉽게 수령**할 수 있고,
+흩어져있는 각 종류별 **주류 매니아**들에게
+집중적으로 **판매 서비스**를 제공하는 것을 목표로 앱을 만들었습니다.
 
 ---
-> 개발 기간 : 2025.01.06 ~ 2025.02.05
-> 
+- 개발 기간 : 2025.01.06 ~ 2025.02.05
 
-## 🌟 배포 주소
->
-> 요구사항 명세서 : 
-> [Google Docs 1조 요구사항명세서.xlsx](https://docs.google.com/spreadsheets/d/1-ofXDRmkZk47_xXCGW6bR6qeVCGTsSX3/edit?gid=1388090367#gid=1388090367)
->
-> 피그마 : 
-> [5팀 쇼핑몰 프로젝트_Judamie](https://www.figma.com/design/KfQfESZVDaSN9AjsIrL7xR/5%ED%8C%80-%EC%87%BC%ED%95%91%EB%AA%B0-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8_Judamie?node-id=0-1&p=f&t=C6MiEut56U40nvz5-0)
->
-> DB설계 :
-> [주다미DB](https://docs.google.com/spreadsheets/d/1SCuNlvhLw9gVG4kw_PFAJ-dmJBbQWXTtrIrgylUT9h0/edit?gid=378717404#gid=378717404)
-> 
+
+<br>
 
 ## 👨‍👩‍👧‍👦 팀 소개
 
@@ -36,50 +29,6 @@
 | --- | --- | --- | --- |
 |  |  |  |  |
 |  |  |  |  |
-
-## 🔍 프로젝트 소개
-
-> **"원하는 주류를 원하는 장소에서 간편하게 픽업하세요"**
->
->
-> 주다미는 원하는 주류를 구매하여 원하는 장소에서 픽업할 수 있는 온라인 주류 쇼핑몰입니다
->
-> 법적인 테두리안에서 주류를 온라인으로 판매할 수 있는 방법을 모색하여 기획했습니다
->
-> 카테고리별로 주류를 검색할 수 있고 지도에서 구매한 주류를 픽업할 장소를 고를수있습니다
-> 
-
-## 🐈기술 스택
-
-### **Environment**
-
-[](https://img.shields.io/badge/androidstudio-3DDC84?style=for-the-badge&logo=androidstudio&logoColor=white)
-
-[](https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white)
-
-[](https://img.shields.io/badge/git-F05032?style=for-the-badge&logo=git&logoColor=white)
-
-### Config
-
-[](https://img.shields.io/badge/gradle-02303A?style=for-the-badge&logo=gradle&logoColor=white)
-
-### Development
-
-[](https://img.shields.io/badge/android-34A853?style=for-the-badge&logo=android&logoColor=white)
-
-[](https://img.shields.io/badge/kotlin-7F52FF?style=for-the-badge&logo=kotlin&logoColor=white)
-
-[](https://img.shields.io/badge/MVVM-2D50A5?style=for-the-badge)
-
-[](https://img.shields.io/badge/Hilt-36474F?style=for-the-badge)
-
-[](https://img.shields.io/badge/firebase-DD2C00?style=for-the-badge&logo=firebase&logoColor=white)
-
-[](https://img.shields.io/badge/node.js-339933?style=for-the-badge&logo=Node.js&logoColor=white)
-
-### Communication
-
-[](https://img.shields.io/badge/notion-000000?style=for-the-badge&logo=notion&logoColor=white)
 
 ## 📺 화면 구성
 
@@ -96,6 +45,9 @@
 | 리뷰작성 | 리뷰보기 |
 | --- | --- |
 | <img src="app/src/main/res/drawable/screenshot_20250314_174816.png" width="200"> | <img src="app/src/main/res/drawable/screenshot_20250314_175027.png" width="200"> |
+
+<br>
+
 ## 🔔 주요 기능
 
 ❗카테고리별 주류 진열 & 검색
@@ -115,8 +67,53 @@
 
 - 고객이 구매한 주류를 픽업하고 픽업완료 버튼을 누르면 품목별로 리뷰를 작성할 수 있음
 
+<br>
+
+## 📱 시연영상
+- 주다미 시연영상 (유투브)
+
+## 🌟 레퍼런스
+>
+> 요구사항 명세서 : 
+> [Google Docs 1조 요구사항명세서.xlsx](https://docs.google.com/spreadsheets/d/1-ofXDRmkZk47_xXCGW6bR6qeVCGTsSX3/edit?gid=1388090367#gid=1388090367)
+>
+> 피그마 : 
+> [5팀 쇼핑몰 프로젝트_Judamie](https://www.figma.com/design/KfQfESZVDaSN9AjsIrL7xR/5%ED%8C%80-%EC%87%BC%ED%95%91%EB%AA%B0-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8_Judamie?node-id=0-1&p=f&t=C6MiEut56U40nvz5-0)
+>
+> DB설계 :
+> [주다미DB](https://docs.google.com/spreadsheets/d/1SCuNlvhLw9gVG4kw_PFAJ-dmJBbQWXTtrIrgylUT9h0/edit?gid=378717404#gid=378717404)
+> 
+
 ## 🏗️ **아키텍처**
 
 ❗흐름
 
 ![image1](app/src/main/res/drawable/judamie_architecture.png)
+
+<br>
+
+## 🐈기술 스택
+
+### **Environment**
+<img src="https://img.shields.io/badge/android studio-3DDC84?style=for-the-badge&logo=androidstudio&logoColor=white"> <img src="https://img.shields.io/badge/git-F05032?style=for-the-badge&logo=git&logoColor=white"> <img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white">
+
+### Config
+
+<img src="https://img.shields.io/badge/gradle-02303A?style=for-the-badge&logo=gradle&logoColor=white">
+
+### Development
+
+<img src="https://img.shields.io/badge/android-3DDC84?style=for-the-badge&logo=android&logoColor=white">
+
+<img src="https://img.shields.io/badge/kotlin-7F52FF?style=for-the-badge&logo=kotlin&logoColor=white">
+
+<img src="https://img.shields.io/badge/mvvm-255E9C?style=for-the-badge&logo=mvvm&logoColor=white">
+
+<img src="https://img.shields.io/badge/hilt-231F20?style=for-the-badge&logo=hilt&logoColor=white">
+
+<img src="https://img.shields.io/badge/firebase-DD2C00?style=for-the-badge&logo=firebase&logoColor=white">
+
+### Communication
+
+<img src="https://img.shields.io/badge/notion-000000?style=for-the-badge&logo=notion&logoColor=white">
+
