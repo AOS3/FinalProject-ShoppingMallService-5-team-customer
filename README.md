@@ -1,4 +1,4 @@
-# 주류 픽업 서비스 주다미(JUDAMIE)
+<img width="1064" alt="스크린샷 2025-03-21 오후 3 57 24" src="https://github.com/user-attachments/assets/cb02c3f1-9e63-4c69-8809-9f66d2909631" /># 주류 픽업 서비스 주다미(JUDAMIE)
 
 <img width="800" alt="스크린샷 2025-03-21 오후 3 32 19" src="https://github.com/user-attachments/assets/a1e7bb81-0ae9-4841-9e8e-9f844d39b8c2" />
 
@@ -48,22 +48,23 @@
 
 <br>
 
-## 🔔 주요 기능
+## 🔔 사용자 흐름 및 주요 기능
 
-❗카테고리별 주류 진열 & 검색
+<img width="800" alt="스크린샷 2025-03-21 오후 3 57 24" src="https://github.com/user-attachments/assets/88d350b1-b752-4393-8ca1-8dbaafdd1e84" />
 
+**❗카테고리별 주류 진열 & 검색**
 - 판매자는 카테고리별로 주류진열가능
 - 고객은 카테고리별로 주류를 구경할 수 있고 검색할 수 있음
 
-❗픽업지 선택
+**❗픽업지 선택**
 
 - 고객은 구매한 주류를 픽업할 픽업지를 지도에서 선택할 수 있음
 
-❗쿠폰 기능
+**❗쿠폰 기능**
 
 - 관리자는 고객에게 기간이 정해진 쿠폰을 지급하며 고객은 정해진 기간내에 쿠폰을 사용하여 물건을 구매할 수 있음
 
-❗리뷰기능
+**❗리뷰기능**
 
 - 고객이 구매한 주류를 픽업하고 픽업완료 버튼을 누르면 품목별로 리뷰를 작성할 수 있음
 
@@ -86,8 +87,6 @@
 
 ## 🏗️ **아키텍처**
 
-❗흐름
-
 ![image1](app/src/main/res/drawable/judamie_architecture.png)
 
 <br>
@@ -98,22 +97,11 @@
 <img src="https://img.shields.io/badge/android studio-3DDC84?style=for-the-badge&logo=androidstudio&logoColor=white"> <img src="https://img.shields.io/badge/git-F05032?style=for-the-badge&logo=git&logoColor=white"> <img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white">
 
 ### Config
-
 <img src="https://img.shields.io/badge/gradle-02303A?style=for-the-badge&logo=gradle&logoColor=white">
 
 ### Development
-
-<img src="https://img.shields.io/badge/android-3DDC84?style=for-the-badge&logo=android&logoColor=white">
-
-<img src="https://img.shields.io/badge/kotlin-7F52FF?style=for-the-badge&logo=kotlin&logoColor=white">
-
-<img src="https://img.shields.io/badge/mvvm-255E9C?style=for-the-badge&logo=mvvm&logoColor=white">
-
-<img src="https://img.shields.io/badge/hilt-231F20?style=for-the-badge&logo=hilt&logoColor=white">
-
-<img src="https://img.shields.io/badge/firebase-DD2C00?style=for-the-badge&logo=firebase&logoColor=white">
+<img src="https://img.shields.io/badge/android-3DDC84?style=for-the-badge&logo=android&logoColor=white"> <img src="https://img.shields.io/badge/kotlin-7F52FF?style=for-the-badge&logo=kotlin&logoColor=white"> <img src="https://img.shields.io/badge/mvvm-255E9C?style=for-the-badge&logo=mvvm&logoColor=white"> <img src="https://img.shields.io/badge/hilt-231F20?style=for-the-badge&logo=hilt&logoColor=white"> <img src="https://img.shields.io/badge/firebase-DD2C00?style=for-the-badge&logo=firebase&logoColor=white">
 
 ### Communication
-
 <img src="https://img.shields.io/badge/notion-000000?style=for-the-badge&logo=notion&logoColor=white">
 
